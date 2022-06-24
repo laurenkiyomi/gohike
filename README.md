@@ -8,6 +8,10 @@ Features:
 - Search page where you can find hikes near you
 - If you find the trail, you can add it to your plan or a wishlist and if you did it you can mark it as done or post it
 
+User Roles
+- Hiker: a user who is seeking to track and share their hikes with friends
+
+
 User Stories:
 - As a hiker, I want to create a profile so that I can connect with other hikers
 - As a hiker, I want to be able to share my hikes with friends
