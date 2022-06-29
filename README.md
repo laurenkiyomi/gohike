@@ -39,18 +39,18 @@ User Stories:
 - As a hiker, I want to be able to like other people's posts
 
 Pages/Screens with Wireframes on Figma:
-https://www.figma.com/file/nudqCgRgjuNkWFyO5MN76k/Capstone-Project-Screens?node-id=5%3A60
+- https://www.figma.com/file/nudqCgRgjuNkWFyO5MN76k/Capstone-Project-Screens?node-id=5%3A60
 - Home Page
 - Find Hikes Page
 - Feed Page
 - View Profile Page
 
 Diagram of Data Model:
-<img width="645" alt="Screen Shot 2022-06-29 at 3 35 40 PM" src="https://user-images.githubusercontent.com/86620096/176557214-1c7bea84-c16b-4855-9f80-b68406021824.png">
+- <img width="645" alt="Screen Shot 2022-06-29 at 3 35 40 PM" src="https://user-images.githubusercontent.com/86620096/176557214-1c7bea84-c16b-4855-9f80-b68406021824.png">
 
-<img width="640" alt="Screen Shot 2022-06-29 at 3 35 57 PM" src="https://user-images.githubusercontent.com/86620096/176557237-bbf7f8b3-546b-47cf-8662-5a3b00758e44.png">
+- <img width="640" alt="Screen Shot 2022-06-29 at 3 35 57 PM" src="https://user-images.githubusercontent.com/86620096/176557237-bbf7f8b3-546b-47cf-8662-5a3b00758e44.png">
 
 
 List of Endpoints:
-<img width="635" alt="Screen Shot 2022-06-29 at 3 36 23 PM" src="https://user-images.githubusercontent.com/86620096/176557279-57d632d2-6f1f-4fbb-987a-8527182aac1a.png">
+- <img width="635" alt="Screen Shot 2022-06-29 at 3 36 23 PM" src="https://user-images.githubusercontent.com/86620096/176557279-57d632d2-6f1f-4fbb-987a-8527182aac1a.png">
 
