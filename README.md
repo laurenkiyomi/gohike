@@ -23,3 +23,15 @@ User Stories:
 - As a hiker, I want to be able to save hikes for later
 - As a hiker, I want to be able to mark hikes as complete
 - As a hiker, I want to be able to click on other people’s profile and see their stats
+
+Pages/Screens with Wireframe:
+- Home Page
+- Find Hikes Page
+- Feed Page
+- View Profile Page
+
+Diagram of Data Model
+- 
+
+List of Endpoints
+- 
