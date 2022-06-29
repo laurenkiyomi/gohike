@@ -8,7 +8,7 @@ Features:
 - Search page where you can find hikes near you
 - If you find the trail, you can add it to your plan or a wishlist and if you did it you can mark it as done or post it
 
-User Roles
+User Roles:
 - Hiker: a user who is seeking to track and share their hikes with friends
 
 
@@ -30,8 +30,8 @@ Pages/Screens with Wireframe:
 - Feed Page
 - View Profile Page
 
-Diagram of Data Model
+Diagram of Data Model:
 - 
 
-List of Endpoints
+List of Endpoints:
 - 
