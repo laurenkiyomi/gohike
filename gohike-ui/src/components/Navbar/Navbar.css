@@ -1,0 +1,108 @@
+/*Navbar*/
+.navbar {
+    position: absolute;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    z-index: 1;
+    filter: drop-shadow(0px 1px 1px #536268);  
+    width: 100%;
+}
+
+/*Nav Buttons*/
+button {
+    border: 0px solid white;
+    background-color: transparent;
+    font-family: 'Gothic A1', sans-serif;
+    color: #536268;
+    font-size: 14px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-top: 24px;
+}
+
+.my-profile-button {
+    border: 0px solid white;
+    background-color: transparent;
+    font-family: 'Gothic A1', sans-serif;
+    color: #536268;
+    font-size: 14px;
+    padding-top: 24px;
+    position: absolute;
+    margin-left: 92%;
+}
+
+.dropdown-button {
+    position: absolute;
+    margin-left: 89.5%;
+    padding-top: 20px;
+}
+
+/*Logo*/
+.logo-img {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    margin-right: 20px;
+    margin-left: 20px;
+    width: 60px;
+}
+
+.transparent {
+    background-color: transparent;
+    filter: none; 
+}
+
+.transparent .nav-button {
+    color: white;
+}
+
+/*Dropdown*/
+.dropdown {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Gothic A1', sans-serif;
+    background-color: white;
+    color: #536268;
+    font-size: 14px;
+    width: 150px;
+    margin-top: 50px;
+    margin-left: 90%;
+    filter: drop-shadow(0px 1px 1px #536268);  
+    border-radius: 10px;
+}
+
+.dropdown-item {
+    padding-left: 10px;
+    padding-right: 5px;
+    margin-left: 0px;
+    padding-top: 9px;
+    padding-bottom: 7px;
+    width: 150px;
+    border-bottom: 1px solid gray;
+    transition: all .2s cubic-bezier(.215,.61,.355,1);
+    text-align: start;
+}
+
+.logout-item {
+    border-bottom: 0px solid gray;
+}
+
+.closed {
+    width: 0px;
+    height: 0px;
+    border: 0px;
+}
+
+.closed .dropdown-item {
+    height: 0px;
+    width: 0px;
+    font-size: 0px;
+    border: 0px;
+}
+
+
+
+
+
+

@@ -1,0 +1,138 @@
+/*Home*/
+.home {
+  width: 100%;
+  max-width: 100vw;
+  height: 100%;
+  min-height: 100vh;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #536268;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/*Hero*/
+.hero {
+  width: 100%;
+  height: 850px;
+  background-image: linear-gradient(transparent 30%, #536268), 
+    url('../Images/seven.jpeg');
+  background-size: auto, cover;
+  object-fit: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-logo {
+  width: 200px;
+  margin: 0px;
+}
+
+.hero-text {
+  font-family: 'Gothic A1', sans-serif;
+  color: white;
+  font-size: 10vh;
+  margin: 0px;
+  opacity: 0;
+  transition: opacity 2s ease-in;
+  will-change: opacity;
+  letter-spacing: .1em;
+}
+
+/*About*/
+.about {
+  z-index: 1;
+  margin-bottom: 200px;
+  display: flex;
+  width: 75%;
+  justify-content: space-around;
+  font-family: 'Gothic A1', sans-serif;
+  color: white;
+}
+
+.about-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 3vh;
+  margin-bottom: 2px;
+}
+
+.about-text-one {
+  opacity: 0;
+  transform: translateY(-4em);
+  transition: transform 6s cubic-bezier(0,1,.3,1),
+              opacity .3s .25s ease-out;
+  will-change: transform, opacity;
+}
+
+.about-text-two {
+  opacity: 0;
+  transform: translateY(-6em);
+  transition: transform 7s cubic-bezier(0,1,.3,1),
+              opacity .5s .25s ease-out;
+  will-change: transform, opacity;
+}
+
+.about-text-three {
+  opacity: 0;
+  transform: translateY(-8em);
+  transition: transform 8s cubic-bezier(0,1,.3,1),
+              opacity .7s .25s ease-out;
+  will-change: transform, opacity;
+}
+
+
+.visible {
+  opacity: 1;
+  transform: translateY(0em);
+}
+
+
+/*Collage*/
+.collage {
+  width: 95%;
+  max-width: 1500px;
+}
+
+.img-one {
+  position: relative;
+  z-index: 4;
+  margin-left: 20px;
+  width: 50vh;
+  top: 0px;
+}
+
+.img-two {
+  position: relative;
+  z-index: 4;
+  margin-left: 450px;
+  width: 42vh;
+}
+
+/* .img-three {
+  position: relative;
+  width: 35vh;
+  z-index: 4;
+  margin-left: 1000px;
+} */
+
+
+
+
+
+
+
+
+
+
+
