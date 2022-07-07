@@ -18,6 +18,7 @@ router.post('/register', async (req, res) => {
 
     try {
         let newUser = await Authorization.createNewUser(firstName, lastName, age, username, password, email);
+        let loginUser = await Authorization.loginUser(username, password)
         res.status(201).json( { username: username} )
     }
 

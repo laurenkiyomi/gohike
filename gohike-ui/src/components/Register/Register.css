@@ -38,8 +38,9 @@
     font-family: 'Gothic A1', sans-serif;
     color: #536268;
     width: 425px;
-    height: 450px;
+    min-height: 450px;
     border: 3px solid #9e9161;
+    padding-bottom: 20px;
 }
 
 .register-logo {
@@ -90,11 +91,24 @@
     align-self: flex-start;
 }
 
-/*Register Form One Submit Button*/
+/*Have An Account*/
+.have-account {
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 55px;
+    padding: 0px;
+    margin-top: -50px;
+    line-height: 5px;
+    font-size: 1.5vh;
+}
+
+/*Next Button*/
 .next-button {
     align-self: end;
     margin-top: 47px;
-    margin-right: 0px;
+    margin-right: 55px;
     width: 115px;
     border-radius: 3px;
     color: white;
@@ -102,7 +116,7 @@
     padding: 15px;
 }
 
-/*Register Form two*/
+/*Register Form Two*/
 .email-input {
     margin-top: 25px;
     width: 300px;
@@ -118,6 +132,18 @@
     width: 300px;
 }
 
+/*Back Button*/
+.register-back-button {
+    align-self: start;
+    margin-top: -47.4px;
+    margin-left: 62.5px;
+    width: 115px;
+    border-radius: 3px;
+    color: white;
+    background-color: #60270d;
+    padding: 15px;
+}
+
 /*Register Form Two Submit Button*/
 .register-button {
     align-self: end;
@@ -130,15 +156,9 @@
     padding: 15px;
 }
 
-/*Have An Account*/
-.have-account {
-    align-self: flex-start;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-left: 55px;
-    padding: 0px;
-    margin-top: -50px;
-    line-height: 5px;
-    font-size: 1.5vh;
+/*Error Message*/
+.register-error {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: red
 }

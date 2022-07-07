@@ -5,8 +5,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from "../Images/Logo.png"
 
 export default function Register({ currUser, setCurrUser, transparent, setTransparent }) {
-      const REGISTER_URL = "http://localhost:3001/authorization/register"
-      const GET_USER_URL = "http://localhost:3001/authorization/currUser"
       const [username, setUsername] = React.useState('')
       const [password, setPassword] = React.useState('')
       const [firstName, setFirstName] = React.useState('')
@@ -14,13 +12,12 @@ export default function Register({ currUser, setCurrUser, transparent, setTransp
       const [age, setAge] = React.useState(0)
       const [email, setEmail] = React.useState('')
       const [error, setError] = React.useState("")
+      const [partOne, setPartOne] = React.useState(true)
       const history = useNavigate()
+      
 
-      const userRef = React.useRef()
-      const errorRef = React.useRef();
-  
       React.useEffect(() => {
-        userRef.current.focus();
+        // userRef.current.focus();
         if (transparent) {
           setTransparent(false);
         }
@@ -30,38 +27,37 @@ export default function Register({ currUser, setCurrUser, transparent, setTransp
         setError('')
       }, [username, password])
   
-      const handleSubmit = async(event) => {
-        event.preventDefault();
-  
-        axios.post(REGISTER_URL, { firstName, lastName, age: parseInt(age), username, password, email }).then(async function(results) {
-          let registerUser = await axios.get(GET_USER_URL)
-          setCurrUser({ username: registerUser.data.currUser.username, firstName: registerUser.data.currUser.firstName, lastName: registerUser.data.currUser.lastName  })
-          setFirstName('')
-          setLastName('')
-          setAge(0)
-          setUsername('')
-          setPassword('')
-          setEmail('')
-
-          history('/')
-        }).catch((err) => {
-          setError("Failed to Register")
-          errorRef.current.focus()
-        })
-      }
-  
       return (
         <nav className="register">
-          <div className="register-section-one">
+          {partOne ? 
+            <RegisterPartOne firstName={firstName} setFirstName={setFirstName} lastName={lastName} setLastName={setLastName} age={age} setAge={setAge} setPartOne={setPartOne} /> : 
+            <RegisterPartTwo username={username} setUsername={setUsername} password={password} setPassword={setPassword} firstName={firstName} setFirstName={setFirstName} lastName={lastName} setLastName={setLastName} age={age} setAge={setAge} email={email}setEmail={setEmail} error={error} setError={setError} setPartOne={setPartOne} history={history} setCurrUser={setCurrUser}/>}
+        </nav>
+      )
+  }
+
+  export function RegisterPartOne({ firstName, setFirstName, lastName, setLastName, age, setAge, setPartOne }) {
+    const nameRef = React.useRef()
+
+    React.useEffect(() => {
+      nameRef.current.focus();
+    }, [])
+
+    const handleNext = () => {
+      setPartOne(false)
+    }
+
+    return (
+      <div className="register-section-one">
             <img className="register-logo"src={logo} />
             <h1 className="register-header">Make an account to plan your next hiking adventure and connect with friends.</h1>
-            <form onSubmit={() => {}} className="form-one">
+            <form className="form-one">
               <div className="name-input">
                 <input 
                       type="text"
                       className="first-name-input register-input"
                       id="firstName"
-                      ref={userRef}
+                      ref={nameRef}
                       autoComplete="off"
                       onChange={(event) => setFirstName(event.target.value)}
                       value={firstName}
@@ -89,14 +85,52 @@ export default function Register({ currUser, setCurrUser, transparent, setTransp
                     placeholder="Age"
                     required
                 />
-              <button className="next-button">Next</button>
             </form>
+            <button className="next-button" onClick={handleNext}>Next</button>
             <div className="have-account">
                 <p>Already have an account?</p>
                 <Link to='/login'>Log In</Link>
             </div>
           </div>
-          <div className="register-section-two part-two">
+    )
+  }
+
+  export function RegisterPartTwo({ username, setUsername, password, setPassword, firstName, setFirstName, lastName, setLastName, age, setAge, email, setEmail, error, setError, setPartOne, history, setCurrUser }) {
+    const REGISTER_URL = "http://localhost:3001/authorization/register"
+    const GET_USER_URL = "http://localhost:3001/authorization/currUser"
+    const emailRef = React.useRef()
+    const errorRef = React.useRef();
+
+    React.useEffect(() => {
+      emailRef.current.focus();
+    }, [])
+
+    const handleBack = () => {
+      setPartOne(true)
+    }
+
+    const handleSubmit = async(event) => {
+      event.preventDefault();
+
+      axios.post(REGISTER_URL, { firstName, lastName, age: parseInt(age), username, password, email }).then(async function(results) { 
+        let registerUser = await axios.get(GET_USER_URL)
+        console.log(registerUser)
+        setCurrUser({ username: registerUser.data.currUser.username, firstName: registerUser.data.currUser.firstName, lastName: registerUser.data.currUser.lastName  })
+        setFirstName('')
+        setLastName('')
+        setAge(0)
+        setUsername('')
+        setPassword('')
+        setEmail('')
+        history('/')
+      }).catch((err) => {
+        setError("Failed to Register")
+        errorRef.current.focus()
+      })
+    }
+
+    return (
+      <div className="register-section-two">
               <img className="register-logo"src={logo} />
               <h1 className="register-header">Make an account to plan your next hiking adventure and connect with friends.</h1>
               {error ? <p ref={errorRef} className="register-error" aria-live="assertive">{error}</p> : ""}
@@ -105,6 +139,7 @@ export default function Register({ currUser, setCurrUser, transparent, setTransp
                     type="email"
                     className="register-input email-input"
                     id="email"
+                    ref={emailRef}
                     autoComplete="off"
                     onChange={(event) => setEmail(event.target.value)}
                     placeholder="Email"
@@ -133,11 +168,7 @@ export default function Register({ currUser, setCurrUser, transparent, setTransp
                 />
                 <button className="register-button">Register</button>
             </form>
-            <div className="have-account">
-                <p>Already have an account?</p>
-                <Link to='/login'>Log In</Link>
-            </div>
+            <button className="register-back-button" onClick={handleBack}>Back</button>
           </div>
-        </nav>
-      )
+    )
   }
