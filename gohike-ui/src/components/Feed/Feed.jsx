@@ -1,5 +1,6 @@
 import * as React from "react"
 import "./Feed.css"
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Feed({ transparent, setTransparent, currUser }) {
     React.useEffect(() => {
@@ -10,7 +11,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
 
     return (
       <nav className="feed">
-        <p>Feed</p>
+        <a href="https://goo.gl/maps/gHGcWQDBqzR2">Link</a>
       </nav>
     )
   }

@@ -3,6 +3,11 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const authorization = require('./routes/authorization');
+const urlExpand = require('url-expand')
+
+// urlExpand("https://goo.gl/maps/gHGcWQDBqzR2", function (err, url) {
+//     console.log(url)
+// })
 
 // var Parse = require('parse/node');
 // Parse.initialize(process.env.APP_ID, process.env.JS_KEY);

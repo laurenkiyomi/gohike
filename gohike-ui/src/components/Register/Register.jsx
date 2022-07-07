@@ -17,7 +17,6 @@ export default function Register({ currUser, setCurrUser, transparent, setTransp
       
 
       React.useEffect(() => {
-        // userRef.current.focus();
         if (transparent) {
           setTransparent(false);
         }
