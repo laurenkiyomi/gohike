@@ -17,9 +17,8 @@ router.post('/register', async (req, res) => {
     let email = infoUser.email
 
     try {
-        let newUser = await Authorization.createNewUser(firstName, lastName, age, username, password, email);
-        let loginUser = await Authorization.loginUser(username, password)
-        res.status(201).json( { username: username} )
+        let sessionToken = await Authorization.createNewUser(firstName, lastName, age, username, password, email);
+        res.status(201).json( { username: username, sessionToken } )
     }
 
     catch {
@@ -33,31 +32,21 @@ router.post('/login', async (req, res) => {
     let password = infoUser.password;
     
     try {
-        let loginUser = await Authorization.loginUser(username, password)
-        res.status(201).json( { username: username } )
+        let sessionToken = await Authorization.loginUser(username, password)
+        res.status(201).json( { username: username, sessionToken } )
     } catch {
         res.status(400).json( { msg: "Failed to login user" } )
     }
 })
 
 router.post('/logout', async (req, res) => {
-    try {        
-        let logoutUser = await Authorization.logoutUser()
-        console.log({msg: logoutUser.msg})
+    try {
+        let sessionToken = req.body.sessionToken       
+        let logoutUser = await Authorization.logoutUser(sessionToken)
         
         res.status(201).json( { msg: logoutUser.msg } )
     } catch {
         res.status(400).json( { msg: "Failed to logout user" } )
-    }
-})
-
-router.get('/currUser', (req, res) => {
-    try {
-        let currUser = Authorization.getCurrUser()
-
-        res.status(201).json( { currUser } )
-    } catch {
-        res.status(400).json( { msg: "Failed to get current user" } )
     }
 })
 

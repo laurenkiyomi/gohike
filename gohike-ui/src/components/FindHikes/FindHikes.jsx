@@ -4,9 +4,10 @@ import SideBar from "./SideBar";
 import GoogleMapReact from 'google-map-react';
 
 export default function FindHikes({ transparent, setTransparent, currUser }) {
-    const [center, setCenter] = React.useState({ lat: 11.0168, lng: 76.9558  })
+    const [selectedHike, setSelectedHike] = React.useState(null)
+    const [center, setCenter] = React.useState({ lat: 37.4816056542292, lng: -122.17105672877193  })
     const [zoom, setZoom] = React.useState(11);
-    const [searchInputResult, setSearchInputResult] = React.useState('')
+    const [searchInputResult, setSearchInputResult] = React.useState([])
 
     React.useEffect(() => {
       if (transparent) {
@@ -16,17 +17,23 @@ export default function FindHikes({ transparent, setTransparent, currUser }) {
 
     return (
       <nav className="find-hikes" >
-        <SideBar searchInputResult={searchInputResult} setSearchInputResult={setSearchInputResult} />
-        <div className="map-div">hi</div>
-        {/* <GoogleMapReact
-          bootstrapURLKeys={{ key: "AIzaSyDEc_o7C5X1ljM7fq27LLr5QdZPfrQlQZA" }}
-          defaultCenter={center}
-          defaultZoom={zoom}
-        >
-          <Marker 
-            lat={11.0168}
-            lng={76.9558}/>
-        </GoogleMapReact> */}
+        <SideBar searchInputResult={searchInputResult} setSearchInputResult={setSearchInputResult} setCenter={setCenter} selectedHike={selectedHike} setSelectedHike={setSelectedHike} />
+        <div className="map-div">
+          <GoogleMapReact
+            bootstrapURLKeys={{ key: "AIzaSyDEc_o7C5X1ljM7fq27LLr5QdZPfrQlQZA" }}
+            center={center}
+            defaultZoom={zoom}
+          >
+            {searchInputResult.map((trail, index) => {
+              return (
+                <Marker
+                  key={index}
+                  lat={trail.latitude}
+                  lng={trail.longitude}/>
+              )
+            })}
+          </GoogleMapReact>
+        </div>
       </nav>
     )
   }
@@ -34,7 +41,7 @@ export default function FindHikes({ transparent, setTransparent, currUser }) {
 export function Marker(props) {
   return (
     <div className="marker">
-      <span className="material-icons md-48">push_pin</span>
+      <span className="material-icons md-48">add_location</span>
     </div>
   )
 }

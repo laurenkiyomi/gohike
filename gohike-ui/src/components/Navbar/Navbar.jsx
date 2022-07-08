@@ -6,7 +6,7 @@ import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
 
 export default function Navbar({ currUser, setCurrUser, transparent }) {
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
-
+ 
   return (
     <nav className={`navbar ${transparent ? "transparent" : ""}`}>
       <Logo className="nav-logo"/>
@@ -14,7 +14,8 @@ export default function Navbar({ currUser, setCurrUser, transparent }) {
       <Link to="/find-hikes"><button className="nav-button" onClick={() => {setDropdownOpen(false)}} >Find Hikes</button></Link>
       <Link to="/feed"><button className="nav-button" onClick={() => {setDropdownOpen(false)}} >Feed</button></Link>
       {currUser ? (
-        <><button 
+        <>
+          <button 
             className="nav-button dropdown-button" 
             onClick={() => {
               if (dropdownOpen) {
@@ -25,22 +26,22 @@ export default function Navbar({ currUser, setCurrUser, transparent }) {
           }}>{dropdownOpen ? 
             <span className="material-icons md-48">expand_less</span> : 
             <span className="material-icons md-48">expand_more</span>}</button>
-          <div className="nav-button my-profile-button">{`${currUser.firstName} ${currUser.lastName}`}</div></>) : 
+          <div className="nav-button my-profile-button">{currUser.username}</div></>) : 
         <Link to="/login"><button className="nav-button login-button" >Log In</button></Link>}
-      {dropdownOpen ? <Dropdown view="open" setCurrUser={setCurrUser} setDropdownOpen={setDropdownOpen} /> : <Dropdown view="closed" setCurrUser={setCurrUser} setDropdownOpen={setDropdownOpen} />}
+      {dropdownOpen ? <Dropdown view="open" setCurrUser={setCurrUser} currUser={currUser} setDropdownOpen={setDropdownOpen} /> : <Dropdown view="closed" setCurrUser={setCurrUser} setDropdownOpen={setDropdownOpen} />}
     </nav>
   )
 }
 
-export function Dropdown({ view, setCurrUser, setDropdownOpen }) {
+export function Dropdown({ view, setCurrUser, currUser, setDropdownOpen }) {
   const LOGOUT_URL = "http://localhost:3001/authorization/logout"
-  const GET_USER_URL = "http://localhost:3001/authorization/currUser"
   const history = useNavigate()
 
   const handleLogout = async() => {
-    axios.post(LOGOUT_URL).then(async(results) => {
-      let logoutUser = await axios.get(GET_USER_URL) 
-      setCurrUser(logoutUser.data.currUser)
+    axios.post(LOGOUT_URL, { sessionToken: currUser.sessionToken }).then((results) => {
+      setCurrUser(null)
+      localStorage.setItem("username", "")
+      localStorage.setItem("sessionToken", "")
       setDropdownOpen(false)
       history('/')
     }).catch((err) => {

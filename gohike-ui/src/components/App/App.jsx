@@ -10,17 +10,15 @@ import Register from "../Register/Register"
 import Feed from "../Feed/Feed"
 
 export default function App() {
-  const [currUser, setCurrUser] = React.useState(null)
+  const [currUser, setCurrUser] = React.useState(() => {
+    if (localStorage.getItem("username") == null|| localStorage.getItem("sessionToken") == null || localStorage.getItem("username") == "" || localStorage.getItem("sessionToken") == "") {
+      return null
+    } else {
+      return { username: localStorage.getItem("username"), sessionToken: localStorage.getItem("sessionToken") }
+    }
+  })
   const [transparent, setTransparent] = React.useState(true)
 
-  React.useEffect(async () => {
-    let loginUser = await axios.get("http://localhost:3001/authorization/currUser")
-
-    if (loginUser.data.currUser) {
-      setCurrUser({ username: loginUser.data.currUser.username, firstName: loginUser.data.currUser.firstName, lastName: loginUser.data.currUser.lastName  })
-    }
-  }, [])
-  
   return (
     <div className="app">
       <BrowserRouter>

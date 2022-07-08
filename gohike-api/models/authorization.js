@@ -1,6 +1,6 @@
 require("dotenv").config();
 var Parse = require('parse/node');
-Parse.initialize(process.env.APP_ID, process.env.JS_KEY);
+Parse.initialize(process.env.APP_ID, process.env.JS_KEY, process.env.MASTER_KEY);
 Parse.serverURL = 'https://parseapi.back4app.com/'
 
 class Authorization {
@@ -8,7 +8,7 @@ class Authorization {
         this.super();
     }
 
-    static async createNewUser(firstName, lastName, age, username, password, email, ) {
+    static async createNewUser(firstName, lastName, age, username, password, email ) {
         let user = new Parse.User();
 
         user.set("firstName", firstName);
@@ -19,27 +19,22 @@ class Authorization {
         user.set("email", email);
 
         let newUser = await user.signUp();
-        return { id: newUser.id }
+        return newUser.getSessionToken()
     }
 
     static async loginUser(username, password) {
-        Parse.User.enableUnsafeCurrentUser()
         const loginUser = await Parse.User.logIn(username, password)
-
-        return { id: loginUser.id }
+        return loginUser.getSessionToken()
     }
 
-    static async logoutUser() {
-        
-        Parse.User.enableUnsafeCurrentUser()
-        await Parse.User.logOut()
+    static async logoutUser(sessionToken) {
+        // Get session by session token
+        let query = new Parse.Query("_Session")
+        query.equalTo("sessionToken", sessionToken)
+        let sessionToDestroy = await query.first({useMasterKey:true})
+        console.log("hii")
+        sessionToDestroy.destroy({useMasterKey:true})
         return { msg: "Logged Out" }   
-    }
-
-    static getCurrUser() {
-        Parse.User.enableUnsafeCurrentUser()
-        let currUser = Parse.User.current()
-        return currUser
     }
 }
 

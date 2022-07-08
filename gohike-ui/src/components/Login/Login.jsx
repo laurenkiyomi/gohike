@@ -6,7 +6,6 @@ import logo from "../Images/Logo.png"
 
 export default function Login({ currUser, setCurrUser, transparent, setTransparent }) {
     const LOGIN_URL = "http://localhost:3001/authorization/login"
-    const GET_USER_URL = "http://localhost:3001/authorization/currUser"
     const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [error, setError] = React.useState("")
@@ -29,9 +28,10 @@ export default function Login({ currUser, setCurrUser, transparent, setTranspare
     const handleSubmit = async(event) => {
       event.preventDefault();
 
-      axios.post(LOGIN_URL, {username, password}).then(async function(results) {
-        let loginUser = await axios.get(GET_USER_URL)
-        setCurrUser({ username: loginUser.data.currUser.username, firstName: loginUser.data.currUser.firstName, lastName: loginUser.data.currUser.lastName  })
+      axios.post(LOGIN_URL, {username, password}).then(function(loginUser) {
+        setCurrUser({ username: loginUser.data.username, sessionToken: loginUser.data.sessionToken })
+        localStorage.setItem("username", loginUser.data.username)
+        localStorage.setItem("sessionToken", loginUser.data.sessionToken)
         setUsername('')
         setPassword('')
         history('/')

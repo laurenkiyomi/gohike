@@ -96,7 +96,6 @@ export default function Register({ currUser, setCurrUser, transparent, setTransp
 
   export function RegisterPartTwo({ username, setUsername, password, setPassword, firstName, setFirstName, lastName, setLastName, age, setAge, email, setEmail, error, setError, setPartOne, history, setCurrUser }) {
     const REGISTER_URL = "http://localhost:3001/authorization/register"
-    const GET_USER_URL = "http://localhost:3001/authorization/currUser"
     const emailRef = React.useRef()
     const errorRef = React.useRef();
 
@@ -111,10 +110,10 @@ export default function Register({ currUser, setCurrUser, transparent, setTransp
     const handleSubmit = async(event) => {
       event.preventDefault();
 
-      axios.post(REGISTER_URL, { firstName, lastName, age: parseInt(age), username, password, email }).then(async function(results) { 
-        let registerUser = await axios.get(GET_USER_URL)
-        console.log(registerUser)
-        setCurrUser({ username: registerUser.data.currUser.username, firstName: registerUser.data.currUser.firstName, lastName: registerUser.data.currUser.lastName  })
+      axios.post(REGISTER_URL, { firstName, lastName, age: parseInt(age), username, password, email }).then(function(registerUser) { 
+        setCurrUser({ username: registerUser.data.username, sessionToken: registerUser.data.sessionToken })
+        localStorage.setItem("username", registerUser.data.username)
+        localStorage.setItem("sessionToken", registerUser.data.sessionToken)
         setFirstName('')
         setLastName('')
         setAge(0)
