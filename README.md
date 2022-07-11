@@ -54,3 +54,9 @@ Diagram of Data Model:
 List of Endpoints:
 - <img width="635" alt="Screen Shot 2022-06-29 at 3 36 23 PM" src="https://user-images.githubusercontent.com/86620096/176557279-57d632d2-6f1f-4fbb-987a-8527182aac1a.png">
 
+Project Plan:
+- <img width="638" alt="Screen Shot 2022-07-11 at 8 59 28 AM" src="https://user-images.githubusercontent.com/86620096/178306998-0505cd59-a1bb-4560-a874-0920bdae031e.png">
+
+- <img width="653" alt="Screen Shot 2022-07-11 at 8 59 32 AM" src="https://user-images.githubusercontent.com/86620096/178307054-e6857aa5-64c9-4696-9bca-b0c63db2d032.png">
+
+
