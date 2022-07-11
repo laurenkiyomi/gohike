@@ -3,7 +3,8 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const authorization = require('./routes/authorization');
-const urlExpand = require('url-expand')
+const posts = require('./routes/posts');
+// const urlExpand = require('url-expand')
 
 // urlExpand("https://goo.gl/maps/gHGcWQDBqzR2", function (err, url) {
 //     console.log(url)
@@ -20,6 +21,7 @@ app.use(cors());
 
 
 app.use('/authorization', authorization)
+app.use('/posts', posts)
 
 app.get('/', (req, res) => {
     res.status(200).send({ "ping": "pong" })  

@@ -32,7 +32,7 @@ class Authorization {
         let query = new Parse.Query("_Session")
         query.equalTo("sessionToken", sessionToken)
         let sessionToDestroy = await query.first({useMasterKey:true})
-        console.log("hii")
+        
         sessionToDestroy.destroy({useMasterKey:true})
         return { msg: "Logged Out" }   
     }

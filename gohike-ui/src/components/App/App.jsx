@@ -18,7 +18,7 @@ export default function App() {
     }
   })
   const [transparent, setTransparent] = React.useState(true)
-
+  
   return (
     <div className="app">
       <BrowserRouter>
