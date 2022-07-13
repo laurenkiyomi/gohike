@@ -21,4 +21,15 @@ router.get('/:trailName', async (req, res) => {
     }
 })
 
+router.get('/id/:trailId', async (req, res) => {
+    try {
+        const trailId = req.params.trailId
+        const trail = await Trails.getTrailById(trailId)
+        res.status(201).json({ trail })
+    } catch (err) {
+        console.log(err)
+        res.status(400).json({ msg: "Could not retrieve trail info." })
+    }
+})
+
 module.exports = router;

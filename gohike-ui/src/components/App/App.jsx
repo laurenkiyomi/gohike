@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Login from "../Login/Login"
 import Register from "../Register/Register"
 import Feed from "../Feed/Feed"
+import MyProfile from "../MyProfile/MyProfile"
 
 export default function App() {
   const [currUser, setCurrUser] = React.useState(() => {
@@ -29,9 +30,11 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home transparent={transparent} setTransparent={setTransparent} />}/>
             <Route path="/find-hikes" element={<FindHikes transparent={transparent} setTransparent={setTransparent} currUser={currUser}/>}/>
+            <Route path="/find-hikes/:id" element={<FindHikes transparent={transparent} setTransparent={setTransparent} currUser={currUser}/>}/>
             <Route path="/feed" element={<Feed transparent={transparent} setTransparent={setTransparent} currUser={currUser}/>}/>
             <Route path="/register" element={<Register currUser={currUser} setCurrUser={setCurrUser} transparent={transparent} setTransparent={setTransparent}/>} />
             <Route path="/login" element={<Login currUser={currUser} setCurrUser={setCurrUser} transparent={transparent} setTransparent={setTransparent}/>} />
+            <Route path="/my-profile" element={<MyProfile currUser={currUser} setCurrUser={setCurrUser} transparent={transparent} setTransparent={setTransparent} />} />
           </Routes>
         </main>
       </BrowserRouter>

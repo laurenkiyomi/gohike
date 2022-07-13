@@ -6,9 +6,10 @@ router.post('/create', async (req, res) => {
     try {
         let sessionToken = req.body.sessionToken
         let hikeId = req.body.hikeId
-        let caption = req.body.caption  
-        let newPost = await Posts.createPost(sessionToken, hikeId, caption )
-        
+        let caption = req.body.caption 
+        let picture = req.body.picture 
+        let newPost = await Posts.createPost(sessionToken, hikeId, caption, picture )
+
         res.status(201).json( { msg: newPost.msg } )
     } catch (err) {
         console.log(err)
@@ -16,13 +17,12 @@ router.post('/create', async (req, res) => {
     }
 })
 
-router.get('/getPost', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
-        let id = req.body.postId
-        let pic = await Posts.getPost(id)
-        res.status(201).json( { pic: pic } )
+        let posts = await Posts.getAllPosts()
+        res.status(201).json( { posts } )
     } catch {
-        res.status(400).json( { msg: "Failed to get post" } )
+        res.status(400).json( { msg: "Failed to get posts" } )
     }
 })
 

@@ -3,6 +3,7 @@ import "./Feed.css"
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import Select from 'react-select';
+import PostGrid from "./PostGrid";
 
 // initalize Parse
 import Parse from 'parse/dist/parse.min.js'
@@ -12,10 +13,16 @@ import Parse from 'parse/dist/parse.min.js'
 
 export default function Feed({ transparent, setTransparent, currUser }) {
     const TRAILS_URL = "http://localhost:3001/trails/"
-    const [picture, setPicture] = React.useState(null)
-    const [trail, setTrail] = React.useState("")
-    const [caption, setCaption] = React.useState("")
+    const POSTS_URL = "http://localhost:3001/posts/"
     const [trailsList, setTrailsList] = React.useState([])
+    const [numPosts, setNumPosts] = React.useState(5)
+    const [posts, setPosts] = React.useState([])
+
+    async function fetchData() {
+      let data = await axios.get(POSTS_URL)
+      // setPosts((oldPosts) => oldPosts.concat(data.data.posts))
+      setPosts(data.data.posts)
+    }
 
     React.useEffect(async () => {
       if (transparent) {
@@ -26,48 +33,55 @@ export default function Feed({ transparent, setTransparent, currUser }) {
       setTrailsList(data.data.trails)
     }, [])
 
+    React.useEffect(async () => {
+      fetchData()
+    }, [numPosts])
+   
     return (
       <nav className="feed">
-        <CreatePost picture={picture} setPicture={setPicture} trail={trail} setTrail={setTrail} caption={caption} setCaption={setCaption} trailsList={trailsList} currUser={currUser}/>
+        <CreatePost trailsList={trailsList} currUser={currUser}/>
+        <PostGrid posts={posts} />
       </nav>
     )
   }
 
-  export function CreatePost({ picture, setPicture, trail, setTrail, caption, setCaption, trailsList, currUser }) {
+  export function CreatePost({ trailsList, currUser }) {
     const CREATE_POST_URL = "http://localhost:3001/posts/create"
+    const [picture, setPicture] = React.useState(null)
+    const [trail, setTrail] = React.useState("")
+    const [caption, setCaption] = React.useState("")
+
+    const _arrayBufferToBase64 = (buffer) => {
+      var binary = '';
+      var bytes = new Uint8Array( buffer );
+      var len = bytes.byteLength;
+      for (var i = 0; i < len; i++) {
+          binary += String.fromCharCode( bytes[ i ] );
+      }
+      return window.btoa( binary );
+  }
 
     const handleCreatePost = async (event) => {
       event.preventDefault()
 
       try {
-        await axios.post(CREATE_POST_URL, { hikeId: trail.value, caption, sessionToken: currUser.sessionToken })
+        // Get array buffer from file
+        const arrayBuffer = await picture.arrayBuffer()
+        // Convert the array to a base64 string
+        const base64String = _arrayBufferToBase64(arrayBuffer)
+
+        await axios.post(CREATE_POST_URL, { hikeId: trail.value, caption, sessionToken: currUser.sessionToken, picture: base64String })
 
         event.target[1].value = ""
         setPicture(null)
         setTrail("")
         setCaption("")
-
       } catch {  
           console.log("Failed to create post.")
       }
     }
     return (
-      <>
         <form className="create-post-form" onSubmit={handleCreatePost}>
-          <Select
-            options={trailsList}
-            value={trail}
-            placeholder="Select Trail"
-            onChange={(value) => {setTrail(value)}}
-            className="trail-post-input"
-          />
-          <input 
-            type="file"
-            className="picture-post-input"
-            name="file"
-            onChange={(event) => setPicture(event.target.files[0])}
-            required
-          />
           <input
             type="text"
             className="caption-post-input"
@@ -75,8 +89,35 @@ export default function Feed({ transparent, setTransparent, currUser }) {
             value={caption}
             placeholder={`How was your hike, ${currUser.firstName}?`}
           />
-          <button>Post</button>
+          <div className="add-to-post">
+            <Select
+              options={trailsList}
+              value={trail}
+              placeholder="Select Trail"
+              onChange={(value) => {setTrail(value)}}
+              className="trail-post-input"
+            />
+            <label htmlFor="file-input">
+              <img className="upload-images-icon" src="https://icon-library.com/images/image-icon-png/image-icon-png-6.jpg"/>
+            </label>
+            <input 
+              type="file"
+              id="file-input"
+              className="picture-post-input"
+              name="file"
+              onChange={(event) => {
+                // Limit size of file
+                if (event.target.files[0].size > 102000) {
+                  alert("File is too big!")
+                  event.target.value = ""
+                } else {
+                  setPicture(event.target.files[0])
+                }
+              }}
+              required
+            />
+            <button className="post-button">Post</button>
+          </div>
         </form>
-      </>
     )
   }

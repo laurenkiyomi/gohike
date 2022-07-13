@@ -2,7 +2,6 @@ require("dotenv").config();
 var Parse = require('parse/node');
 Parse.initialize(process.env.APP_ID, process.env.JS_KEY, process.env.MASTER_KEY);
 Parse.serverURL = 'https://parseapi.back4app.com/'
-const { parse } = require("path");
 
 class Trails {
     constructor() {
@@ -77,6 +76,45 @@ class Trails {
         }
         
         return trail
+    }
+
+    static async getTrailById(trailId) {
+        // Get all trails in database
+        let query = new Parse.Query("Trail")
+        query.equalTo("hikeId", parseInt(trailId))
+        let trail = await query.first({useMasterKey:true})
+        let res = []
+
+        // Get largest image available
+        let img = ""
+        if (trail.get("imgMedium") != "") {
+            img = trail.get("imgMedium")
+        } else if (trail.get("imgSmallMed") != "") {
+            img = trail.get("imgSmallMed")
+        } else if (trail.get("imgSmall") != "") {
+            img = trail.get("imgSmall")
+        } else if (trail.get("imgSqSmall") != "") {
+            img = trail.get("imgSqSmall")
+        }
+
+        res.push({ 
+            id: trail.get("hikeId"), 
+            name: trail.get("name"), 
+            trail_type: trail.get("trail_type"), 
+            summary: trail.get("summary"), 
+            location: trail.get("location"), 
+            length: trail.get("distance"), 
+            ascent: trail.get("ascent"), 
+            descent: trail.get("descent"), 
+            conditionStatus: trail.get("conditionStatus"), 
+            high: trail.get("high"), 
+            low: trail.get("low"), 
+            longitude: trail.get("longitude"), 
+            latitude: trail.get("latitude"), 
+            img
+        })
+        
+        return res
     }
 }
 
