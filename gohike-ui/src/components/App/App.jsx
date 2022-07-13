@@ -11,14 +11,14 @@ import Feed from "../Feed/Feed"
 
 export default function App() {
   const [currUser, setCurrUser] = React.useState(() => {
-    if (localStorage.getItem("username") == null|| localStorage.getItem("sessionToken") == null || localStorage.getItem("username") == "" || localStorage.getItem("sessionToken") == "") {
+    if (localStorage.getItem("username") == null|| localStorage.getItem("sessionToken") == null || localStorage.getItem("firstName") == null || localStorage.getItem("lastName") == null) {
       return null
     } else {
-      return { username: localStorage.getItem("username"), sessionToken: localStorage.getItem("sessionToken") }
+      return { username: localStorage.getItem("username"), sessionToken: localStorage.getItem("sessionToken"), firstName: localStorage.getItem("firstName"), lastName: localStorage.getItem("lastName") }
     }
   })
   const [transparent, setTransparent] = React.useState(true)
-  
+
   return (
     <div className="app">
       <BrowserRouter>

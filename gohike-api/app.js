@@ -4,15 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const authorization = require('./routes/authorization');
 const posts = require('./routes/posts');
-// const urlExpand = require('url-expand')
-
-// urlExpand("https://goo.gl/maps/gHGcWQDBqzR2", function (err, url) {
-//     console.log(url)
-// })
-
-// var Parse = require('parse/node');
-// Parse.initialize(process.env.APP_ID, process.env.JS_KEY);
-// Parse.serverURL = 'https://parseapi.back4app.com/'
+const trails = require('./routes/trails');
 
 const app = express(); 
 app.use(bodyParser.json());
@@ -22,6 +14,7 @@ app.use(cors());
 
 app.use('/authorization', authorization)
 app.use('/posts', posts)
+app.use('/trails', trails)
 
 app.get('/', (req, res) => {
     res.status(200).send({ "ping": "pong" })  

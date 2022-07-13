@@ -5,11 +5,6 @@ class Trails {
         this.super();
     }
 
-    static async getFirstTrail() {
-        const firstTrail = (storage.get("trails").value())[0]
-        return { name: firstTrail.name, longitude: firstTrail.longitude, latitude: firstTrail.latitude }
-    }
-
     static async getTrailByName(trailName) {
         const trails = storage.get("trails").value()
         let trail=[]
@@ -36,6 +31,7 @@ class Trails {
                 }
 
                 trail.push({ 
+                    id: addTrail.id, 
                     name: addTrail.name, 
                     trail_type: addTrail.trail_type, 
                     summary: addTrail.summary, 
@@ -55,6 +51,28 @@ class Trails {
             }
         }
         return trail
+    }
+
+    static async getTrailList() {
+        const trails = storage.get("trails").value()
+        const res = []
+        for (let i = 0; i < trails.length; i++) {
+            let trail = { label: trails[i].name, value: trails[i].id }
+            res.push(trail)
+        }
+
+        return res
+    }
+
+    static async getAllTrails() {
+        const trails = storage.get("trails").value()
+        const res = []
+        for (let i = 0; i < trails.length; i++) {
+            let trail = trails[i]
+            res.push(trail)
+        }
+
+        return res
     }
 }
 

@@ -46,7 +46,7 @@ export function SearchBar({ searchInputResult, setSearchInputResult, setCenter, 
 
     async function handleSearch(event) {
         event.preventDefault()
-        const data = await axios.get(`http://localhost:3005/trails/?name=${searchInput.replaceAll(" ", "+")}`)
+        const data = await axios.get(`http://localhost:3001/trails/${searchInput.replaceAll(" ", "+")}`)
         setSearchInputResult(data.data.trail)
         setSelectedHike(null)
         setCenter({ lat: data?.data?.trail[0]?.latitude, lng: data?.data?.trail[0]?.longitude  })

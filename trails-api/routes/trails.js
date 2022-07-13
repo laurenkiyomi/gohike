@@ -2,16 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Trails = require('../models/trails');
 
-
-router.get('/firstTrail', async (req, res) => {
-    try {
-        const firstTrail = await Trails.getFirstTrail()
-        res.status(201).json({ firstTrail })
-    } catch {
-        res.status(400).json({ msg: "Could not retrieve trail info." })
-    }
-}) 
-
 router.get('/', async (req, res) => {
     try {
         const trailName = req.query.name
@@ -20,6 +10,26 @@ router.get('/', async (req, res) => {
     } catch {
         res.status(400).json({ msg: "Could not retrieve trail info." })
     }
-}) 
+})
+
+router.get('/trail-list', async (req, res) => {
+    try {
+        const trails = await Trails.getTrailList()
+        res.status(201).json({ trails })
+    } catch {
+        res.status(400).json({ msg: "Could not get trail list." })
+    }
+})
+
+router.get('/all-trails', async (req, res) => {
+    try {
+        const trails = await Trails.getAllTrails()
+        res.status(201).json({ trails })
+    } catch {
+        res.status(400).json({ msg: "Could not get trail list." })
+    }
+})
+
+
 
 module.exports = router

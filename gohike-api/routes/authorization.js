@@ -18,7 +18,7 @@ router.post('/register', async (req, res) => {
 
     try {
         let sessionToken = await Authorization.createNewUser(firstName, lastName, age, username, password, email);
-        res.status(201).json( { username: username, sessionToken } )
+        res.status(201).json( { username: username, sessionToken, firstName, lastName } )
     }
 
     catch {
@@ -32,8 +32,8 @@ router.post('/login', async (req, res) => {
     let password = infoUser.password;
     
     try {
-        let sessionToken = await Authorization.loginUser(username, password)
-        res.status(201).json( { username: username, sessionToken } )
+        let loginUser = await Authorization.loginUser(username, password)
+        res.status(201).json( { username: username, sessionToken: loginUser.sessionToken, firstName: loginUser.firstName, lastName: loginUser.lastName } )
     } catch {
         res.status(400).json( { msg: "Failed to login user" } )
     }

@@ -40,8 +40,7 @@ export function Dropdown({ view, setCurrUser, currUser, setDropdownOpen }) {
   const handleLogout = async() => {
     axios.post(LOGOUT_URL, { sessionToken: currUser.sessionToken }).then((results) => {
       setCurrUser(null)
-      localStorage.setItem("username", "")
-      localStorage.setItem("sessionToken", "")
+      localStorage.clear()
       setDropdownOpen(false)
       history('/')
     }).catch((err) => {

@@ -24,7 +24,7 @@ class Authorization {
 
     static async loginUser(username, password) {
         const loginUser = await Parse.User.logIn(username, password)
-        return loginUser.getSessionToken()
+        return { sessionToken: loginUser.getSessionToken(), firstName: loginUser.get("firstName"), lastName: loginUser.get("lastName") }
     }
 
     static async logoutUser(sessionToken) {

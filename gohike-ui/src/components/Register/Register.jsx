@@ -111,9 +111,11 @@ export default function Register({ currUser, setCurrUser, transparent, setTransp
       event.preventDefault();
 
       axios.post(REGISTER_URL, { firstName, lastName, age: parseInt(age), username, password, email }).then(function(registerUser) { 
-        setCurrUser({ username: registerUser.data.username, sessionToken: registerUser.data.sessionToken })
+        setCurrUser({ username: registerUser.data.username, sessionToken: registerUser.data.sessionToken, firstName: registerUser.data.firstName, lastName: registerUser.data.lastName })
         localStorage.setItem("username", registerUser.data.username)
         localStorage.setItem("sessionToken", registerUser.data.sessionToken)
+        localStorage.setItem("firstName", registerUser.data.firstName)
+        localStorage.setItem("lastName", registerUser.data.lastName)
         setFirstName('')
         setLastName('')
         setAge(0)

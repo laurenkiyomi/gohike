@@ -29,9 +29,11 @@ export default function Login({ currUser, setCurrUser, transparent, setTranspare
       event.preventDefault();
 
       axios.post(LOGIN_URL, {username, password}).then(function(loginUser) {
-        setCurrUser({ username: loginUser.data.username, sessionToken: loginUser.data.sessionToken })
+        setCurrUser({ username: loginUser.data.username, sessionToken: loginUser.data.sessionToken, firstName: loginUser.data.firstName, lastName: loginUser.data.lastName })
         localStorage.setItem("username", loginUser.data.username)
         localStorage.setItem("sessionToken", loginUser.data.sessionToken)
+        localStorage.setItem("firstName", loginUser.data.firstName)
+        localStorage.setItem("lastName", loginUser.data.lastName)
         setUsername('')
         setPassword('')
         history('/')
