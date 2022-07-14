@@ -25,4 +25,17 @@ router.get('/posts/:sessionToken', async (req, res) => {
     
 })
 
+router.put('/profilePhoto', async (req, res) => {
+    try {
+        let sessionToken = req.body.sessionToken
+        let picture = req.body.picture
+
+        await User.changeProfilePicture(sessionToken, picture)
+        res.status(201).json( { msg: "Changed profile photo" } )
+    } catch {
+        res.status(400).json( { msg: "Failed to change profile photo" } )
+    }
+
+})
+
 module.exports = router;

@@ -69,7 +69,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
         const arrayBuffer = await picture.arrayBuffer()
         // Convert the array to a base64 string
         const base64String = _arrayBufferToBase64(arrayBuffer)
-
+        // Upload to Parse
         await axios.post(CREATE_POST_URL, { hikeId: trail.value, caption, sessionToken: currUser.sessionToken, picture: base64String })
 
         event.target[1].value = ""
@@ -80,6 +80,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
           console.log("Failed to create post.")
       }
     }
+    
     return (
         <form className="create-post-form" onSubmit={handleCreatePost}>
           <input

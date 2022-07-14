@@ -54,6 +54,28 @@ class User {
 
         return res
     }
+
+    static async changeProfilePicture(sessionToken, picture) {
+        // Create Parse file object from picture
+        const file = new Parse.File('picture', {base64: picture})
+        await file.save()
+
+        console.log(file)
+        // Get User id from sessionToken
+        let query = new Parse.Query("_Session")
+        query.equalTo("sessionToken", sessionToken)
+        let session = await query.first({useMasterKey:true})
+        let userId = session.get("user").id
+
+        // Get user info
+        let query2 = new Parse.Query("_User")
+        query2.equalTo("objectId", userId)
+        let user = await query2.first({useMasterKey:true})
+
+        // Set profile pic
+        user.set("profilePic", file)
+        user.save()
+    }
 }
 
 module.exports = User

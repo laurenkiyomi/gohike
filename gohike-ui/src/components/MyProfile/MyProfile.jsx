@@ -6,20 +6,51 @@ import logo from "../Images/Logo.png"
 import PostGrid from "../Feed/PostGrid"
 
 export default function MyProfile({ transparent, setTransparent, currUser, setCurrUser }) {
+    const EDIT_PROFILE_PIC_URL = "http://localhost:3001/user/profilePhoto"
     const [profileData, setProfileData] = React.useState(null)
     const [posts, setPosts] = React.useState(null)
     const [select, setSelect] = React.useState("posts")
+
+    const _arrayBufferToBase64 = (buffer) => {
+        var binary = '';
+        var bytes = new Uint8Array( buffer );
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode( bytes[ i ] );
+        }
+        return window.btoa( binary );
+    }
+
+    const changeProfilePicture = async (event) => {  
+        try {
+          // Get array buffer from file
+          const arrayBuffer = await event.target.files[0].arrayBuffer()
+          // Convert the array to a base64 string
+          const base64String = _arrayBufferToBase64(arrayBuffer)
+  
+          console.log(base64String)
+          await axios.put(EDIT_PROFILE_PIC_URL, { sessionToken: currUser.sessionToken, picture: base64String })
+        
+          event.target.value = ""
+
+          let data = await axios.get(`http://localhost:3001/user/${currUser.sessionToken}`)
+          setProfileData(data.data.user)
+        } catch (err){  
+            console.log(err)
+            console.log("Failed to change profile picture.")
+        }
+      }
 
      React.useEffect(async () => {
         if (transparent) {
           setTransparent(false)
         }
 
-        // let data = await axios.get(`http://localhost:3001/user/${currUser.sessionToken}`)
-        // setProfileData(data.data.user)
+        let data = await axios.get(`http://localhost:3001/user/${currUser.sessionToken}`)
+        setProfileData(data.data.user)
 
-        // let data2 = await axios.get(`http://localhost:3001/user/posts/${currUser.sessionToken}`)
-        // setPosts(data2.data.posts)
+        let data2 = await axios.get(`http://localhost:3001/user/posts/${currUser.sessionToken}`)
+        setPosts(data2.data.posts)
     }, [])
 
     if (profileData == null || posts == null) {
@@ -55,6 +86,14 @@ export default function MyProfile({ transparent, setTransparent, currUser, setCu
                     }}>Stats</li>
                 </ul>
             </div>
+            <input 
+              type="file"
+              id="file-input"
+              className="profile-pic-input"
+              name="file"
+              onChange={async (event) => {
+                await changeProfilePicture(event)
+            }}/>
             {select == "posts" ? <PostGrid posts={posts}></PostGrid> : <Stats/>}
         </div>
     )

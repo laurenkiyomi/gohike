@@ -48,10 +48,14 @@ export function Dropdown({ view, setCurrUser, currUser, setDropdownOpen }) {
     })
   }
 
+  const handleProfile = () => {
+    setDropdownOpen(false)
+    history('/my-profile')
+  }
+
   return (
     <div className={`dropdown ${view}`}>
-      <button className="dropdown-item">SAVED</button>
-      <button className="dropdown-item">COMPLETED</button>
+      <button className="dropdown-item" onClick={handleProfile}>MY PROFILE</button>
       <button className="dropdown-item">PENDING FRIEND REQUESTS</button>
       <button className="dropdown-item logout-item" onClick={handleLogout}>LOG OUT</button>
     </div>
