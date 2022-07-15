@@ -5,22 +5,16 @@ import axios from "axios";
 import Select from 'react-select';
 import PostGrid from "./PostGrid";
 
-// initalize Parse
-import Parse from 'parse/dist/parse.min.js'
-
-// {(picture == "") ? "" : <img src={URL.createObjectURL(picture)}/> }
-//       {/* <img src={URL.createObjectURL(picture)}/> */}
-
 export default function Feed({ transparent, setTransparent, currUser }) {
     const TRAILS_URL = "http://localhost:3001/trails/"
-    const POSTS_URL = `http://localhost:3001/posts/friends/${currUser.sessionToken}`
+    const FRIENDS_POSTS_URL = `http://localhost:3001/posts/friends/${currUser.sessionToken}`
+    const POSTS_URL = "http://localhost:3001/posts"
     const [trailsList, setTrailsList] = React.useState([])
     const [numPosts, setNumPosts] = React.useState(5)
     const [posts, setPosts] = React.useState(null)
 
     async function fetchData() {
       let data = await axios.get(POSTS_URL)
-      // setPosts((oldPosts) => oldPosts.concat(data.data.posts))
       setPosts(data.data.posts)
     }
 
@@ -39,13 +33,13 @@ export default function Feed({ transparent, setTransparent, currUser }) {
    
     return (
       <nav className="feed">
-        <CreatePost trailsList={trailsList} currUser={currUser}/>
-        <PostGrid posts={posts} />
+        <CreatePost trailsList={trailsList} currUser={currUser} fetchData={fetchData}/>
+        <PostGrid posts={posts} currUser={currUser} />
       </nav>
     )
   }
 
-  export function CreatePost({ trailsList, currUser }) {
+  export function CreatePost({ trailsList, currUser, fetchData }) {
     const CREATE_POST_URL = "http://localhost:3001/posts/create"
     const [picture, setPicture] = React.useState(null)
     const [trail, setTrail] = React.useState("")

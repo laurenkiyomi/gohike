@@ -131,7 +131,7 @@ export default function MyProfile({ transparent, setTransparent, currUser, setCu
                     }}>Stats</li>
                 </ul>
             </div>
-            {select == "posts" ? <PostGrid posts={posts}></PostGrid> : <Stats/>}
+            {select == "posts" ? <PostGrid posts={posts} currUser={currUser}></PostGrid> : <Stats/>}
         </div>
     )
 }

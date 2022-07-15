@@ -26,26 +26,63 @@ router.get('/', async (req, res) => {
     }
 })
 
+router.get('/likes', async (req, res) => {
+    try {
+        let postId = req.body.postId
+
+        let likes = await Posts.getLikes(postId)
+        res.status(201).json( { likes } )
+    } catch (err) {
+        console.log(err)
+        res.status(400).json( { msg: "Failed to get post's likes" } )
+    }
+
+})
+
 router.get('/friends/:sessionToken', async (req, res) => {
     try {
         let sessionToken = req.params.sessionToken
-        console.log(sessionToken)
         let posts = await Posts.getFriendPosts(sessionToken)
         res.status(201).json( { posts } )
+    } catch {
+        res.status(400).json( { msg: "Failed to get friends' posts" } )
+    }
+})
+
+router.get('/:postId', async (req, res) => {
+    try {
+        let postId = req.params.postId
+        let post = await Posts.getPost(postId)
+        res.status(201).json( { post } )
     } catch (err) {
         console.log(err)
-        res.status(400).json( { msg: "Failed to get friends' posts" } )
+        res.status(400).json( { msg: "Failed to get post by id" } )
     }
 })
 
 router.put('/like', async (req, res) => {
     try {
-        let sessionToken = req.body.sessionToken
+        let username = req.body.username
         let postId = req.body.postId
 
-        let likedPost = await Posts.likePost(sessionToken, postId)
+        let likedPost = await Posts.likePost(username, postId)
         res.status(201).json( { msg: likedPost.msg } )
-    } catch {
+    } catch (err) {
+        console.log(err)
+        res.status(400).json( { msg: "Failed to like post" } )
+    }
+
+})
+
+router.put('/unlike', async (req, res) => {
+    try {
+        let username = req.body.username
+        let postId = req.body.postId
+
+        let unlikedPost = await Posts.unlikePost(username, postId)
+        res.status(201).json( { msg: unlikedPost.msg } )
+    } catch (err) {
+        console.log(err)
         res.status(400).json( { msg: "Failed to like post" } )
     }
 

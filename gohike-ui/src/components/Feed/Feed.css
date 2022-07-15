@@ -136,10 +136,31 @@
     transform: translateY(-50%);
 }
 
-.post-caption {
+/*Right Side of Post Card*/
+.post-right-section {
     margin: 0px 0px 0px 15px;
     width: 40%;
+    height: 300px;
     font-family: 'Gothic A1', sans-serif;
     font-size: 1.5vh;
     color: #536268; 
+    padding: 0px;
+}
+
+.post-caption {
+    height: 94%;
+    margin: 0px;
+}
+.post-likes {
+    margin: 0px;
+    padding: 0px;
+}
+
+.post-likes button {
+    margin: 0px;
+    padding: 0 10px 0px 0px;
+}
+
+.post-likes button:active {
+    color: lightgray;
 }

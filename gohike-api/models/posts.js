@@ -3,6 +3,7 @@ var Parse = require('parse/node');
 Parse.initialize(process.env.APP_ID, process.env.JS_KEY, process.env.MASTER_KEY);
 Parse.serverURL = 'https://parseapi.back4app.com/'
 const { parse } = require("path");
+const { post } = require("../routes/authorization");
 
 class Posts {
     constructor() {
@@ -43,7 +44,7 @@ class Posts {
         let session = await query.first({useMasterKey:true})
         let userId = session.get("user").id
 
-        // Get User object from user pointer
+        // Get User object's friends from user pointer
         let query4 = new Parse.Query("_User")
         query4.equalTo("objectId", userId)
         let user = await query4.first({useMasterKey:true})
@@ -54,71 +55,103 @@ class Posts {
             return []
         }
 
-        // Get all Post Objects
-        let query2 = new Parse.Query("Post")
-        let allPosts = await query2.find({useMasterKey:true})
+        let posts =[]
+        for (let i = 0; i < friends.length; i++) {
+            let query3 = new Parse.Query("_User")
+            query3.equalTo("username", friends[i])
+            let friend = await query3.first({useMasterKey:true})
 
-        // Get posts only from friends
-        let posts = []
-        for (let i = 0; i < allPosts.length; i++) {
-            let postPointer = allPosts[i]
-            let query3 = new Parse.Query("Post")
-            query3.equalTo("objectId", postPointer.id)
-            let post = await query3.first({useMasterKey:true})
-            let postUser = post.get("username")
-
-            for (let j = 0; j < friends.length; j++) {
-                if (postUser == friends[j]) {
-                    posts.push({ username: postUser, trailName: post.get("trailName"), hikeId: post.get("hikeId"), caption: post.get("caption"), createdAt:post.get("createdAt"), picture: post.get("picture") })
-                    break;
-                }
+            if (friend.get("posts") != null && friend.get("posts") != undefined) {
+                posts = posts.concat(friend.get("posts"))
             }
         }
 
-        return posts;
+        return posts
     }
  
     static async getAllPosts() {
         // Get all Post objects
         let query = new Parse.Query("Post")
+        query.descending("createdAt")
         let posts = await query.find({useMasterKey:true})
-    
-        // Create array with necessary info for each post
+
         let res = []
         for (let i = 0; i < posts.length; i++) {
-            let post = posts[i]
-            let query = new Parse.Query("Post")
-            query.equalTo("objectId", post.id)
-            let trailInfo = await query.first({useMasterKey:true})
-          
-            res.push({ username: trailInfo.get("username"), trailName: trailInfo.get("trailName"), hikeId: trailInfo.get("hikeId"), caption: trailInfo.get("caption"), createdAt: trailInfo.get("createdAt"), picture: trailInfo.get("picture") })
+            res.push(posts[i].id)
         }
 
         return res
     }
 
-    static async likePost(sessionToken, postId) {
+    static async getPost(postId) {
+        let query = new Parse.Query("Post")
+        query.equalTo("objectId", postId)
+        let post = await query.first({useMasterKey:true})
+
+        let likes
+        if (post.get("likes") == undefined || post.get("likes") == null) {
+            likes = []
+        } else {
+            likes = post.get("likes")
+        }
+     
+        return ({ username: post.get("username"), trailName: post.get("trailName"), hikeId: post.get("hikeId"), caption: post.get("caption"), createdAt: post.get("createdAt"), picture: post.get("picture"), likes })
+    }
+
+    static async likePost(username, postId) {
         // Get Post object from postId
         let query = new Parse.Query("Post")
         query.equalTo("objectId", postId)
         let post = await query.first({useMasterKey:true})
-        let likes = post.get("Likes")
-
-        // Get User object from sessionToken
-        let query2 = new Parse.Query("_Session")
-        query2.equalTo("sessionToken", sessionToken)
-        let session = await query2.first({useMasterKey:true})
-        let user = session.get("user")
+        let likes = post.get("likes")
         
         // Add user to likes array
-        likes.push(user)
-        post.set("Likes", likes)
-        post.save();
+        if (likes == undefined || likes == null) {
+            post.set("likes", [username])
+            await post.save()
+        } else {
+            likes.push(username)
+            post.set("likes", likes)
+            await post.save();
+        }
 
         return { msg: "Liked post" }
     }
 
+    static async unlikePost(username, postId) {
+        // Get Post object from postId
+        let query = new Parse.Query("Post")
+        query.equalTo("objectId", postId)
+        let post = await query.first({useMasterKey:true})
+        let likes = post.get("likes")
+        
+        // Remove user from likes array
+        let res = []
+        for (let i = 0; i < likes.length; i++) {
+            if (likes[i] != username) {
+                res.push(likes[i])
+            }
+        }
+        
+        // Set likes to res
+        post.set("likes", res)
+        await post.save();
+        return { msg: "Unliked post" }
+    }
 
+    static async getLikes(postId) {
+        // Get Post object from postId
+        let query = new Parse.Query("Post")
+        query.equalTo("objectId", postId)
+        let post = await query.first({useMasterKey:true})
+        let likes = post.get("likes")
+
+        if (likes == undefined || likes == null) {
+            return []
+        } else {
+            return likes
+        }
+    }
 }
 
 module.exports = Posts

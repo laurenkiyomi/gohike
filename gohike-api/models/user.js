@@ -41,14 +41,7 @@ class User {
         let res = []
         for (let i = 0; i < posts.length; i++) {
             if (posts[i].get("user").id == userId) {
-                let post = posts[i]
-
-                // Get Post info
-                let query4 = new Parse.Query("Post")
-                query4.equalTo("objectId", post.id)
-                let postInfo = await query4.first({useMasterKey:true})
-                
-                res.push({ firstName: user.get("firstName"), lastName: user.get("lastName"), trailName: postInfo.get("trailName"), hikeId: postInfo.get("hikeId"), caption: postInfo.get("caption"), createdAt: postInfo.get("createdAt"), picture: postInfo.get("picture") })
+                res.push(posts[i].id)
             }
         }
 
@@ -112,14 +105,7 @@ class User {
         let res = []
         for (let i = 0; i < posts.length; i++) {
             if (posts[i].get("user").id == userId) {
-                let post = posts[i]
-
-                // Get Post info
-                let query3 = new Parse.Query("Post")
-                query3.equalTo("objectId", post.id)
-                let postInfo = await query3.first({useMasterKey:true})
-                
-                res.push({ firstName: user.get("firstName"), lastName: user.get("lastName"), trailName: postInfo.get("trailName"), hikeId: postInfo.get("hikeId"), caption: postInfo.get("caption"), createdAt: postInfo.get("createdAt"), picture: postInfo.get("picture") })
+                res.push(posts[i].id)
             }
         }
 
