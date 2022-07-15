@@ -42,7 +42,6 @@ export default function PostGrid({ posts, currUser }) {
 
                         setLiked(false)
                         for (let i = 0; i < data.data.post.likes.length; i++) {
-                            console.log(data.data.post.likes[i])
                             if (data.data.post.likes[i] == currUser.username) {
                                 setLiked(true) 
                                 break
@@ -70,8 +69,6 @@ export function PostCard({ post, likePost, unlikePost, likes, setLikes, liked })
     if (post == null) {
         return null
     }
-
-    console.log('rendering')
 
     const months = [ "January", "February", "March", "April", "May", "June", 
     "July", "August", "September", "October", "November", "December" ]

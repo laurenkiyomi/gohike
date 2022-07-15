@@ -59,6 +59,12 @@ export default function Feed({ transparent, setTransparent, currUser }) {
       event.preventDefault()
 
       try {
+        // Alert and throw error if missing trail selection
+        if (trail == "") {
+          alert("Please select a trail!")
+          throw new Error()
+        }
+
         // Get array buffer from file
         const arrayBuffer = await picture.arrayBuffer()
         // Convert the array to a base64 string
@@ -84,6 +90,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
             onChange={(event) => setCaption(event.target.value)}
             value={caption}
             placeholder={`How was your hike, ${currUser.firstName}?`}
+            required
           />
           <div className="add-to-post">
             <Select

@@ -57,7 +57,6 @@ export default function ViewProfile({ transparent, setTransparent, currUser, set
         // Get user's posts
         let data2 = await axios.get(`http://localhost:3001/user/view/posts/${username}`)
         setPosts(data2.data.posts)
-        console.log(data2.data.posts)
         
         // Set friend status
         if (data.data.user.sentFriendRequests != null && data.data.user.sentFriendRequests != undefined) {
