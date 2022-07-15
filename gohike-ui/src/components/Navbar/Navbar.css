@@ -38,6 +38,10 @@ button {
     padding-top: 20px;
 }
 
+.nav-button:active {
+    color: lightgray;
+}
+
 /*Logo*/
 .logo-img {
     padding-top: 12px;
@@ -54,6 +58,10 @@ button {
 
 .transparent .nav-button {
     color: white;
+}
+
+.transparent .nav-button:active {
+    color: #60270d;
 }
 
 /*Dropdown*/
@@ -100,6 +108,74 @@ button {
     font-size: 0px;
     border: 0px;
 }
+
+.dropdown-item:active {
+    color: lightgray;
+}
+
+/*Pending Friend Requests*/
+.friend-requests {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Gothic A1', sans-serif;
+    background-color: white;
+    border-radius: 10px;
+    color: #536268;
+    font-size: 11px;
+    margin-top: 180px;
+    margin-left: 90%;
+    filter: drop-shadow(0px 1px 1px #536268);  
+    width: 150px;
+}
+
+/*Request Item*/
+.request {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 0px;
+    margin-left: 0px;
+    width: 100%;
+    transition: all .2s cubic-bezier(.215,.61,.355,1);
+    text-align: start;
+}
+
+.request-username {
+    max-width: 90px;
+    overflow: hidden;
+}
+
+.accept-button {
+    background-color: #60270d;
+    padding: 0px 4px 0px;
+    color: white;
+    margin: 0px;
+    font-size: 11px;
+    
+}
+
+.decline-button {
+    background-color: #60270d;
+    padding: 0px 4px 0px;
+    color: white;
+    margin: 0px 10px 0px 5px;
+    font-size: 11px;
+}
+
+.friends-closed {
+    display: none;
+}
+
+/*No Friend Requests Display Message*/
+.no-friend-requests {
+    margin: 5px;
+    color: #60270d;
+}
+
+
 
 
 

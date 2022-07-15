@@ -1,0 +1,131 @@
+/*View Profile*/
+.view-profile {
+    width: 100%;
+    max-width: 100vw;
+    height: 100%;
+    min-height: 100vh;
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(0deg, rgba(255, 251, 251, 0.6), rgba(255, 251, 251, 0.6)), linear-gradient(0deg, rgba(167, 184, 205, 0.8), rgba(167, 184, 205, 0.8)), #536268;
+  }
+
+/*View Profile Header*/
+.view-profile-header {
+    width: 65%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .view-profile-header h1 {
+    font-family: 'Gothic A1', sans-serif;
+    color: #536268;
+    font-size: 5vh;
+    margin-top: 43px;
+  }
+  
+  .view-profile .logo-img {
+    width: 100px;
+  }
+
+/*View Profile Banner*/
+.view-profile-banner {
+    width: 65%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 7.5px;
+}
+  
+.view-cover-pic-container {
+    width: 100%;
+    height: 350px;
+    overflow: hidden
+}
+  
+.view-cover-pic {
+    width: 100%;
+    transform: translateY(-50%);
+}
+  
+.view-profile-pic-container {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid white;
+    margin-left: 50px;
+    margin-top: -40px;
+    margin-bottom: -15px;
+    z-index: 2;
+}
+  
+.view-profile-pic {
+    width: 100%;
+}
+  
+.view-profile-name {
+    margin-left: 210px;
+    margin-top: -90px;
+    font-family: 'Gothic A1', sans-serif;
+    font-weight: 2000px;
+    font-size: 40px;
+}
+  
+.view-profile-friends {
+    font-family: 'Gothic A1', sans-serif;
+    font-size: 2vh;
+    margin-left: 210px;
+    margin-top: 5px;
+  }
+  
+.view-profile .line {
+    align-self: center;
+    margin-top: 30px;
+    width: 95%;
+    height: 1px;
+    background-color:rgba(167, 184, 205, 0.8)
+}
+
+/*Add Friend Button*/
+.friend-button {
+  background-color: #60270d;
+  font-family: 'Gothic A1', sans-serif;
+  color: white;
+  border-radius: 2px;
+  padding-top: 5px;
+  width: 150px;
+  margin-left: 84%;
+  font-size: 12px;
+  margin-bottom: -20px;
+  z-index: 10;
+}
+  
+/*View Profile Navigation*/
+.view-profile-nav {
+    margin-left: 50px;
+    padding: 0px;
+}
+
+.view-profile-nav li {
+    display: inline-block;
+    font-family: 'Gothic A1', sans-serif;
+    font-size: 1.5vh;
+    font-weight: bolder;
+    margin-right: 50px;
+}
+
+.view-profile-nav .active {
+    text-decoration: underline;
+    text-decoration-color: #60270d;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 2px;
+}
+
+/*View Profile Posts*/
+.view-profile .post-card {
+    align-self: start;
+}
+  

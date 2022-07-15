@@ -9,10 +9,11 @@ import Login from "../Login/Login"
 import Register from "../Register/Register"
 import Feed from "../Feed/Feed"
 import MyProfile from "../MyProfile/MyProfile"
+import ViewProfile from "../ViewProfile/ViewProfile"
 
 export default function App() {
   const [currUser, setCurrUser] = React.useState(() => {
-    if (localStorage.getItem("username") == null|| localStorage.getItem("sessionToken") == null || localStorage.getItem("firstName") == null || localStorage.getItem("lastName") == null) {
+    if (localStorage.getItem("username") == null || localStorage.getItem("sessionToken") == null || localStorage.getItem("firstName") == null || localStorage.getItem("lastName") == null) {
       return null
     } else {
       return { username: localStorage.getItem("username"), sessionToken: localStorage.getItem("sessionToken"), firstName: localStorage.getItem("firstName"), lastName: localStorage.getItem("lastName") }
@@ -35,6 +36,7 @@ export default function App() {
             <Route path="/register" element={<Register currUser={currUser} setCurrUser={setCurrUser} transparent={transparent} setTransparent={setTransparent}/>} />
             <Route path="/login" element={<Login currUser={currUser} setCurrUser={setCurrUser} transparent={transparent} setTransparent={setTransparent}/>} />
             <Route path="/my-profile" element={<MyProfile currUser={currUser} setCurrUser={setCurrUser} transparent={transparent} setTransparent={setTransparent} />} />
+            <Route path="/view-profile/:username" element={<ViewProfile currUser={currUser} setCurrUser={setCurrUser} transparent={transparent} setTransparent={setTransparent} />} />
           </Routes>
         </main>
       </BrowserRouter>

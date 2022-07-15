@@ -62,6 +62,10 @@
     width: 35px;
 }
 
+.upload-images-label {
+    z-index: 5;
+}
+
 .post-button {
     margin-left: 50%;
     height: 40px;
@@ -111,6 +115,10 @@
     color: #536268;
 }
 
+.post-card span:active {
+    color: lightgray;
+}
+
 .post-card-section {
     display: flex;
     flex-direction: row;
@@ -124,9 +132,8 @@
 }
 
 .post-pic {
-    width: 100%;
-    bottom: 30%;
-    transform: translateY(-30%);
+    object-fit: cover;
+    transform: translateY(-50%);
 }
 
 .post-caption {

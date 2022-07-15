@@ -13,10 +13,10 @@ import Parse from 'parse/dist/parse.min.js'
 
 export default function Feed({ transparent, setTransparent, currUser }) {
     const TRAILS_URL = "http://localhost:3001/trails/"
-    const POSTS_URL = "http://localhost:3001/posts/"
+    const POSTS_URL = `http://localhost:3001/posts/friends/${currUser.sessionToken}`
     const [trailsList, setTrailsList] = React.useState([])
     const [numPosts, setNumPosts] = React.useState(5)
-    const [posts, setPosts] = React.useState([])
+    const [posts, setPosts] = React.useState(null)
 
     async function fetchData() {
       let data = await axios.get(POSTS_URL)
@@ -68,7 +68,8 @@ export default function Feed({ transparent, setTransparent, currUser }) {
         // Get array buffer from file
         const arrayBuffer = await picture.arrayBuffer()
         // Convert the array to a base64 string
-        const base64String = _arrayBufferToBase64(arrayBuffer)
+        let base64String = _arrayBufferToBase64(arrayBuffer)
+        base64String = "data:image/jpeg;base64," + base64String
         // Upload to Parse
         await axios.post(CREATE_POST_URL, { hikeId: trail.value, caption, sessionToken: currUser.sessionToken, picture: base64String })
 
@@ -98,7 +99,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
               onChange={(value) => {setTrail(value)}}
               className="trail-post-input"
             />
-            <label htmlFor="file-input">
+            <label className="upload-images-label" htmlFor="file-input">
               <img className="upload-images-icon" src="https://icon-library.com/images/image-icon-png/image-icon-png-6.jpg"/>
             </label>
             <input 
@@ -107,13 +108,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
               className="picture-post-input"
               name="file"
               onChange={(event) => {
-                // Limit size of file
-                if (event.target.files[0].size > 102000) {
-                  alert("File is too big!")
-                  event.target.value = ""
-                } else {
-                  setPicture(event.target.files[0])
-                }
+                setPicture(event.target.files[0])
               }}
               required
             />

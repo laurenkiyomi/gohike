@@ -26,6 +26,18 @@ router.get('/', async (req, res) => {
     }
 })
 
+router.get('/friends/:sessionToken', async (req, res) => {
+    try {
+        let sessionToken = req.params.sessionToken
+        console.log(sessionToken)
+        let posts = await Posts.getFriendPosts(sessionToken)
+        res.status(201).json( { posts } )
+    } catch (err) {
+        console.log(err)
+        res.status(400).json( { msg: "Failed to get friends' posts" } )
+    }
+})
+
 router.put('/like', async (req, res) => {
     try {
         let sessionToken = req.body.sessionToken
