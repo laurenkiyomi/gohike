@@ -1,6 +1,6 @@
 import * as React from "react"
 import "./FindHikes.css"
-import axios from 'axios';   
+import axios from 'axios';
 
 export default function SideBar({ searchInputResult, setSearchInputResult, setCenter, selectedHike, setSelectedHike }) {
     return (
@@ -43,13 +43,17 @@ export function HikePopout({ selectedHike, setSelectedHike }) {
 
 export function SearchBar({ searchInputResult, setSearchInputResult, setCenter, setSelectedHike}) {
     const [searchInput, setSearchInput] = React.useState('')
+    const [spinner, setSpinner] = React.useState(false)
 
     async function handleSearch(event) {
         event.preventDefault()
-        const data = await axios.get(`http://localhost:3001/trails/${searchInput.replaceAll(" ", "+")}`)
-        setSearchInputResult(data.data.trail)
-        setSelectedHike(null)
-        setCenter({ lat: data?.data?.trail[0]?.latitude, lng: data?.data?.trail[0]?.longitude  })
+        setSpinner(true)
+        await axios.get(`http://localhost:3001/trails/${searchInput.replaceAll(" ", "+")}`).then((data) => {
+            setSearchInputResult(data.data.trail)
+            setSelectedHike(null)
+            setCenter({ lat: data?.data?.trail[0]?.latitude, lng: data?.data?.trail[0]?.longitude  })
+            setSpinner(false)
+        })
     }
 
     return (
@@ -62,7 +66,7 @@ export function SearchBar({ searchInputResult, setSearchInputResult, setCenter, 
                 value={searchInput}
                 onChange={(event) => setSearchInput(event.target.value)}>
             </input>
-            <button className="hike-search-button material-icons md-48">search</button>
+            {spinner ? <button className="hike-search-button">Loading</button> : <button className="hike-search-button material-icons md-48">search</button>}
         </form>
     )
 }
