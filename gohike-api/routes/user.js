@@ -106,4 +106,32 @@ router.put('/declineFriend', async (req, res) => {
     } 
 })
 
+router.put('/save', async (req, res) => {
+    try {
+        let username = req.body.username
+        let hikeId = req.body.hikeId
+
+        let savedPost = await User.savePost(username, hikeId)
+        res.status(201).json( { msg: savedPost.msg } )
+    } catch (err) {
+        console.log(err)
+        res.status(400).json( { msg: "Failed to save post" } )
+    }
+
+})
+
+router.put('/unsave', async (req, res) => {
+    try {
+        let username = req.body.username
+        let hikeId = req.body.hikeId
+
+        let unsavedPost = await User.unsavePost(username, hikeId)
+        res.status(201).json( { msg: unsavedPost.msg } )
+    } catch (err) {
+        console.log(err)
+        res.status(400).json( { msg: "Failed to unsave post" } )
+    }
+
+})
+
 module.exports = router;

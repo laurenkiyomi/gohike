@@ -17,6 +17,9 @@ class Authorization {
         user.set("username", username);
         user.set("password", password);
         user.set("email", email);
+        user.set("saved", []);
+        user.set("completed", []);
+        user.set("posts", []);
 
         let newUser = await user.signUp();
         return newUser.getSessionToken()

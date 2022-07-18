@@ -248,6 +248,46 @@ class User {
         return "Declined friend request"
     }
     
+    static async savePost(username, hikeId) {
+        // Get User object from username
+        let query = new Parse.Query("_User")
+        query.equalTo("username", username)
+        let user = await query.first({useMasterKey:true})
+        let saved = user.get("saved")
+        
+        // Add hike to saved array
+        if (saved == undefined || saved == null) {
+            user.set("saved", [hikeId])
+            await user.save(null, {useMasterKey:true})
+        } else {
+            saved.push(hikeId)
+            user.set("saved", saved)
+            await user.save(null, {useMasterKey:true})
+        }
+
+        return { msg: "Saved post" }
+    }
+
+    static async unsavePost(username, hikeId) {
+        // Get User object from username
+        let query = new Parse.Query("_User")
+        query.equalTo("username", username)
+        let user = await query.first({useMasterKey:true})
+        let saved = user.get("saved")
+        
+        // Add hike to saved array
+        let res = []
+        for (let i = 0; i < saved.length; i++) {
+            if (saved[i] != hikeId)
+            res.push(hikeId)
+        }
+
+        user.set("saved", res)
+            await user.save(null, {useMasterKey:true})
+            
+        return { msg: "Unsaved post" }
+    }
+
 
 }
 
