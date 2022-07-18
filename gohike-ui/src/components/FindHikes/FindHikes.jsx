@@ -12,11 +12,15 @@ export default function FindHikes({ transparent, setTransparent, currUser }) {
     const [center, setCenter] = React.useState({ lat: 37.4816056542292, lng: -122.17105672877193  })
     const [zoom, setZoom] = React.useState(11);
     const [searchInputResult, setSearchInputResult] = React.useState([])
+    const [saved, setSaved] = React.useState(null)
+    const [completed, setCompleted] = React.useState(null)
 
     React.useEffect(async () => {
       if (transparent) {
         setTransparent(false)
       }
+
+      
 
       if (id != undefined) {
         let data = await axios.get(`http://localhost:3001/trails/id/${id}`)

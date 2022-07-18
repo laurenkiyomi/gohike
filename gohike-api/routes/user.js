@@ -2,6 +2,18 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 
+router.get('/saved-completed', async (req, res) => {
+    try {
+        let username = req.body.username
+
+        let savedCompleted = await User.getSavedAndCompleted(username)
+        res.status(201).json( savedCompleted )
+    } catch (err) {
+        console.log(err)
+        res.status(400).json( { msg: "Failed to get saved and completed hikes" } )
+    }
+})
+
 router.get('/:sessionToken', async (req, res) => {
     try {
         const sessionToken = req.params.sessionToken
@@ -115,7 +127,7 @@ router.put('/save', async (req, res) => {
         res.status(201).json( { msg: savedPost.msg } )
     } catch (err) {
         console.log(err)
-        res.status(400).json( { msg: "Failed to save post" } )
+        res.status(400).json( { msg: "Failed to save hike" } )
     }
 
 })
@@ -129,9 +141,35 @@ router.put('/unsave', async (req, res) => {
         res.status(201).json( { msg: unsavedPost.msg } )
     } catch (err) {
         console.log(err)
-        res.status(400).json( { msg: "Failed to unsave post" } )
+        res.status(400).json( { msg: "Failed to unsave hike" } )
     }
 
+})
+
+router.put('/complete', async (req, res) => {
+    try {
+        let username = req.body.username
+        let hikeId = req.body.hikeId
+
+        let completedPost = await User.completePost(username, hikeId)
+        res.status(201).json( { msg: completedPost.msg } )
+    } catch (err) {
+        console.log(err)
+        res.status(400).json( { msg: "Failed to complete hike" } )
+    }
+})
+
+router.put('/uncomplete', async (req, res) => {
+    try {
+        let username = req.body.username
+        let hikeId = req.body.hikeId
+
+        let uncompletedPost = await User.uncompletePost(username, hikeId)
+        res.status(201).json( { msg: uncompletedPost.msg } )
+    } catch (err) {
+        console.log(err)
+        res.status(400).json( { msg: "Failed to uncomplete hike" } )
+    }
 })
 
 module.exports = router;

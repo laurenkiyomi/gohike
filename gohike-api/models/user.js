@@ -1,5 +1,6 @@
 require("dotenv").config();
 var Parse = require('parse/node');
+const { use } = require("../routes/user");
 Parse.initialize(process.env.APP_ID, process.env.JS_KEY, process.env.MASTER_KEY);
 Parse.serverURL = 'https://parseapi.back4app.com/'
 
@@ -19,6 +20,16 @@ class User {
         query2.equalTo("objectId", session.get("user").id)
         let user = await query2.first({useMasterKey:true})
         return user
+    }
+
+    static async getSavedAndCompleted(username) {
+        // Get User object from username
+        let query = new Parse.Query("_User")
+        query.equalTo("username", username)
+        let user = await query.first({useMasterKey:true})
+
+        // Return saved and completed
+        return { saved: user.get("saved"), completed: user.get("completed") }
     }
 
     static async getUserPosts(sessionToken) {
@@ -265,7 +276,7 @@ class User {
             await user.save(null, {useMasterKey:true})
         }
 
-        return { msg: "Saved post" }
+        return { msg: "Saved hike" }
     }
 
     static async unsavePost(username, hikeId) {
@@ -275,7 +286,7 @@ class User {
         let user = await query.first({useMasterKey:true})
         let saved = user.get("saved")
         
-        // Add hike to saved array
+        // Add hike to saved array if not hikeId
         let res = []
         for (let i = 0; i < saved.length; i++) {
             if (saved[i] != hikeId)
@@ -285,7 +296,47 @@ class User {
         user.set("saved", res)
             await user.save(null, {useMasterKey:true})
             
-        return { msg: "Unsaved post" }
+        return { msg: "Unsaved hike" }
+    }
+
+    static async completePost(username, hikeId) {
+        // Get User object from username
+        let query = new Parse.Query("_User")
+        query.equalTo("username", username)
+        let user = await query.first({useMasterKey:true})
+        let completed = user.get("completed")
+        
+        // Add hike to completed array
+        if (completed == undefined || completed == null) {
+            user.set("completed", [hikeId])
+            await user.save(null, {useMasterKey:true})
+        } else {
+            completed.push(hikeId)
+            user.set("completed", completed)
+            await user.save(null, {useMasterKey:true})
+        }
+
+        return { msg: "Completed hike" }
+    }
+
+    static async uncompletePost(username, hikeId) {
+        // Get User object from username
+        let query = new Parse.Query("_User")
+        query.equalTo("username", username)
+        let user = await query.first({useMasterKey:true})
+        let completed = user.get("completed")
+        
+        // Add hike to completed array if not hikeId
+        let res = []
+        for (let i = 0; i < completed.length; i++) {
+            if (completed[i] != hikeId)
+            res.push(hikeId)
+        }
+
+        user.set("completed", res)
+            await user.save(null, {useMasterKey:true})
+            
+        return { msg: "Uncompleted hike" }
     }
 
 
