@@ -90,7 +90,6 @@
     font-size: 1.3vh;
     letter-spacing: .4px;
     color: #536268;
-    margin-top: 3px;
 }
 
 .hike-card .hike-type {
@@ -105,6 +104,42 @@
 
 .hike-card .hike-name:hover {
     text-decoration: underline;
+}
+
+.hike-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+}
+
+/*Save and complete buttons*/
+.hike-card .hike-saved {
+    font-size: 24px;
+    margin: 2px;
+    padding: 0px;
+    color: #92bcd1;
+}
+
+.hike-card .hike-completed {
+    font-size: 24px;
+    margin: 2px;
+    padding: 0px;
+    color: #b4bc64;
+}
+
+.hike-card .hike-not-saved {
+    font-size: 24px;
+    margin: 2px;
+    padding: 0px;
+    color: rgba(0,0,0,0.2);
+}
+
+.hike-card .hike-not-completed {
+    font-size: 24px;
+    margin: 2px;
+    padding: 0px;
+    color: rgba(0,0,0,0.2);
 }
 
 /*Search Bar*/

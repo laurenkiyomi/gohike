@@ -72,6 +72,41 @@ export function SearchBar({ searchInputResult, setSearchInputResult, setCenter, 
 }
 
 export function HikeCard({ hikeObject, setSelectedHike }) {
+    const [saved, setSaved] = React.useState(false)
+    const [completed, setCompleted] = React.useState(false)
+    
+    async function saveHike() {
+        setSaved(true)
+    }
+
+    async function unsaveHike() {
+        setSaved(false)
+    }
+
+    async function completeHike() {
+        setCompleted(true)
+    }
+
+    async function uncompleteHike() {
+        setCompleted(false)
+    }
+
+    async function likePost() {
+        await axios.put(LIKE_URL, { username: currUser.username, postId })
+
+        let data = await axios.get(GET_POST_URL, { sessionToken: currUser.sessionToken })
+        setLikes(data.data.post.likes)
+        setLiked(true)
+    }
+
+    async function unlikePost() {
+        await axios.put(UNLIKE_URL, { username: currUser.username, postId })
+
+        let data = await axios.get(GET_POST_URL, { sessionToken: currUser.sessionToken })
+        setLikes(data.data.post.likes)
+        setLiked(false)
+    }
+
     return (
         <div className="hike-card" >
             {(hikeObject.img == "") ? "" : 
@@ -80,8 +115,16 @@ export function HikeCard({ hikeObject, setSelectedHike }) {
                 </div>
             }
             <span className="hike-type">{hikeObject.trail_type}</span>
-            <span className="hike-name" 
-                onClick={() => {setSelectedHike(hikeObject)}}>{hikeObject.name}
+            <span className="hike-title"> 
+                <p className = "hike-name" onClick={() => {setSelectedHike(hikeObject)}}>{hikeObject.name}</p>
+                {saved ? 
+                <button onClick={unsaveHike} className="hike-saved material-icons md-48">bookmark</button> : 
+                <button onClick={saveHike} className="hike-not-saved material-icons md-48">bookmark</button>
+            }
+            {completed ? 
+                <button onClick={uncompleteHike} className="hike-completed material-icons md-48">done_outline</button> : 
+                <button onClick={completeHike} className="hike-not-completed material-icons md-48">done_outline</button>
+            }
             </span>
             <span className="hike-location">{hikeObject.location}</span>
             <span className="hike-length-ascent">{`Length: ${hikeObject.length} | Ascent: ${hikeObject.ascent}`}</span> 
