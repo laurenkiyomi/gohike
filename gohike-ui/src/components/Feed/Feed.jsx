@@ -1,5 +1,6 @@
 import * as React from "react"
 import "./Feed.css"
+import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import Select from 'react-select';
@@ -12,9 +13,11 @@ export default function Feed({ transparent, setTransparent, currUser }) {
     const [trailsList, setTrailsList] = React.useState([])
     const [numPosts, setNumPosts] = React.useState(5)
     const [posts, setPosts] = React.useState(null)
+    const [spinner, setSpinner] = React.useState(false)
 
     async function fetchData() {
       let data = await axios.get(POSTS_URL)
+      setSpinner(true)
       setPosts(data.data.posts)
     }
 
@@ -34,7 +37,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
     return (
       <nav className="feed">
         <CreatePost trailsList={trailsList} currUser={currUser} fetchData={fetchData}/>
-        <PostGrid posts={posts} currUser={currUser} />
+        {spinner ? <PostGrid posts={posts} currUser={currUser} /> : <LoadingScreen/>}
       </nav>
     )
   }
