@@ -8,12 +8,13 @@ import PostGrid from "./PostGrid";
 
 export default function Feed({ transparent, setTransparent, currUser }) {
     const TRAILS_URL = "http://localhost:3001/trails/"
-    const FRIENDS_POSTS_URL = `http://localhost:3001/posts/friends/${currUser.sessionToken}`
+    // const FRIENDS_POSTS_URL = `http://localhost:3001/posts/friends/${currUser.sessionToken}`
     const POSTS_URL = "http://localhost:3001/posts"
     const [trailsList, setTrailsList] = React.useState([])
     const [numPosts, setNumPosts] = React.useState(5)
     const [posts, setPosts] = React.useState(null)
     const [spinner, setSpinner] = React.useState(false)
+    const history = useNavigate()
 
     async function fetchData() {
       let data = await axios.get(POSTS_URL)
@@ -22,6 +23,11 @@ export default function Feed({ transparent, setTransparent, currUser }) {
     }
 
     React.useEffect(async () => {
+      // Navigate to login page if user isn't logged in
+      if (currUser == null) {
+        history('/login')
+      }
+
       if (transparent) {
         setTransparent(false)
       }
@@ -74,7 +80,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
         let base64String = _arrayBufferToBase64(arrayBuffer)
         base64String = "data:image/jpeg;base64," + base64String
         // Upload to Parse
-        await axios.post(CREATE_POST_URL, { hikeId: trail.value, caption, sessionToken: currUser.sessionToken, picture: base64String })
+        await axios.post(CREATE_POST_URL, { hikeId: trail.value, caption, sessionToken: currUser?.sessionToken, picture: base64String })
 
         event.target[1].value = ""
         setPicture(null)
@@ -92,7 +98,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
             className="caption-post-input"
             onChange={(event) => setCaption(event.target.value)}
             value={caption}
-            placeholder={`How was your hike, ${currUser.firstName}?`}
+            placeholder={`How was your hike, ${currUser?.firstName}?`}
             required
           />
           <div className="add-to-post">
