@@ -4,6 +4,7 @@ import axios from 'axios'
 import { Link, useParams } from 'react-router-dom';
 import logo from "../Images/Logo.png"
 import PostGrid from "../Feed/PostGrid"
+import LoadingScreen from "../LoadingScreen/LoadingScreen";
 
 export default function ViewProfile({ transparent, setTransparent, currUser, setCurrUser }) {
     const ADD_FRIEND_URL = "http://localhost:3001/user/addFriend"
@@ -12,9 +13,10 @@ export default function ViewProfile({ transparent, setTransparent, currUser, set
     const [profileData, setProfileData] = React.useState(null)
     const [posts, setPosts] = React.useState(null)
     const [select, setSelect] = React.useState("posts")
-    const [friendStatus, setFriendStatus] = React.useState()
+    const [friendStatus, setFriendStatus] = React.useState("")
     const params = useParams()
     const username = params.username
+    const [spinner, setSpinner] = React.useState(false)
 
     const addFriend = async() => {
         try {
@@ -43,13 +45,7 @@ export default function ViewProfile({ transparent, setTransparent, currUser, set
         }
     }
 
-
-
-    React.useEffect(async () => {
-        if (transparent) {
-          setTransparent(false)
-        }
-
+    const fetchData = async() => {
         // Get profile data
         let data = await axios.get(`http://localhost:3001/user/view/${username}`)
         setProfileData(data.data.user)
@@ -57,7 +53,7 @@ export default function ViewProfile({ transparent, setTransparent, currUser, set
         // Get user's posts
         let data2 = await axios.get(`http://localhost:3001/user/view/posts/${username}`)
         setPosts(data2.data.posts)
-        
+
         // Set friend status
         if (data.data.user.sentFriendRequests != null && data.data.user.sentFriendRequests != undefined) {
             for (let i = 0; i < data.data.user.sentFriendRequests.length; i++) {
@@ -86,11 +82,16 @@ export default function ViewProfile({ transparent, setTransparent, currUser, set
                 } 
             }
         }
-    }, [])
-
-    if (profileData == null || posts == null) {
-        return null
     }
+
+    React.useEffect(async () => {
+        if (transparent) {
+          setTransparent(false)
+        }
+
+        await fetchData()
+        setSpinner(true)
+    }, [])
 
     return (
         <div className="view-profile">
@@ -98,6 +99,22 @@ export default function ViewProfile({ transparent, setTransparent, currUser, set
                 <h1>GOHIKE</h1>
                 <img className="logo-img" src={logo}/>
             </div>
+            {spinner ? 
+                <ViewProfileBanner currUser={currUser} posts={posts} profileData={profileData} select={select} setSelect={setSelect} acceptFriend={acceptFriend} addFriend={addFriend} friendStatus={friendStatus}/> :
+                <LoadingScreen />
+            }
+            
+        </div>
+    )
+}
+
+export function ViewProfileBanner({ currUser, posts, profileData, select, setSelect, acceptFriend, addFriend, friendStatus={friendStatus} }) {
+    if (profileData == null || posts == null || friendStatus == "") {
+        return null
+    }
+
+    return (
+        <>
             <div className="view-profile-banner">
                 <div className="view-cover-pic-container">
                     <img className="view-cover-pic" src={profileData.coverPic}/>
@@ -128,7 +145,7 @@ export default function ViewProfile({ transparent, setTransparent, currUser, set
                 </ul>
             </div>
             {select == "posts" ? <PostGrid posts={posts} currUser={currUser}></PostGrid> : <About/>}
-        </div>
+        </>
     )
 }
 
