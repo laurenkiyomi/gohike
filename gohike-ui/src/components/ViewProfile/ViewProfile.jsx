@@ -1,7 +1,7 @@
 import * as React from "react"
 import "./ViewProfile.css"
 import axios from 'axios'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import logo from "../Images/Logo.png"
 import PostGrid from "../Feed/PostGrid"
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
@@ -17,7 +17,12 @@ export default function ViewProfile({ transparent, setTransparent, currUser, set
     const params = useParams()
     const username = params.username
     const [spinner, setSpinner] = React.useState(false)
+    const history = useNavigate()
 
+    if (currUser.username == username) {
+        history('/my-profile')
+    }    
+    
     const addFriend = async() => {
         try {
             await axios.put(ADD_FRIEND_URL, { sessionToken: currUser.sessionToken, username: profileData.username })
