@@ -2,10 +2,9 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 
-router.get('/saved-completed', async (req, res) => {
+router.get('/saved-completed/:username', async (req, res) => {
     try {
-        let username = req.body.username
-
+        var username = req.params.username
         let savedCompleted = await User.getSavedAndCompleted(username)
         res.status(201).json( savedCompleted )
     } catch (err) {
@@ -34,7 +33,6 @@ router.get('/posts/:sessionToken', async (req, res) => {
         console.log(err)
         res.status(400).json({ msg: "Could not retrieve user posts." })
     }
-    
 })
 
 router.put('/profilePhoto', async (req, res) => {
@@ -123,8 +121,8 @@ router.put('/save', async (req, res) => {
         let username = req.body.username
         let hikeId = req.body.hikeId
 
-        let savedPost = await User.savePost(username, hikeId)
-        res.status(201).json( { msg: savedPost.msg } )
+        let saved = await User.savePost(username, hikeId)
+        res.status(201).json( { saved } )
     } catch (err) {
         console.log(err)
         res.status(400).json( { msg: "Failed to save hike" } )
@@ -137,8 +135,8 @@ router.put('/unsave', async (req, res) => {
         let username = req.body.username
         let hikeId = req.body.hikeId
 
-        let unsavedPost = await User.unsavePost(username, hikeId)
-        res.status(201).json( { msg: unsavedPost.msg } )
+        let saved = await User.unsavePost(username, hikeId)
+        res.status(201).json( { saved } )
     } catch (err) {
         console.log(err)
         res.status(400).json( { msg: "Failed to unsave hike" } )
@@ -151,8 +149,8 @@ router.put('/complete', async (req, res) => {
         let username = req.body.username
         let hikeId = req.body.hikeId
 
-        let completedPost = await User.completePost(username, hikeId)
-        res.status(201).json( { msg: completedPost.msg } )
+        let completed = await User.completePost(username, hikeId)
+        res.status(201).json( { completed } )
     } catch (err) {
         console.log(err)
         res.status(400).json( { msg: "Failed to complete hike" } )
@@ -164,8 +162,8 @@ router.put('/uncomplete', async (req, res) => {
         let username = req.body.username
         let hikeId = req.body.hikeId
 
-        let uncompletedPost = await User.uncompletePost(username, hikeId)
-        res.status(201).json( { msg: uncompletedPost.msg } )
+        let completed = await User.uncompletePost(username, hikeId)
+        res.status(201).json( { completed } )
     } catch (err) {
         console.log(err)
         res.status(400).json( { msg: "Failed to uncomplete hike" } )

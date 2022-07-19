@@ -2,20 +2,28 @@ import * as React from "react"
 import "./FindHikes.css"
 import axios from 'axios';
 
-export default function SideBar({ searchInputResult, setSearchInputResult, setCenter, selectedHike, setSelectedHike }) {
+export default function SideBar({ searchInputResult, setSearchInputResult, setCenter, selectedHike, setSelectedHike, currUser }) {
     return (
         <>
             <div className="side-bar">
                 <SearchBar searchInputResult={searchInputResult} setSearchInputResult={setSearchInputResult} setCenter={setCenter} setSelectedHike={setSelectedHike} />
                 <div>{(searchInputResult.length == 0) ? <div className="nothing-message">Nothing to Display</div> : 
-                    (searchInputResult.map((hikeObject, index) => {
-                        return (
-                            <HikeCard key={index} hikeObject={hikeObject} setSelectedHike={setSelectedHike} />
-                        )
-                    }))
+                    <SearchResults searchInputResult={searchInputResult} setSelectedHike={setSelectedHike} currUser={currUser} />
                 }</div>
             </div>
             { selectedHike ? <HikePopout selectedHike={selectedHike} setSelectedHike={setSelectedHike} /> : ""}
+        </>
+    )
+}
+
+export function SearchResults({ searchInputResult, setSelectedHike, currUser }) {
+    return (
+        <>
+            {(searchInputResult.map((hikeObject, index) => {
+                        return (
+                            <HikeCard key={index} hikeObject={hikeObject} setSelectedHike={setSelectedHike} currUser={currUser}/>
+                        )
+                    }))}
         </>
     )
 }
@@ -45,6 +53,8 @@ export function SearchBar({ searchInputResult, setSearchInputResult, setCenter, 
     const [searchInput, setSearchInput] = React.useState('')
     const [spinner, setSpinner] = React.useState(false)
 
+
+
     async function handleSearch(event) {
         event.preventDefault()
         setSpinner(true)
@@ -71,24 +81,56 @@ export function SearchBar({ searchInputResult, setSearchInputResult, setCenter, 
     )
 }
 
-export function HikeCard({ hikeObject, setSelectedHike }) {
-    const [saved, setSaved] = React.useState(false)
-    const [completed, setCompleted] = React.useState(false)
+export function HikeCard({ hikeObject, setSelectedHike, currUser }) {
+    const [saved, setSaved] = React.useState(null)
+    const [completed, setCompleted] = React.useState(null)
+    const COMPLETE_HIKE_URL = "http://localhost:3001/user/complete"
+    const UNCOMPLETE_HIKE_URL = "http://localhost:3001/user/uncomplete"
+    const SAVE_HIKE_URL = "http://localhost:3001/user/save"
+    const UNSAVE_HIKE_URL = "http://localhost:3001/user/unsave"
+    
+    React.useEffect(async () => {
+        const data = await axios.get(`http://localhost:3001/user/saved-completed/${currUser.username}`)
+
+        setSaved(data.data.saved)
+        setCompleted(data.data.completed)
+    }, [])
+
     
     async function saveHike() {
-        setSaved(true)
+        try {
+            let data = await axios.put(SAVE_HIKE_URL, { hikeId: hikeObject.id, username: currUser.username })
+            setSaved(data.data.saved)
+        } catch {
+            console.log("Failed to save hike")
+        }
     }
 
     async function unsaveHike() {
-        setSaved(false)
+        try {
+            let data = await axios.put(UNSAVE_HIKE_URL, { hikeId: hikeObject.id, username: currUser.username })
+            setSaved(data.data.saved)
+        } catch {
+            console.log("Failed to unsave hike")
+        }
     }
 
     async function completeHike() {
-        setCompleted(true)
+        try {
+            let data = await axios.put(COMPLETE_HIKE_URL, { hikeId: hikeObject.id, username: currUser.username })
+            setCompleted(data.data.completed)
+        } catch {
+            console.log("Failed to complete hike")
+        }
     }
 
     async function uncompleteHike() {
-        setCompleted(false)
+        try {
+            let data = await axios.put(UNCOMPLETE_HIKE_URL, { hikeId: hikeObject.id, username: currUser.username })
+            setCompleted(data.data.completed)
+        } catch {
+            console.log("Failed to complete hike")
+        }
     }
 
     async function likePost() {
@@ -107,6 +149,10 @@ export function HikeCard({ hikeObject, setSelectedHike }) {
         setLiked(false)
     }
 
+    if (saved == null || completed == null) {
+        return null
+    }
+
     return (
         <div className="hike-card" >
             {(hikeObject.img == "") ? "" : 
@@ -117,11 +163,11 @@ export function HikeCard({ hikeObject, setSelectedHike }) {
             <span className="hike-type">{hikeObject.trail_type}</span>
             <span className="hike-title"> 
                 <p className = "hike-name" onClick={() => {setSelectedHike(hikeObject)}}>{hikeObject.name}</p>
-                {saved ? 
+                {saved.includes(hikeObject.id) ? 
                 <button onClick={unsaveHike} className="hike-saved material-icons md-48">bookmark</button> : 
                 <button onClick={saveHike} className="hike-not-saved material-icons md-48">bookmark</button>
             }
-            {completed ? 
+            {completed.includes(hikeObject.id) ? 
                 <button onClick={uncompleteHike} className="hike-completed material-icons md-48">done_outline</button> : 
                 <button onClick={completeHike} className="hike-not-completed material-icons md-48">done_outline</button>
             }

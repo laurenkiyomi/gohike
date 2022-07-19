@@ -270,13 +270,13 @@ class User {
         if (saved == undefined || saved == null) {
             user.set("saved", [hikeId])
             await user.save(null, {useMasterKey:true})
+            return [hikeId]
         } else {
             saved.push(hikeId)
             user.set("saved", saved)
             await user.save(null, {useMasterKey:true})
+            return saved
         }
-
-        return { msg: "Saved hike" }
     }
 
     static async unsavePost(username, hikeId) {
@@ -289,14 +289,15 @@ class User {
         // Add hike to saved array if not hikeId
         let res = []
         for (let i = 0; i < saved.length; i++) {
-            if (saved[i] != hikeId)
-            res.push(hikeId)
+            if (parseInt(saved[i]) != parseInt(hikeId)) {
+                res.push(saved[i])
+            }
         }
 
         user.set("saved", res)
             await user.save(null, {useMasterKey:true})
             
-        return { msg: "Unsaved hike" }
+        return res
     }
 
     static async completePost(username, hikeId) {
@@ -310,13 +311,13 @@ class User {
         if (completed == undefined || completed == null) {
             user.set("completed", [hikeId])
             await user.save(null, {useMasterKey:true})
+            return [hikeId]
         } else {
             completed.push(hikeId)
             user.set("completed", completed)
             await user.save(null, {useMasterKey:true})
+            return completed
         }
-
-        return { msg: "Completed hike" }
     }
 
     static async uncompletePost(username, hikeId) {
@@ -329,14 +330,15 @@ class User {
         // Add hike to completed array if not hikeId
         let res = []
         for (let i = 0; i < completed.length; i++) {
-            if (completed[i] != hikeId)
-            res.push(hikeId)
+            if (parseInt(completed[i]) != parseInt(hikeId)) {
+                res.push(completed[i])
+            }
         }
 
         user.set("completed", res)
-            await user.save(null, {useMasterKey:true})
+        await user.save(null, {useMasterKey:true})
             
-        return { msg: "Uncompleted hike" }
+        return res
     }
 
 
