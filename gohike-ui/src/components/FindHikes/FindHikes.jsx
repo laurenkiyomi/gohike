@@ -18,6 +18,8 @@ export default function FindHikes({ transparent, setTransparent, currUser }) {
         setTransparent(false)
       }
 
+
+
       if (id != undefined) {
         let data = await axios.get(`http://localhost:3001/trails/id/${id}`)
         setSearchInputResult(Array.from(data.data.trail))
@@ -27,7 +29,7 @@ export default function FindHikes({ transparent, setTransparent, currUser }) {
 
     return (
       <nav className="find-hikes" >
-        <SideBar searchInputResult={searchInputResult} setSearchInputResult={setSearchInputResult} setCenter={setCenter} selectedHike={selectedHike} setSelectedHike={setSelectedHike} />
+        <SideBar searchInputResult={searchInputResult} setSearchInputResult={setSearchInputResult} setCenter={setCenter} selectedHike={selectedHike} setSelectedHike={setSelectedHike} currUser={currUser}/>
         <div className="map-div">
           <GoogleMapReact
             bootstrapURLKeys={{ key: "AIzaSyDEc_o7C5X1ljM7fq27LLr5QdZPfrQlQZA" }}

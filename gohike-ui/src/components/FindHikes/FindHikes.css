@@ -47,7 +47,7 @@
     display: flex;
     justify-content: center;
     padding: 0px;
-    margin-top: 10px;
+    margin-top: 30px;
     font-family: 'Gothic A1', sans-serif;
     font-size: 1.5vh;
     color: #536268;
@@ -90,7 +90,6 @@
     font-size: 1.3vh;
     letter-spacing: .4px;
     color: #536268;
-    margin-top: 3px;
 }
 
 .hike-card .hike-type {
@@ -105,6 +104,42 @@
 
 .hike-card .hike-name:hover {
     text-decoration: underline;
+}
+
+.hike-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+}
+
+/*Save and complete buttons*/
+.hike-card .hike-saved {
+    font-size: 24px;
+    margin: 2px;
+    padding: 0px;
+    color: #92bcd1;
+}
+
+.hike-card .hike-completed {
+    font-size: 24px;
+    margin: 2px;
+    padding: 0px;
+    color: #b4bc64;
+}
+
+.hike-card .hike-not-saved {
+    font-size: 24px;
+    margin: 2px;
+    padding: 0px;
+    color: rgba(0,0,0,0.2);
+}
+
+.hike-card .hike-not-completed {
+    font-size: 24px;
+    margin: 2px;
+    padding: 0px;
+    color: rgba(0,0,0,0.2);
 }
 
 /*Search Bar*/
@@ -135,6 +170,30 @@
     font-size: 10px;
     padding: 2px;
     color: white;
+}
+
+/*Side Bar Navigation*/
+.side-bar-nav {
+    padding: 0px;
+    margin: 15px 0px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.side-bar-nav li {
+    display: inline-block;
+    font-family: 'Gothic A1', sans-serif;
+    font-size: 12px;
+    font-weight: bolder;
+    margin: 0px 25px;
+}
+
+.side-bar-nav .active {
+    text-decoration: underline;
+    text-decoration-color: #60270d;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 2px;
 }
 
 /*Hike Popout*/
