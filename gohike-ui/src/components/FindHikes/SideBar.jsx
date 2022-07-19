@@ -1,14 +1,18 @@
 import * as React from "react"
 import "./FindHikes.css"
 import axios from 'axios';
+import LoadingScreen from "../LoadingScreen/LoadingScreen";
 
 export default function SideBar({ searchInputResult, setSearchInputResult, setCenter, selectedHike, setSelectedHike, currUser }) {
+    const [spinner, setSpinner] = React.useState(false)
+
     return (
         <>
             <div className="side-bar">
-                <SearchBar searchInputResult={searchInputResult} setSearchInputResult={setSearchInputResult} setCenter={setCenter} setSelectedHike={setSelectedHike} />
-                <div>{(searchInputResult.length == 0) ? <div className="nothing-message">Nothing to Display</div> : 
-                    <SearchResults searchInputResult={searchInputResult} setSelectedHike={setSelectedHike} currUser={currUser} />
+                <SearchBar searchInputResult={searchInputResult} setSearchInputResult={setSearchInputResult} setCenter={setCenter} setSelectedHike={setSelectedHike} currUser={currUser} setSpinner={setSpinner} />
+                <div>{(!spinner) ? (searchInputResult.length == 0) ? <div className="nothing-message">Nothing to Display</div> : 
+                    <SearchResults searchInputResult={searchInputResult} setSelectedHike={setSelectedHike} currUser={currUser} /> : 
+                    <LoadingScreen/>
                 }</div>
             </div>
             { selectedHike ? <HikePopout selectedHike={selectedHike} setSelectedHike={setSelectedHike} /> : ""}
@@ -49,11 +53,9 @@ export function HikePopout({ selectedHike, setSelectedHike }) {
     )
 }
 
-export function SearchBar({ searchInputResult, setSearchInputResult, setCenter, setSelectedHike}) {
+export function SearchBar({ searchInputResult, setSearchInputResult, setCenter, setSelectedHike, currUser, setSpinner }) {
     const [searchInput, setSearchInput] = React.useState('')
-    const [spinner, setSpinner] = React.useState(false)
-
-
+    const [select, setSelect] = React.useState("all")
 
     async function handleSearch(event) {
         event.preventDefault()
@@ -66,18 +68,60 @@ export function SearchBar({ searchInputResult, setSearchInputResult, setCenter, 
         })
     }
 
+    async function handleSaved() {
+        setSelect("saved")
+        setSpinner(true)
+        await axios.get(`http://localhost:3001/user/saved/${currUser.username}`).then((data) => {
+            setSearchInputResult(data.data.saved)
+            setSelectedHike(null)
+            setCenter({ lat: data?.data?.saved[0]?.latitude, lng: data?.data?.saved[0]?.longitude  })
+            setSpinner(false)
+        })
+    }
+
+    async function handleCompleted() {
+        setSelect("completed")
+        setSpinner(true)
+        await axios.get(`http://localhost:3001/user/completed/${currUser.username}`).then((data) => {
+            setSearchInputResult(data.data.completed)
+            setSelectedHike(null)
+            setCenter({ lat: data?.data?.completed[0]?.latitude, lng: data?.data?.completed[0]?.longitude  })
+            setSpinner(false)
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
+    async function handleAll() {
+        setSelect("all")
+        setSearchInputResult([])
+        setSelectedHike(null)
+        setSearchInput("")
+        setCenter({ lat: 37.4816056542292, lng: -122.17105672877193  })
+    }
+
     return (
-        <form onSubmit={handleSearch} className="hike-search-form">
-            <input 
-                className="hike-search-input" 
-                autoComplete="off"
-                type="text"
-                placeholder="Search for a hike"
-                value={searchInput}
-                onChange={(event) => setSearchInput(event.target.value)}>
-            </input>
-            {spinner ? <button className="hike-search-button">Loading</button> : <button className="hike-search-button material-icons md-48">search</button>}
-        </form>
+        <>
+            <ul className="side-bar-nav">
+                <li className={`side-bar-all-button ${select == "all" ? "active" : ""}`} onClick={handleAll}>All</li>
+                <li className={`side-bar-saved-button ${select == "saved" ? "active" : ""}`} onClick={handleSaved}>Saved</li>
+                <li className={`side-bar-completed-button ${select == "completed" ? "active" : ""}`} onClick={handleCompleted}>Completed</li>
+            </ul>
+            {select == "all" ? 
+                <form onSubmit={handleSearch} className="hike-search-form">
+                    <input 
+                        className="hike-search-input" 
+                        autoComplete="off"
+                        type="text"
+                        placeholder="Search for a hike"
+                        value={searchInput}
+                        onChange={(event) => setSearchInput(event.target.value)}>
+                    </input>
+                    <button className="hike-search-button material-icons md-48">search</button>
+                </form> : 
+                ""
+            }
+        </>
     )
 }
 

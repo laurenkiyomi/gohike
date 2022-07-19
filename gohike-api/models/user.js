@@ -22,13 +22,117 @@ class User {
         return user
     }
 
+    static async getSaved(username) {
+        // Get User object from username
+        let query = new Parse.Query("_User")
+        query.equalTo("username", username)
+        let user = await query.first({useMasterKey:true})
+
+        // Get completed
+        let saved = user.get("saved")
+
+        if (saved == undefined || saved == null) {
+            return []
+        }
+
+        let savedRes = []
+        for (let i = 0; i < saved.length; i++) {
+            let query2 = new Parse.Query("Trail")
+            query2.equalTo("hikeId", saved[i])
+            let addTrail = await query2.first({useMasterKey:true})
+
+            // Get largest image available
+            let img = ""
+            if (addTrail.get("imgMedium") != "") {
+                img = addTrail.get("imgMedium")
+            } else if (addTrail.get("imgSmallMed") != "") {
+                img = addTrail.get("imgSmallMed")
+            } else if (addTrail.get("imgSmall") != "") {
+                img = addTrail.get("imgSmall")
+            } else if (addTrail.get("imgSqSmall") != "") {
+                img = addTrail.get("imgSqSmall")
+            }
+
+            savedRes.push({ 
+                id: addTrail.get("hikeId"), 
+                name: addTrail.get("name"), 
+                trail_type: addTrail.get("trail_type"), 
+                summary: addTrail.get("summary"), 
+                location: addTrail.get("location"), 
+                length: addTrail.get("distance"), 
+                ascent: addTrail.get("ascent"), 
+                descent: addTrail.get("descent"), 
+                conditionStatus: addTrail.get("conditionStatus"), 
+                high: addTrail.get("high"), 
+                low: addTrail.get("low"), 
+                longitude: addTrail.get("longitude"), 
+                latitude: addTrail.get("latitude"), 
+                img
+            })
+        }
+
+        return savedRes
+    }
+
+    static async getCompleted(username) {
+        // Get User object from username
+        let query = new Parse.Query("_User")
+        query.equalTo("username", username)
+        let user = await query.first({useMasterKey:true})
+
+        // Get completed
+        let completed = user.get("completed")
+
+        if (completed == undefined || completed == null) {
+            return []
+        }
+
+        let completedRes = []
+        for (let i = 0; i < completed.length; i++) {
+            let query2 = new Parse.Query("Trail")
+            query2.equalTo("hikeId", completed[i])
+            let addTrail = await query2.first({useMasterKey:true})
+
+            // Get largest image available
+            let img = ""
+            if (addTrail.get("imgMedium") != "") {
+                img = addTrail.get("imgMedium")
+            } else if (addTrail.get("imgSmallMed") != "") {
+                img = addTrail.get("imgSmallMed")
+            } else if (addTrail.get("imgSmall") != "") {
+                img = addTrail.get("imgSmall")
+            } else if (addTrail.get("imgSqSmall") != "") {
+                img = addTrail.get("imgSqSmall")
+            }
+
+            completedRes.push({ 
+                id: addTrail.get("hikeId"), 
+                name: addTrail.get("name"), 
+                trail_type: addTrail.get("trail_type"), 
+                summary: addTrail.get("summary"), 
+                location: addTrail.get("location"), 
+                length: addTrail.get("distance"), 
+                ascent: addTrail.get("ascent"), 
+                descent: addTrail.get("descent"), 
+                conditionStatus: addTrail.get("conditionStatus"), 
+                high: addTrail.get("high"), 
+                low: addTrail.get("low"), 
+                longitude: addTrail.get("longitude"), 
+                latitude: addTrail.get("latitude"), 
+                img
+            })
+        }
+
+        return completedRes
+    }
+
     static async getSavedAndCompleted(username) {
         // Get User object from username
         let query = new Parse.Query("_User")
         query.equalTo("username", username)
         let user = await query.first({useMasterKey:true})
 
-        // Return saved and completed
+        // Getsaved and completed
         return { saved: user.get("saved"), completed: user.get("completed") }
     }
 

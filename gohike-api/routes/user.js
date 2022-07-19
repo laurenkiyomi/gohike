@@ -13,6 +13,28 @@ router.get('/saved-completed/:username', async (req, res) => {
     }
 })
 
+router.get('/saved/:username', async (req, res) => {
+    try {
+        var username = req.params.username
+        let saved = await User.getSaved(username)
+        res.status(201).json( { saved } )
+    } catch (err) {
+        console.log(err)
+        res.status(400).json( { msg: "Failed to get saved hikes" } )
+    }
+})
+
+router.get('/completed/:username', async (req, res) => {
+    try {
+        var username = req.params.username
+        let completed = await User.getCompleted(username)
+        res.status(201).json( { completed } )
+    } catch (err) {
+        console.log(err)
+        res.status(400).json( { msg: "Failed to get completed hikes" } )
+    }
+})
+
 router.get('/:sessionToken', async (req, res) => {
     try {
         const sessionToken = req.params.sessionToken
