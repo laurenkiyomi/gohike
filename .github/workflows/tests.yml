@@ -21,6 +21,12 @@ jobs:
       - name: npm install frontend
         working-directory: gohike-ui
         run: npm install
+      - name: Boot backend
+        working-directory: gohike-api
+        run: npm run dev
+      - name: Boot frontend
+        working-directory: gohike-ui
+        run: npm run dev
       - name: Run cypress testing
         working-directory: gohike-ui
         run: npm test
