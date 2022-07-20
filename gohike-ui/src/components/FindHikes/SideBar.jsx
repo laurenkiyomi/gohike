@@ -13,7 +13,7 @@ export default function SideBar({ searchInputResult, setSearchInputResult, setCe
             <div className="side-bar">
                 <SearchBar searchInputResult={searchInputResult} setSearchInputResult={setSearchInputResult} setCenter={setCenter} setSelectedHike={setSelectedHike} currUser={currUser} setSpinner={setSpinner} />
                 <div>{(!spinner) ? (searchInputResult.length == 0) ? <div className="nothing-message">Nothing to Display</div> : 
-                    <SearchResults searchInputResult={searchInputResult} setSelectedHike={setSelectedHike} currUser={currUser} /> : 
+                    <SearchResults searchInputResult={searchInputResult} setSelectedHike={setSelectedHike} currUser={currUser} setCenter={setCenter} /> : 
                     <LoadingScreen/>
                 }</div>
             </div>
@@ -22,12 +22,12 @@ export default function SideBar({ searchInputResult, setSearchInputResult, setCe
     )
 }
 
-export function SearchResults({ searchInputResult, setSelectedHike, currUser }) {
+export function SearchResults({ searchInputResult, setSelectedHike, currUser, setCenter }) {
     return (
         <>
             {(searchInputResult.map((hikeObject, index) => {
                         return (
-                            <HikeCard key={index} hikeObject={hikeObject} setSelectedHike={setSelectedHike} currUser={currUser}/>
+                            <HikeCard key={index} hikeObject={hikeObject} setSelectedHike={setSelectedHike} currUser={currUser} setCenter={setCenter}/>
                         )
                     }))}
         </>
@@ -154,7 +154,7 @@ export function SearchBar({ searchInputResult, setSearchInputResult, setCenter, 
     )
 }
 
-export function HikeCard({ hikeObject, setSelectedHike, currUser }) {
+export function HikeCard({ hikeObject, setSelectedHike, currUser, setCenter }) {
     const [saved, setSaved] = React.useState(null)
     const [completed, setCompleted] = React.useState(null)
     const COMPLETE_HIKE_URL = "http://localhost:3001/user/complete"
@@ -219,7 +219,10 @@ export function HikeCard({ hikeObject, setSelectedHike, currUser }) {
             }
             <span className="hike-type">{hikeObject.trail_type}</span>
             <span className="hike-title"> 
-                <p className = "hike-name" onClick={() => {setSelectedHike(hikeObject)}}>{hikeObject.name}</p>
+                <p className = "hike-name" onClick={() => {
+                    setSelectedHike(hikeObject)
+                    setCenter({ lng: hikeObject.longitude, lat: hikeObject.latitude })
+                }}>{hikeObject.name}</p>
                 {saved.includes(hikeObject.id) ? 
                 <button onClick={unsaveHike} className="hike-saved material-icons md-48">bookmark</button> : 
                 <button onClick={saveHike} className="hike-not-saved material-icons md-48">bookmark</button>
