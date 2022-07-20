@@ -18,8 +18,6 @@ export default function FindHikes({ transparent, setTransparent, currUser }) {
         setTransparent(false)
       }
 
-
-
       if (id != undefined) {
         let data = await axios.get(`http://localhost:3001/trails/id/${id}`)
         setSearchInputResult(Array.from(data.data.trail))
@@ -41,7 +39,11 @@ export default function FindHikes({ transparent, setTransparent, currUser }) {
                 <Marker
                   key={index}
                   lat={trail.latitude}
-                  lng={trail.longitude}/>
+                  lng={trail.longitude}
+                  setCenter={setCenter}
+                  setSelectedHike={setSelectedHike}
+                  selectedHike={selectedHike}
+                  trail={trail}/>
               )
             })}
           </GoogleMapReact>
@@ -50,10 +52,22 @@ export default function FindHikes({ transparent, setTransparent, currUser }) {
     )
   }
 
-export function Marker(props) {
+export function Marker({ lat, lng, setCenter, setSelectedHike, selectedHike, trail }) {
+
+  function handleClick() {
+    setCenter({ lat, lng })
+
+    if (selectedHike != trail) {
+      setSelectedHike(trail)
+    } else {
+      setSelectedHike(null)
+    }
+    
+  }
+
   return (
     <div className="marker">
-      <span className="material-icons md-48">add_location</span>
+      <span className="material-icons md-48 marker-icon" onClick={handleClick}>add_location</span>
     </div>
   )
 }
