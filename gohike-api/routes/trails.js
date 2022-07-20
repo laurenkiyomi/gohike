@@ -11,6 +11,17 @@ router.get('/', async (req, res) => {
     }
 })
 
+router.get('/hike-pictures/:trailId', async (req, res) => {
+    try {
+        const trailId = req.params.trailId
+        const results = await Trails.getTrailPictures(trailId)
+        res.status(201).json({ pictures: results })
+    } catch (err) {
+        console.log(err)
+        res.status(400).json( { msg: "Failed to get sorted pictures" } )
+    }
+})
+
 router.get('/:trailName', async (req, res) => {
     try {
         const trailName = req.params.trailName

@@ -15,7 +15,7 @@ export default function SideBar({ searchInputResult, setSearchInputResult, setCe
                     <LoadingScreen/>
                 }</div>
             </div>
-            { selectedHike ? <HikePopout selectedHike={selectedHike} setSelectedHike={setSelectedHike} /> : ""}
+            { selectedHike ? <HikePopout selectedHike={selectedHike} setSelectedHike={setSelectedHike} id={selectedHike.id}/> : ""}
         </>
     )
 }
@@ -32,13 +32,34 @@ export function SearchResults({ searchInputResult, setSelectedHike, currUser }) 
     )
 }
 
-export function HikePopout({ selectedHike, setSelectedHike }) {
+export function HikePopout({ selectedHike, setSelectedHike, id }) {
+    const [images, setImages] = React.useState(null)
+
+    React.useEffect(async () => {
+        let data = await axios.get(`http://localhost:3001/trails/hike-pictures/${id}`)
+        if (data.data.pictures == [] && selectedHike.img == "") {
+            setImages([])
+        } else if (selectedHike.img == "") {
+            setImages(data.data.pictures)
+        } else if (data.data.pictures == []) {
+            setImages([selectedHike.img])
+        } else {
+            setImages([selectedHike.img, ...data.data.pictures])
+        }
+    }, [])
+
+    if (images == null) {
+        return null
+    }
+
+    console.log(images)
+
     return (
         <div className="hike-popout">
                 <button className="close" onClick={() => {setSelectedHike(null)}}>x</button>
-                {(selectedHike?.img == "") ? "" : 
-                    <div className="hike-poput-img">
-                        <img src={selectedHike?.img}/>
+                {(images == []) ? "" : 
+                    <div className="hike-popout-img">
+                        <img src={images[0]}/>
                     </div>
                 }
                 <span className="hike-type">{selectedHike?.trail_type}</span>
