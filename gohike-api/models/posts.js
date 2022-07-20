@@ -58,6 +58,7 @@ class Posts {
         let posts =[]
         for (let i = 0; i < friends.length; i++) {
             let query3 = new Parse.Query("_User")
+            query3.descending("createdAt")
             query3.equalTo("username", friends[i])
             let friend = await query3.first({useMasterKey:true})
 

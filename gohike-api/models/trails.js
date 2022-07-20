@@ -116,6 +116,22 @@ class Trails {
         
         return res
     }
+
+    static async getTrailPictures(trailId) {
+        // Get all posts in database sorted by most liked
+        let query = new Parse.Query("Post")
+        query.descending("likes")
+        let posts = await query.find({useMasterKey:true})
+        
+        let res = []
+        for (let i = 0; i < posts.length; i++) {
+            if (posts[i].get("hikeId") == trailId) {
+                res.push(posts[i].get("picture"))
+            }
+        }
+
+        return res
+    }
 }
 
 module.exports = Trails

@@ -2,6 +2,8 @@ import * as React from "react"
 import "./FindHikes.css"
 import axios from 'axios';
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 export default function SideBar({ searchInputResult, setSearchInputResult, setCenter, selectedHike, setSelectedHike, currUser }) {
     const [spinner, setSpinner] = React.useState(false)
@@ -33,12 +35,39 @@ export function SearchResults({ searchInputResult, setSelectedHike, currUser }) 
 }
 
 export function HikePopout({ selectedHike, setSelectedHike }) {
+    const [images, setImages] = React.useState(null)
+
+    React.useEffect(async () => {
+        let data = await axios.get(`http://localhost:3001/trails/hike-pictures/${selectedHike.id}`)
+        if (data.data.pictures == [] && selectedHike.img == "") {
+            setImages([])
+        } else if (selectedHike.img == "") {
+            setImages(data.data.pictures)
+        } else if (data.data.pictures == []) {
+            setImages([selectedHike.img])
+        } else {
+            setImages([selectedHike.img, ...data.data.pictures])
+        }
+    }, [selectedHike])
+
+    if (images == null) {
+        return null
+    }
+
     return (
         <div className="hike-popout">
                 <button className="close" onClick={() => {setSelectedHike(null)}}>x</button>
-                {(selectedHike?.img == "") ? "" : 
-                    <div className="hike-poput-img">
-                        <img src={selectedHike?.img}/>
+                {(images.length == 0) ? "" : 
+                    <div className="hike-popout-img">
+                        <Carousel autoPlay useKeyboardArrows infiniteLoop className="carousel">
+                            {images.map((img, index) => {
+                                return (
+                                    <div key={index}>
+                                        <img className="carousel-img" src={img} />
+                                    </div>
+                                )
+                            })}
+                        </Carousel>
                     </div>
                 }
                 <span className="hike-type">{selectedHike?.trail_type}</span>
@@ -175,22 +204,6 @@ export function HikeCard({ hikeObject, setSelectedHike, currUser }) {
         } catch {
             console.log("Failed to complete hike")
         }
-    }
-
-    async function likePost() {
-        await axios.put(LIKE_URL, { username: currUser.username, postId })
-
-        let data = await axios.get(GET_POST_URL, { sessionToken: currUser.sessionToken })
-        setLikes(data.data.post.likes)
-        setLiked(true)
-    }
-
-    async function unlikePost() {
-        await axios.put(UNLIKE_URL, { username: currUser.username, postId })
-
-        let data = await axios.get(GET_POST_URL, { sessionToken: currUser.sessionToken })
-        setLikes(data.data.post.likes)
-        setLiked(false)
     }
 
     if (saved == null || completed == null) {
