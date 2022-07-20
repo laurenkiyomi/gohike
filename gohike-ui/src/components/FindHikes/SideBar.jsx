@@ -2,6 +2,8 @@ import * as React from "react"
 import "./FindHikes.css"
 import axios from 'axios';
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 export default function SideBar({ searchInputResult, setSearchInputResult, setCenter, selectedHike, setSelectedHike, currUser }) {
     const [spinner, setSpinner] = React.useState(false)
@@ -59,7 +61,15 @@ export function HikePopout({ selectedHike, setSelectedHike, id }) {
                 <button className="close" onClick={() => {setSelectedHike(null)}}>x</button>
                 {(images == []) ? "" : 
                     <div className="hike-popout-img">
-                        <img src={images[0]}/>
+                        <Carousel infiniteLoop useKeyboardArrows autoplay>
+                            {images.map((img) => {
+                                return (
+                                    <div>
+                                        <img src={img} />
+                                    </div>
+                                )
+                            })}
+                        </Carousel>
                     </div>
                 }
                 <span className="hike-type">{selectedHike?.trail_type}</span>

@@ -217,8 +217,8 @@
 .hike-popout .close {
     position: absolute;
     background-color: #60270d;
-    margin-top: 20px;
-    margin-left: 84%;
+    margin-top: -22px;
+    margin-left: 95%;
     width: 30px;
     height: 30px;
     font-size: 14px;
