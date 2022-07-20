@@ -26,13 +26,8 @@ jobs:
         run: npm run dev & npx wait-on http://localhost:3001
         env:
           CI: true
-      - name: Boot frontend
+      - name: Boot frontend and run cypress tests
         working-directory: gohike-ui
-        run: npm run dev & npx wait-on http://localhost:3000
-        env:
-          CI: true
-      - name: Run cypress testing
-        working-directory: gohike-ui
-        run: npm test
+        run: npm run dev & npx wait-on http://localhost:3000 & npm test
         env:
           CI: true
