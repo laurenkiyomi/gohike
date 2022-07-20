@@ -28,7 +28,7 @@ export default function Navbar({ currUser, setCurrUser, transparent }) {
           }}>{dropdownOpen ? 
             <span className="material-icons md-48">expand_less</span> : 
             <span className="material-icons md-48">expand_more</span>}</button>
-          <div className="nav-button my-profile-button">{currUser.firstName}</div>
+          <div className="nav-button my-profile-button">{currUser.firstName} {currUser.lastName}</div>
           {dropdownOpen ? 
             <Dropdown view="open" setCurrUser={setCurrUser} currUser={currUser} setDropdownOpen={setDropdownOpen} friendsOpen={friendsOpen} setFriendsOpen={setFriendsOpen}/> : 
             <Dropdown view="closed" setCurrUser={setCurrUser} currUser={currUser} setDropdownOpen={setDropdownOpen} friendsOpen={friendsOpen} setFriendsOpen={setFriendsOpen}/>}
