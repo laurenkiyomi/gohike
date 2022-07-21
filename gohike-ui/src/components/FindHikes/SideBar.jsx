@@ -254,6 +254,23 @@ export function SearchBar({ setSearchInputResult, setCenter, setSelectedHike,
         })
     }
 
+    async function handleNearMe() {
+        setSelect("near-me")
+        setSpinner(true)
+        // Fetches completed hikes
+        await axios.get(
+            "http://localhost:3001/trails/near-me/lat/37.3100859140489/lng/-122.0456891308477")
+            .then((data) => {
+                setSearchInputResult(data.data.trails)
+                setSelectedHike(null)
+                setCenter({ lat: data?.data?.trails[0]?.latitude, 
+                    lng: data?.data?.trails[0]?.longitude  })
+                setSpinner(false)
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
     /**
      * Filters search results for any hike containing search input
      */
@@ -278,6 +295,10 @@ export function SearchBar({ setSearchInputResult, setCenter, setSelectedHike,
                 <li className={`side-bar-completed-button 
                     ${select == "completed" ? "active" : ""}`} 
                     onClick={handleCompleted}>Completed</li>
+                <li className={`side-bar-near-me-button 
+                    ${select == "near-me" ? "active" : ""}`} 
+                    onClick={handleNearMe}
+                    >Near Me</li>
             </ul>
             {select == "all" ? 
                 <form 

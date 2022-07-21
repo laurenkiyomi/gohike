@@ -41,6 +41,11 @@ export default function Home({ transparent, setTransparent }) {
     }
   }, [])
 
+  if (navigator.geolocation) {
+    console.log('GeoLocation is Available!');
+    } else {
+    console.log('Sorry Not available!');
+    }
   // Return React component
   return (
     <div className="home">

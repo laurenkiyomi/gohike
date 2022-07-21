@@ -36,6 +36,22 @@ router.get('/hike-pictures/:trailId', async (req, res) => {
 })
 
 /**
+ * Get request for getting all trails near the current user
+ */
+router.get('/near-me/lat/:latitude/lng/:longitude', async (req, res) => {
+    try {
+        const lat = req.params.latitude
+        const lng = req.params.longitude
+        // Gets trails near you by calling Trails method
+        const trails = await Trails.getNearMe(lat, lng)
+        res.status(201).json({ trails })
+    } catch (err) {
+        console.log(err)
+        res.status(400).json( { msg: "Failed to get hikes near you" } )
+    }
+})
+
+/**
  * Get request for getting information on a trail based on its name
  */
 router.get('/:trailName', async (req, res) => {
