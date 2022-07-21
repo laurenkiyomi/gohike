@@ -31,17 +31,17 @@ export default function Feed({ transparent, setTransparent, currUser }) {
       */
     const POSTS_URL = "http://localhost:3001/posts"
     /**
-      * All trails in database including name and hike id
+      * State var that holds all trails in database including name and hike id
       * @type {Array<{name: string, value: number}>}
       */
     const [trailsList, setTrailsList] = React.useState([])
     /**
-      * Post number offset to render
+      * Stats var that holds post number offset to render
       * @type {number}
       */
     const [numPosts, setNumPosts] = React.useState(5)
     /**
-      * Post id's of posts to render
+      * State var that holds post id's of posts to render
       * @type {Array<number>}
       */
     const [posts, setPosts] = React.useState(null)
@@ -120,12 +120,12 @@ export default function Feed({ transparent, setTransparent, currUser }) {
      */
     const CREATE_POST_URL = "http://localhost:3001/posts/create"
     /**
-     * Url of picture input
+     * State var that holds url of picture input
      * @type {string}
      */
     const [picture, setPicture] = React.useState(null)
     /**
-     * Name and id of trail selected by user
+     * State var that holds name and id of trail selected by user
      * @type {{name: string, value: number}}
      */
     const [trail, setTrail] = React.useState("")

@@ -27,23 +27,23 @@ export default function FindHikes({ transparent, setTransparent, currUser }) {
      */
     const id = params.id
     /**
-     * Holds id of a hike selected in the sidebar
+     * State var that holds id of a hike selected in the sidebar
      * @param {number}
      */
     const [selectedHike, setSelectedHike] = React.useState(null)
     /**
-     * Coordinates of center of GoogleMap component
+     * State var that holds coordinates of center of GoogleMap component
      * @type {{lat: number, lng: number}}
      */
     const [center, setCenter] = React.useState(
       { lat: 37.4816056542292, lng: -122.17105672877193  })
     /**
-     * Value of zoom for GoogleMap component
+     * State var that holds value of zoom for GoogleMap component
      * @type {number}
      */
     const [zoom, setZoom] = React.useState(11);
     /**
-     * Info on hikes found from search
+     * State var that holds info on hikes found from search
      * @type {Array<hike>}
      */
     const [searchInputResult, setSearchInputResult] = React.useState([])

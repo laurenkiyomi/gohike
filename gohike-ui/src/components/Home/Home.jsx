@@ -1,5 +1,6 @@
 /**
- * @fileoverview This file implements the Home Page component. By default, this is the first page to be shown when the GoHike app is opened.
+ * @fileoverview This file implements the Home Page component. By default, this 
+ * is the first page to be shown when the GoHike app is opened.
  */
 import * as React from "react"
 import logo from "../Images/Logo.png"
@@ -11,7 +12,17 @@ import Plx from "react-plx";
 import axios from 'axios'
 import { Link } from 'react-router-dom';
 
+/**
+ * Renders Home page with animations and on scroll effects
+ * 
+ * @param {boolean} transparent State var holding state of Navbar background 
+ * @param {function} setTransparent Sets the boolean in transparent
+ * @returns Home component 
+ */
 export default function Home({ transparent, setTransparent }) {
+  /**
+   * Animation helper
+   */
   function makeVisible() {
     var visibles = Array.from(document.getElementsByClassName("appear")) 
   
@@ -20,6 +31,9 @@ export default function Home({ transparent, setTransparent }) {
     }
   }
   
+  /**
+   * Makes animated components visible on render
+   */
   React.useEffect(() => {
     makeVisible()
     if (!transparent) {
@@ -28,6 +42,7 @@ export default function Home({ transparent, setTransparent }) {
   }, [])
 
 
+  // Return React component
   return (
     <div className="home">
       <div className="hero">
@@ -37,15 +52,21 @@ export default function Home({ transparent, setTransparent }) {
       <div className="about">
         <div className="about-text about-text-one appear">
           <h2>Explore</h2>
-          <p className="about-para">Find hikes near you and save them for later</p>
+          <p className="about-para">
+            Find hikes near you and save them for later
+          </p>
         </div>
         <div className="about-text about-text-two appear">
           <h2>Connect</h2>
-          <p className="about-para">Add your friends to receive updates on their latest hikes</p>
+          <p className="about-para">
+            Add your friends to receive updates on their latest hikes
+          </p>
         </div>
         <div className="about-text about-text-three appear">
           <h2>Track</h2>
-          <p className="about-para">Keep track of your progress and how far you've hiked</p>
+          <p className="about-para">
+            Keep track of your progress and how far you've hiked
+          </p>
         </div>
       </div>
       <div className="collage">

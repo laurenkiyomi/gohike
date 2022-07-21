@@ -1,5 +1,6 @@
 /**
- * @fileoverview This file implements the My Profile Page so that logged in users can view and edit their own profile.
+ * @fileoverview This file implements the My Profile Page so that logged in 
+ * users can view and edit their own profile.
  */
 import * as React from "react"
 import "./MyProfile.css"
@@ -9,14 +10,53 @@ import logo from "../Images/Logo.png"
 import PostGrid from "../Feed/PostGrid"
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
 
-export default function MyProfile({ transparent, setTransparent, currUser, setCurrUser }) {
+/**
+ * Allows logged in users to view and edit their own profile
+ * 
+ * @param {{username: string, sessionToken: string, firstName: string, 
+ * lastName: string}} currUser Holds info on current user from local storage
+ * @param {function} setCurrUser
+ * @param {boolean} transparent Hold the state of the Navbar background
+ * @returns My Profile component
+ */
+export default function MyProfile({ transparent, setTransparent, currUser }) {
+    /**
+     * URL to make put request to change profile picture
+     * @type {string}
+     */
     const EDIT_PROFILE_PIC_URL = "http://localhost:3001/user/profilePhoto"
+    /**
+     * URL to make put request to change cover picture
+     * @type {string}
+     */
     const EDIT_COVER_PIC_URL = "http://localhost:3001/user/coverPhoto"
+    /**
+     * State var holding profile info on currUser
+     * @type {{coverPic: string, profilePic: string, firstName: string, 
+     * lastName: string, friends: Array<string>}}
+     */
     const [profileData, setProfileData] = React.useState(null)
+    /**
+     * State var holding id's of post made by currUser
+     * @type {Array<number>}
+     */
     const [posts, setPosts] = React.useState(null)
+    /**
+     * State var that handles navigation through profile
+     * @type {string}
+     */
     const [select, setSelect] = React.useState("posts")
+    /**
+     * State var that holds whether or not app is fetching data
+     * @type {boolean}
+     */
     const [spinner, setSpinner] = React.useState(false)
 
+    /**
+     * Converts buffer to base64 format in order to save pictures to Parse
+     * @param {buffer} buffer 
+     * @returns {string} base64 of picture data
+     */
     const _arrayBufferToBase64 = (buffer) => {
         var binary = '';
         var bytes = new Uint8Array( buffer );
@@ -27,6 +67,10 @@ export default function MyProfile({ transparent, setTransparent, currUser, setCu
         return window.btoa( binary );
     }
 
+    /**
+     * OnClick handler of submitting change profile picture form
+     * @param {event} event 
+     */
     const changeProfilePicture = async (event) => {  
         try {
           // Get array buffer from file
@@ -35,10 +79,14 @@ export default function MyProfile({ transparent, setTransparent, currUser, setCu
           let base64String = _arrayBufferToBase64(arrayBuffer)
           base64String = "data:image/jpeg;base64," + base64String
 
-          await axios.put(EDIT_PROFILE_PIC_URL, { sessionToken: currUser.sessionToken, picture: base64String })
+          // Make put request
+          await axios.put(EDIT_PROFILE_PIC_URL, { 
+            sessionToken: currUser.sessionToken, picture: base64String })
         
+          // Reset form
           event.target.value = ""
 
+          // Re-fetch profile data
           let data = await axios.get(`http://localhost:3001/user/${currUser.sessionToken}`)
           setProfileData(data.data.user)
           return
@@ -48,6 +96,10 @@ export default function MyProfile({ transparent, setTransparent, currUser, setCu
         }
       }
 
+      /**
+        * OnClick handler of submitting change cover picture form
+        * @param {event} event 
+        */
       const changeCoverPicture = async (event) => {  
         try {
           // Get array buffer from file
@@ -56,10 +108,16 @@ export default function MyProfile({ transparent, setTransparent, currUser, setCu
           let base64String = _arrayBufferToBase64(arrayBuffer)
           base64String = "data:image/jpeg;base64," + base64String
 
-          await axios.put(EDIT_COVER_PIC_URL, { sessionToken: currUser.sessionToken, picture: base64String })
+          // Make put request
+          await axios.put(EDIT_COVER_PIC_URL, { 
+            sessionToken: currUser.sessionToken, picture: base64String })
+          
+          // Reset form
           event.target.value = ""
 
-          let data = await axios.get(`http://localhost:3001/user/${currUser.sessionToken}`)
+          // Re-fetch profile data
+          let data = await axios.get(
+            `http://localhost:3001/user/${currUser.sessionToken}`)
           setProfileData(data.data.user)
           return
         } catch (err){  
@@ -68,14 +126,22 @@ export default function MyProfile({ transparent, setTransparent, currUser, setCu
         }
       }
 
+      /**
+       * Fetches and sets profile data
+       */
       const fetchData = async () => {
-        let data = await axios.get(`http://localhost:3001/user/${currUser.sessionToken}`)
+        let data = await axios.get(
+            `http://localhost:3001/user/${currUser.sessionToken}`)
         setProfileData(data.data.user)
 
-        let data2 = await axios.get(`http://localhost:3001/user/posts/${currUser.sessionToken}`)
+        let data2 = await axios.get(
+            `http://localhost:3001/user/posts/${currUser.sessionToken}`)
         setPosts(data2.data.posts)
       }
 
+    /**
+     * Fetches profile data on every render
+     */
      React.useEffect(async () => {
         if (transparent) {
           setTransparent(false)
@@ -85,6 +151,7 @@ export default function MyProfile({ transparent, setTransparent, currUser, setCu
         setSpinner(true)
     }, [])
 
+    // Return React component
     return (
         <div className="my-profile">
             <div className="my-profile-header">
@@ -92,18 +159,42 @@ export default function MyProfile({ transparent, setTransparent, currUser, setCu
                 <img className="logo-img" src={logo}/>
             </div>
             {spinner ? 
-                <ProfileBanner currUser={currUser} posts={posts} profileData={profileData} changeCoverPicture={changeCoverPicture} changeProfilePicture={changeProfilePicture} select={select} setSelect={setSelect}/> :
+                <ProfileBanner 
+                    currUser={currUser} 
+                    posts={posts} 
+                    profileData={profileData} 
+                    changeCoverPicture={changeCoverPicture} 
+                    changeProfilePicture={changeProfilePicture} 
+                    select={select} 
+                    setSelect={setSelect}/> :
                 <LoadingScreen />
             }
         </div>
     )
 }
 
-export function ProfileBanner({ currUser, posts, profileData, changeCoverPicture, changeProfilePicture, select, setSelect }) {
+/**
+ * Renders main information of current user
+ * 
+ * @param {{username: string, sessionToken: string, firstName: string, 
+ * lastName: string}} currUser Holds info on current user from local storage
+ * @param {Array<number>} posts
+ * @param {{coverPic: string, profilePic: string, firstName: string, 
+ * lastName: string, friends: Array<string>}} profileData
+ * @param {function} changeCoverPicture
+ * @param {function} changeProfilePicture
+ * @param {string} select Sets selected navigation menu item
+ * @param {function} setSelect
+ * @returns Profile Banner component
+ */
+export function ProfileBanner({ currUser, posts, profileData, 
+    changeCoverPicture, changeProfilePicture, select, setSelect }) {
+    // Don't return until profileData and posts are set
     if (profileData == null || posts == null) {
         return null
     }
     
+    // Return React component
     return (
         <>
             <div className="profile-banner">
@@ -111,7 +202,9 @@ export function ProfileBanner({ currUser, posts, profileData, changeCoverPicture
                     <img className="cover-pic" src={profileData.coverPic}/>
                 </div>
                 <label className="cover-pic-label" htmlFor="file-input2">
-                    <button className="cover-pic-button">Edit Cover Picture</button>
+                    <button className="cover-pic-button">
+                        Edit Cover Picture
+                    </button>
                 </label>
                 <input 
                     type="file"
@@ -124,10 +217,14 @@ export function ProfileBanner({ currUser, posts, profileData, changeCoverPicture
                 <div className="profile-pic-container">
                     <img className="profile-pic" src={profileData.profilePic}/>
                 </div>
-                <h2 className="profile-name">{`${profileData.firstName} ${profileData.lastName}`}</h2>
-                <p className="profile-friends">{`${profileData.friends == undefined ? "0" : profileData.friends.length} Friends`}</p>
+                <h2 className="profile-name">{
+                    `${profileData.firstName} ${profileData.lastName}`}</h2>
+                <p className="profile-friends">{
+                    `${profileData.friends == undefined ? "0" : 
+                    profileData.friends.length} Friends`}</p>
                 <label className="profile-pic-label" htmlFor="file-input1">
-                    <img className="profile-pic-icon" src="https://i.pinimg.com/originals/e2/bc/2b/e2bc2b005d593253f62a4727d3da5d4f.png"/>
+                    <img className="profile-pic-icon" 
+                    src="https://i.pinimg.com/originals/e2/bc/2b/e2bc2b005d593253f62a4727d3da5d4f.png"/>
                 </label>
                 <input 
                     type="file"
@@ -139,23 +236,37 @@ export function ProfileBanner({ currUser, posts, profileData, changeCoverPicture
                 }}/>
                 <div className="line"></div>
                 <ul className="profile-nav">
-                    <li className={`profile-posts-button ${select != "posts" ? "" : "active"}`} onClick={() => {
-                        if (select != "posts") {
-                            setSelect("posts")
-                        }    
-                    }}>Posts</li>
-                    <li className={`profile-stats-button ${select == "posts" ? "" : "active"}`} onClick={() => {
-                        if (select == "posts") {
-                            setSelect("stats")
-                        }    
-                    }}>Stats</li>
+                    <li className={`profile-posts-button ${select != "posts" ? 
+                        "" : "active"}`} 
+                        onClick={() => {
+                            if (select != "posts") {
+                                setSelect("posts")
+                            }    
+                        }}>
+                        Posts
+                    </li>
+                    <li className={`profile-stats-button ${select == "posts" ? 
+                        "" : "active"}`} 
+                        onClick={() => {
+                            if (select == "posts") {
+                                setSelect("stats")
+                            }    
+                        }}>
+                        Stats
+                    </li>
                 </ul>
             </div>
-            {select == "stats" ? <Stats/> : <PostGrid posts={posts} currUser={currUser}></PostGrid>}
+            {select == "stats" ? 
+                <Stats/> : 
+                <PostGrid posts={posts} currUser={currUser}></PostGrid>}
         </>
     )
 }
 
+/**
+ * Renders information on hikes that the logged in user has completed
+ * @returns Stats component
+ */
 export function Stats() {
     return (
         <div>Stats</div>

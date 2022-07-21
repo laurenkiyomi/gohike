@@ -25,7 +25,8 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 export default function SideBar({ searchInputResult, setSearchInputResult, 
     setCenter, selectedHike, setSelectedHike, currUser }) {
     /**
-     * Sets whether or not to render loading state when fetching data
+     * State var that sets whether or not to render loading state when 
+     * fetching data
      * @type {boolean}
      */
     const [spinner, setSpinner] = React.useState(false)
@@ -101,7 +102,8 @@ export function SearchResults({ searchInputResult, setSelectedHike, currUser,
  */
 export function HikePopout({ selectedHike, setSelectedHike }) {
     /**
-     * Holds all images posted about hike in order of most to least liked
+     * State var that holds all images posted about hike in order of most to 
+     * least liked
      * @type {Array<string>} Contains image url's
      */
     const [images, setImages] = React.useState(null)
@@ -187,12 +189,12 @@ export function HikePopout({ selectedHike, setSelectedHike }) {
 export function SearchBar({ setSearchInputResult, setCenter, setSelectedHike, 
     currUser, setSpinner }) {
     /**
-     * Holds value of search
+     * State var that holds value of search
      * @type {string}
      */
     const [searchInput, setSearchInput] = React.useState('')
     /**
-     * Used in filtering side bar results
+     * State var that is used in filtering side bar results
      * @type {string}
      */
     const [select, setSelect] = React.useState("all")
@@ -208,7 +210,8 @@ export function SearchBar({ setSearchInputResult, setCenter, setSelectedHike,
             " ", "+")}`).then((data) => {
             setSearchInputResult(data.data.trail)
             setSelectedHike(null)
-            setCenter({ lat: data?.data?.trail[0]?.latitude, lng: data?.data?.trail[0]?.longitude  })
+            setCenter({ lat: data?.data?.trail[0]?.latitude, 
+                lng: data?.data?.trail[0]?.longitude  })
             setSpinner(false)
         })
     }
@@ -225,7 +228,8 @@ export function SearchBar({ setSearchInputResult, setCenter, setSelectedHike,
             (data) => {
                 setSearchInputResult(data.data.saved)
                 setSelectedHike(null)
-                setCenter({ lat: data?.data?.saved[0]?.latitude, lng: data?.data?.saved[0]?.longitude  })
+                setCenter({ lat: data?.data?.saved[0]?.latitude, 
+                    lng: data?.data?.saved[0]?.longitude  })
                 setSpinner(false)
             })
     }
@@ -237,11 +241,14 @@ export function SearchBar({ setSearchInputResult, setCenter, setSelectedHike,
         setSelect("completed")
         setSpinner(true)
         // Fetches completed hikes
-        await axios.get(`http://localhost:3001/user/completed/${currUser.username}`).then((data) => {
-            setSearchInputResult(data.data.completed)
-            setSelectedHike(null)
-            setCenter({ lat: data?.data?.completed[0]?.latitude, lng: data?.data?.completed[0]?.longitude  })
-            setSpinner(false)
+        await axios.get(
+            `http://localhost:3001/user/completed/${currUser.username}`).then(
+            (data) => {
+                setSearchInputResult(data.data.completed)
+                setSelectedHike(null)
+                setCenter({ lat: data?.data?.completed[0]?.latitude, 
+                    lng: data?.data?.completed[0]?.longitude  })
+                setSpinner(false)
         }).catch((err) => {
             console.log(err)
         })
@@ -305,12 +312,12 @@ export function SearchBar({ setSearchInputResult, setCenter, setSelectedHike,
  */
 export function HikeCard({ hikeObject, setSelectedHike, currUser, setCenter }) {
     /**
-     * Hikes saved by current user
+     * State var that holds hikes saved by current user
      * @type {Array<number>} Contains hike id's
      */
     const [saved, setSaved] = React.useState(null)
     /**
-     * Hikes completed by current user
+     * State var that holds hikes completed by current user
      * @type {Array<number>} Contains hike id's
      */
     const [completed, setCompleted] = React.useState(null)
@@ -339,7 +346,8 @@ export function HikeCard({ hikeObject, setSelectedHike, currUser, setCenter }) {
      * Sets saved and completed state variables on every render
      */
     React.useEffect(async () => {
-        const data = await axios.get(`http://localhost:3001/user/saved-completed/${currUser.username}`)
+        const data = await axios.get(
+            `http://localhost:3001/user/saved-completed/${currUser.username}`)
 
         setSaved(data.data.saved)
         setCompleted(data.data.completed)
