@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file implements the App component for the GoHike App.
+ */
 import * as React from "react"
 import Navbar from "../Navbar/Navbar"
 import Home from "../Home/Home"
@@ -12,6 +15,10 @@ import MyProfile from "../MyProfile/MyProfile"
 import ViewProfile from "../ViewProfile/ViewProfile"
 
 export default function App() {
+  /**
+   * Some description.
+   * @type {!Array<number>}
+   */
   const [currUser, setCurrUser] = React.useState(() => {
     if (localStorage.getItem("username") == null || localStorage.getItem("sessionToken") == null || localStorage.getItem("firstName") == null || localStorage.getItem("lastName") == null) {
       return null

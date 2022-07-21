@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file holds the routing methods for the GoHike app API.
+ */
 const express = require('express'); // instantiate express
 const morgan = require('morgan');
 const bodyParser = require('body-parser');

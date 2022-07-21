@@ -1,15 +1,17 @@
 /**
- * @fileoverview This file is the Posts model in the GoHike app API. It is used to implement a Posts class and is called by the the Posts routing methods.
+ * @fileoverview This file is the Posts model in the GoHike app API. It is used 
+ * to implement a Posts class and is called by the the Posts routing methods.
  */
-require("dotenv").config();
-var Parse = require('parse/node');
-Parse.initialize(process.env.APP_ID, process.env.JS_KEY, process.env.MASTER_KEY);
+require("dotenv").config()
+var Parse = require('parse/node')
+Parse.initialize(process.env.APP_ID, process.env.JS_KEY, process.env.MASTER_KEY)
 Parse.serverURL = 'https://parseapi.back4app.com/'
-const { parse } = require("path");
-const { post } = require("../routes/authorization");
+const { parse } = require("path")
+const { post } = require("../routes/authorization")
 
 /**
- * This class handles creation of posts, getting posts, and interacting with posts.
+ * This class handles creation of posts, getting posts, and interacting with 
+ * posts.
  */
 class Posts {
     constructor() {
@@ -19,11 +21,13 @@ class Posts {
     /**
      * Creates a new Post object and saves new post to Parse
      * 
-     * @param {String} sessionToken Corresponds to the session of the post creator
+     * @param {String} sessionToken Corresponds to the session of the post 
+     * creator
      * @param {Number} hikeId Id of the Trail that the post is about
      * @param {String} caption Description of post created by the user
      * @param {*} picture Picture of the hike taken by the user
-     * @returns {Object} Contains message indicating successful creation of new post
+     * @returns {Object} Contains message indicating successful creation of 
+     * new post
      */
     static async createPost(sessionToken, hikeId, caption, picture) {
         // Get User object from sessionToken
@@ -44,7 +48,9 @@ class Posts {
               
         // Create new Post object and set correct values
         // Save Post object to Parse
-        let newPost = new Parse.Object("Post", { username: userObject.get("username"), user, hikeId, caption, trailName: trail.get("name"), trail, picture  })
+        let newPost = new Parse.Object("Post", { username: userObject.get(
+            "username"), user, hikeId, caption, trailName: trail.get("name"), 
+            trail, picture  })
         await newPost.save()
 
         return { msg: "Created new post" }
@@ -53,8 +59,9 @@ class Posts {
     /**
      * Gets all posts made by the current user's friends
      * 
-     * @param {String} sessionToken Corresponds to the session of the current user
-     * @returns {Array<Number>} Contains the id's of all posts made by the current user's friends
+     * @param {String} sessionToken Corresponds to session of the current user
+     * @returns {Array<Number>} Contains the id's of all posts made by the 
+     * current user's friends
      */
     static async getFriendPosts(sessionToken) {
         // Get User pointer from sessionToken
@@ -82,7 +89,8 @@ class Posts {
             query3.equalTo("username", friends[i])
             let friend = await query3.first({useMasterKey:true})
 
-            if (friend.get("posts") != null && friend.get("posts") != undefined) {
+            if (friend.get("posts") != null && friend.get("posts") != undefined)
+            {
                 posts = posts.concat(friend.get("posts"))
             }
         }
@@ -93,7 +101,8 @@ class Posts {
     /**
      * Gets all posts in the Parse database
      * 
-     * @returns @returns {Array<Number>} Contains the id's of all posts in the Parse database
+     * @returns @returns {Array<Number>} Contains the id's of all posts in the 
+     * Parse database
      */
     static async getAllPosts() {
         // Get all Post objects
@@ -114,7 +123,9 @@ class Posts {
      * Queries Parse for information on a specific post
      * 
      * @param {Number} postId Corresponds to the post to return
-     * @returns {Object} Contains the creator's username, the name of the trail, the trail id, the caption, the created at time, picture, and likes array of the post corresponding to the postId
+     * @returns {Object} Contains the creator's username, the name of the trail,
+     * the trail id, the caption, the created at time, picture, and likes array 
+     * of the post corresponding to the postId
      */
     static async getPost(postId) {
         // Get Post object from postId
@@ -131,7 +142,10 @@ class Posts {
             likes = post.get("likes")
         }
      
-        return ({ username: post.get("username"), trailName: post.get("trailName"), hikeId: post.get("hikeId"), caption: post.get("caption"), createdAt: post.get("createdAt"), picture: post.get("picture"), likes })
+        return ({ username: post.get("username"), trailName: post.get(
+            "trailName"), hikeId: post.get("hikeId"), caption: post.get(
+            "caption"), createdAt: post.get("createdAt"), picture: post.get(
+            "picture"), likes })
     }
 
     /**

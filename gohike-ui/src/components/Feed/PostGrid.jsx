@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file implements the Post Grid component to show posts from other users. This component is rendered inside the Feed Page.
+ */
 import * as React from "react"
 import "./Feed.css"
 import { Link, useNavigate } from 'react-router-dom';

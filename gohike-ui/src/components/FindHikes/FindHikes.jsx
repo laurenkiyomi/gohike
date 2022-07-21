@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file implements the Find Hikes page component so that users can find hikes near them. It uses the Google Maps API to render a map with markers at hike locations.
+ */
 import * as React from "react"
 import "./FindHikes.css"
 import SideBar from "./SideBar";

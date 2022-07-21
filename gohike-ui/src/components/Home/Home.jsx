@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file implements the Home Page component. By default, this is the first page to be shown when the GoHike app is opened.
+ */
 import * as React from "react"
 import logo from "../Images/Logo.png"
 import imageOne from "../Images/four.jpeg"

@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file implements the Feed component so that users can view posts from other users and share their own posts.
+ */
 import * as React from "react"
 import "./Feed.css"
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
@@ -64,6 +67,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
       return window.btoa( binary );
   }
 
+    // Creates a post on form submit
     const handleCreatePost = async (event) => {
       event.preventDefault()
 

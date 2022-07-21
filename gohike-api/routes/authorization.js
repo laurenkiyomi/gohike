@@ -1,5 +1,8 @@
 /**
- * @fileoverview This file contains the Authorization routing methods for the GoHike app API. It handles authentication and authorization for creating new users and logging in/out existing users by calling on an instance of the Authorization class in the models directory.
+ * @fileoverview This file contains the Authorization routing methods for the 
+ * GoHike app API. It handles authentication and authorization for creating 
+ * new users and logging in/out existing users by calling on an instance of the
+ * Authorization class in the models directory.
  */
 const express = require('express');
 const router = express.Router();
@@ -20,8 +23,10 @@ router.post('/register', async (req, res) => {
 
     // Creates new user by calling Authorization methods
     try {
-        let sessionToken = await Authorization.createNewUser(firstName, lastName, age, username, password, email);
-        res.status(201).json( { username: username, sessionToken, firstName, lastName } )
+        let sessionToken = await Authorization.createNewUser(firstName, 
+            lastName, age, username, password, email);
+        res.status(201).json( { username: username, sessionToken, firstName, 
+            lastName } )
     } catch {
         res.status(400).json( { msg: "Failed to create new user" } )
     }
@@ -39,7 +44,9 @@ router.post('/login', async (req, res) => {
     // Logs in user by calling Authorization methods
     try {
         let loginUser = await Authorization.loginUser(username, password)
-        res.status(201).json( { username: username, sessionToken: loginUser.sessionToken, firstName: loginUser.firstName, lastName: loginUser.lastName } )
+        res.status(201).json( { username: username, 
+            sessionToken: loginUser.sessionToken, 
+            firstName: loginUser.firstName, lastName: loginUser.lastName } )
     } catch {
         res.status(400).json( { msg: "Failed to login user" } )
     }

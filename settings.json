@@ -1,0 +1,12 @@
+{
+    "files.autoSave": "afterDelay",
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.rulers": [ 
+            {
+                "column": 80,    // spacing of 1st column from left
+                "color": "#ff9900"   // orange
+            }
+         ]
+    }
+}

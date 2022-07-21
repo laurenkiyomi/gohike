@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file implements the Register Page so that users can create an account for the GoHike app.
+ */
 import * as React from "react"
 import "./Register.css"
 import axios from 'axios'

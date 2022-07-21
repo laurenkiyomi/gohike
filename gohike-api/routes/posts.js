@@ -16,7 +16,8 @@ router.post('/create', async (req, res) => {
         let caption = req.body.caption 
         let picture = req.body.picture 
         // Creates post by calling Posts method
-        let newPost = await Posts.createPost(sessionToken, hikeId, caption, picture )
+        let newPost = await Posts.createPost(sessionToken, hikeId, 
+            caption, picture )
 
         res.status(201).json( { msg: newPost.msg } )
     } catch (err) {
@@ -56,7 +57,8 @@ router.get('/likes', async (req, res) => {
 })
 
 /**
- * Get request for getting the friends of the current user based on their session token
+ * Get request for getting the friends of the current user based on their 
+ * session token
  */
 router.get('/friends/:sessionToken', async (req, res) => {
     try {

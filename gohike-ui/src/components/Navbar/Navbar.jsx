@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file implements the Navbar component so that users can navigate through the GoHike app. This component is rendered on every page of the GoHike app.
+ */
 import * as React from "react"
 import Logo from "./Logo"
 import "./Navbar.css"

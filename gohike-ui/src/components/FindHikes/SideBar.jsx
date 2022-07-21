@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file implements the Side Bar component inside the Find Hikes page so that users can look up hikes and see results from their searches.
+ */
 import * as React from "react"
 import "./FindHikes.css"
 import axios from 'axios';

@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file implements the Login Page for users with existing accounts.
+ */
 import * as React from "react"
 import "./Login.css"
 import axios from 'axios'

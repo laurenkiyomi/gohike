@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file tests the core features of the GoHike app API.
+ */
 /// <reference types="cypress" />
 
 describe('Login', function() {

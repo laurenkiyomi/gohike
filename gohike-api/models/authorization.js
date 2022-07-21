@@ -1,9 +1,11 @@
 /**
- * @fileoverview This file is the Authorization model in the GoHike app API. It is used to implement an Authorization class and is called by the the Authorization routing methods.
+ * @fileoverview This file is the Authorization model in the GoHike app API. It 
+ * is used to implement an Authorization class and is called by the the 
+ * Authorization routing methods.
  */
-require("dotenv").config();
-var Parse = require('parse/node');
-Parse.initialize(process.env.APP_ID, process.env.JS_KEY, process.env.MASTER_KEY);
+require("dotenv").config()
+var Parse = require('parse/node')
+Parse.initialize(process.env.APP_ID, process.env.JS_KEY, process.env.MASTER_KEY)
 Parse.serverURL = 'https://parseapi.back4app.com/'
 
 /**
@@ -23,9 +25,10 @@ class Authorization {
     * @param {String} username
     * @param {String} password
     * @param {String} email
-    * @returns {String} User's session token returned by creating account/logging in
+    * @returns {String} User's session token returned by creating account
 	*/
-    static async createNewUser(firstName, lastName, age, username, password, email ) {
+    static async createNewUser(firstName, lastName, age, username, password, 
+        email ) {
         // Create empty Parse _User object
         let user = new Parse.User();
 
@@ -50,12 +53,15 @@ class Authorization {
      * 
      * @param {String} username 
      * @param {String} password 
-     * @returns {Object} Contains logged in user's session token, first name, and last name
+     * @returns {Object} Contains logged in user's session token, first name, 
+     * and last name
      */
     static async loginUser(username, password) {
         // Log in user using Parse method
         const loginUser = await Parse.User.logIn(username, password)
-        return { sessionToken: loginUser.getSessionToken(), firstName: loginUser.get("firstName"), lastName: loginUser.get("lastName") }
+        return { sessionToken: loginUser.getSessionToken(), 
+            firstName: loginUser.get("firstName"), 
+            lastName: loginUser.get("lastName") }
     }
 
     /**

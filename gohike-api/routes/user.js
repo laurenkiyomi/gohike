@@ -1,12 +1,16 @@
 /**
- * @fileoverview This file contains the User routing methods for the GoHike app API. It handles getting information on users, user-to-user interaction, and user-to-post interaction by calling on an instance of the User class in the models directory.
+ * @fileoverview This file contains the User routing methods for the GoHike 
+ * app API. It handles getting information on users, user-to-user interaction, 
+ * and user-to-post interaction by calling on an instance of the User class in 
+ * the models directory.
  */
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 
 /**
- * Get request for getting the id's of hikes saved and completed by the specified user
+ * Get request for getting the id's of hikes saved and completed by the 
+ * specified user
  */
 router.get('/saved-completed/:username', async (req, res) => {
     try {
@@ -16,7 +20,7 @@ router.get('/saved-completed/:username', async (req, res) => {
         res.status(201).json( savedCompleted )
     } catch (err) {
         console.log(err)
-        res.status(400).json( { msg: "Failed to get saved and completed hikes" } )
+        res.status(400).json({ msg: "Failed to get saved and completed hikes" })
     }
 })
 
@@ -51,7 +55,8 @@ router.get('/completed/:username', async (req, res) => {
 })
 
 /**
- * Get request for getting information on the current user based on their session token stored in local storage
+ * Get request for getting information on the current user based on their 
+ * session token stored in local storage
  */
 router.get('/:sessionToken', async (req, res) => {
     try {
@@ -66,7 +71,8 @@ router.get('/:sessionToken', async (req, res) => {
 })
 
 /**
- * Get request for getting the id's of posts made by the current user based on their session token stored in local storage
+ * Get request for getting the id's of posts made by the current user based on 
+ * their session token stored in local storage
  */
 router.get('/posts/:sessionToken', async (req, res) => {
     try {
@@ -81,7 +87,8 @@ router.get('/posts/:sessionToken', async (req, res) => {
 })
 
 /**
- * Put request for changing the profile picture of the current user based on their session token stored in local storage
+ * Put request for changing the profile picture of the current user based on 
+ * their session token stored in local storage
  */
 router.put('/profilePhoto', async (req, res) => {
     try {
@@ -99,7 +106,8 @@ router.put('/profilePhoto', async (req, res) => {
 })
 
 /**
- * Put request for changing the cover picture of the current user based on their session token stored in local storage
+ * Put request for changing the cover picture of the current user based on 
+ * their session token stored in local storage
  */
 router.put('/coverPhoto', async (req, res) => {
     try {
@@ -116,7 +124,8 @@ router.put('/coverPhoto', async (req, res) => {
 })
 
 /**
- * Get request for getting information on a user based on their username in order for current user to view another user's profile
+ * Get request for getting information on a user based on their username in 
+ * order for current user to view another user's profile
  */
 router.get('/view/:username', async (req, res) => {
     try {
@@ -131,7 +140,7 @@ router.get('/view/:username', async (req, res) => {
 })
 
 /**
- * Get request for getting id's of posts made by another user based on their username
+ * Get request for getting id's of posts made by another user based on username
  */
 router.get('/view/posts/:username', async (req, res) => {
     try {
@@ -146,7 +155,7 @@ router.get('/view/posts/:username', async (req, res) => {
 })
 
 /**
- * Put request for sending a friend request from the current user to another user
+ * Put request for sending a friend request from current user to another user
  */
 router.put('/addFriend', async (req, res) => {
     try {
@@ -164,7 +173,7 @@ router.put('/addFriend', async (req, res) => {
 })
 
 /**
- * Put request for the current user to accept a friend request from another user
+ * Put request for current user to accept a friend request from another user
  */
 router.put('/acceptFriend', async (req, res) => {
     try {
@@ -181,7 +190,7 @@ router.put('/acceptFriend', async (req, res) => {
 })
 
 /**
- * Put request for the current user to decline a friend request from another user
+ * Put request for current user to decline a friend request from another user
  */
 router.put('/declineFriend', async (req, res) => {
     try {
@@ -218,7 +227,7 @@ router.put('/save', async (req, res) => {
 })
 
 /**
- * Put request for removing a hike's id from the current user's saved hikes array
+ * Put request for removing a hike's id from current user's saved hikes array
  */
 router.put('/unsave', async (req, res) => {
     try {
@@ -238,7 +247,7 @@ router.put('/unsave', async (req, res) => {
 })
 
 /**
- * Put request for adding a hike's id to the current user's completed hikes array
+ * Put request for adding a hike's id to current user's completed hikes array
  */
 router.put('/complete', async (req, res) => {
     try {
@@ -257,7 +266,7 @@ router.put('/complete', async (req, res) => {
 })
 
 /**
- * Put request for removing a hike's id from the current user's completed hikes array
+ * Put request for removing a hike's id from current user's completed hikes
  */
 router.put('/uncomplete', async (req, res) => {
     try {

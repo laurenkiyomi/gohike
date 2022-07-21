@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file implements the View Profile page so that logged in users can view and interact with other users' profiles.
+ */
 import * as React from "react"
 import "./ViewProfile.css"
 import axios from 'axios'

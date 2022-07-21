@@ -1,3 +1,6 @@
+/**
+ * @fileoverview This file implements the My Profile Page so that logged in users can view and edit their own profile.
+ */
 import * as React from "react"
 import "./MyProfile.css"
 import axios from 'axios'

@@ -1,9 +1,12 @@
 /**
- * @fileoverview This file is the Trails model in the GoHike app API. It is used to implement an Trails class and is called by the the Trails routing methods. Trails in the Parse database were retrieved from an open source Github project and reformatted to be uploaded to Parse.
+ * @fileoverview This file is the Trails model in the GoHike app API. It is 
+ * used to implement an Trails class and is called by the the Trails routing 
+ * methods. Trails in the Parse database were retrieved from an open source 
+ * Github project and reformatted to be uploaded to Parse.
  */
 require("dotenv").config();
 var Parse = require('parse/node');
-Parse.initialize(process.env.APP_ID, process.env.JS_KEY, process.env.MASTER_KEY);
+Parse.initialize(process.env.APP_ID, process.env.JS_KEY, process.env.MASTER_KEY)
 Parse.serverURL = 'https://parseapi.back4app.com/'
 
 /**
@@ -17,7 +20,9 @@ class Trails {
     /**
      * Get all trails in the Parse database
      * 
-     * @returns {Array<Object>} Contains objects containing the name and hikeId of each trail in order to allow users to select a hike when creating a post from the frontend
+     * @returns {Array<Object>} Contains objects containing the name and hikeId 
+     * of each trail in order to allow users to select a hike when creating a 
+     * post from the frontend
      */
     static async getAllTrails() {
         // Get all trails in database
@@ -28,7 +33,8 @@ class Trails {
         // Create array with trail names and values
         const res = []
         for (let i = 0; i < trails.length; i++) {
-            let trail = { label: trails[i].get("name"), value: trails[i].get("hikeId") }
+            let trail = { label: trails[i].get("name"), value: trails[i].get(
+                "hikeId") }
             res.push(trail)
         }
 
@@ -39,7 +45,9 @@ class Trails {
      * Gets information on all hikes whose name contains trailName
      * 
      * @param {String} trailName Name to look for
-     * @returns {Array<Object>} Contains objects with the trail's name, id, type, summary, location, length, ascent, descent, condition status, high, low, longitude, latitude, and picture
+     * @returns {Array<Object>} Contains objects with the trail's name, id, 
+     * type, summary, location, length, ascent, descent, condition status, high,
+     * low, longitude, latitude, and picture
      */
     static async getTrailByName(trailName) {
         // Get all trails in database
@@ -100,7 +108,9 @@ class Trails {
      * Gets information on a specific hike based on its id
      * 
      * @param {String} trailId Id of trail to get information on
-     * @returns {Array<Object>} Contains a single object of the trail's name, id, type, summary, location, length, ascent, descent, condition status, high, low, longitude, latitude, and picture
+     * @returns {Array<Object>} Contains a single object of the trail's name, 
+     * id, type, summary, location, length, ascent, descent, condition status, 
+     * high, low, longitude, latitude, and picture
      */
     static async getTrailById(trailId) {
         // Get all trails in database
@@ -143,7 +153,9 @@ class Trails {
     }
 
     /**
-     * Gets all pictures in the Parse database posted of a trail in order of most to least liked in order to create a carousel in the hike popouts in the frontend
+     * Gets all pictures in the Parse database posted of a trail in order of 
+     * most to least liked in order to create a carousel in the hike popouts 
+     * in the frontend
      * 
      * @param {Number} trailId Id of trail to get pictures of
      * @returns {Array<String>} Contains URI's of pictures

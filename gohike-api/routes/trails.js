@@ -1,5 +1,7 @@
 /**
- * @fileoverview This file contains the Trails routing methods for the GoHike app API. It handles getting information on trails by calling on an instance of the Trails class in the models directory.
+ * @fileoverview This file contains the Trails routing methods for the GoHike 
+ * app API. It handles getting information on trails by calling on an instance 
+ * of the Trails class in the models directory.
  */
 const express = require('express');
 const router = express.Router();
@@ -40,7 +42,8 @@ router.get('/:trailName', async (req, res) => {
     try {
         const trailName = req.params.trailName
         // Gets information on trail by calling Trails method
-        const trail = await Trails.getTrailByName((trailName.replaceAll("+", " ")).toLowerCase())
+        const trail = await Trails.getTrailByName((trailName.replaceAll(
+            "+", " ")).toLowerCase())
         res.status(201).json({ trail })
     } catch {
         res.status(400).json({ msg: "Could not retrieve trail info." })
