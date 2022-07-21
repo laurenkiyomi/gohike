@@ -1,14 +1,26 @@
+/**
+ * @fileoverview This file is the User model in the GoHike app API. It is used to implement an User class and is called by the the User routing methods.
+ */
 require("dotenv").config();
 var Parse = require('parse/node');
 const { use } = require("../routes/user");
 Parse.initialize(process.env.APP_ID, process.env.JS_KEY, process.env.MASTER_KEY);
 Parse.serverURL = 'https://parseapi.back4app.com/'
 
+/**
+ * This class handles getting information about users in the Parse database, editing user information, user-to-user interactions, and user-to-post interactions.
+ */
 class User {
     constructor() {
         this.super();
     }
 
+    /**
+     * Gets information on a user based on their session token stored in local storage
+     * 
+     * @param {String} sessionToken Corresponds to the current user's session
+     * @returns {Object} Contains information on user
+     */
     static async getUserInfo(sessionToken) {
         // Get User pointer from sessionToken
         let query = new Parse.Query("_Session")
@@ -22,6 +34,12 @@ class User {
         return user
     }
 
+    /**
+     * Get the hikes saved by a specified user
+     * 
+     * @param {String} username 
+     * @returns {Array<Object>} Contains objects with the trail's name, id, type, summary, location, length, ascent, descent, condition status, high, low, longitude, latitude, and picture
+     */
     static async getSaved(username) {
         // Get User object from username
         let query = new Parse.Query("_User")
@@ -35,6 +53,7 @@ class User {
             return []
         }
 
+        // Push hike to savedRes if it is saved by the user
         let savedRes = []
         for (let i = 0; i < saved.length; i++) {
             let query2 = new Parse.Query("Trail")
@@ -53,6 +72,7 @@ class User {
                 img = addTrail.get("imgSqSmall")
             }
 
+            // Set important information for hike
             savedRes.push({ 
                 id: addTrail.get("hikeId"), 
                 name: addTrail.get("name"), 
@@ -74,6 +94,12 @@ class User {
         return savedRes
     }
 
+    /**
+     * Get the hikes completed by a specified user
+     * 
+     * @param {String} username 
+     * @returns {Array<Object>} Contains objects with the trail's name, id, type, summary, location, length, ascent, descent, condition status, high, low, longitude, latitude, and picture
+     */
     static async getCompleted(username) {
         // Get User object from username
         let query = new Parse.Query("_User")
@@ -87,6 +113,7 @@ class User {
             return []
         }
 
+        // Push hike to completedRes if it is saved by the user
         let completedRes = []
         for (let i = 0; i < completed.length; i++) {
             let query2 = new Parse.Query("Trail")
@@ -105,6 +132,7 @@ class User {
                 img = addTrail.get("imgSqSmall")
             }
 
+            // Set important information for hike
             completedRes.push({ 
                 id: addTrail.get("hikeId"), 
                 name: addTrail.get("name"), 
@@ -126,16 +154,28 @@ class User {
         return completedRes
     }
 
+    /**
+     * Get all hikes saved and completed by a user
+     * 
+     * @param {String} username 
+     * @returns {Object} Contains a saved array and completed array with the id's of saved and completed hikes respectively
+     */
     static async getSavedAndCompleted(username) {
         // Get User object from username
         let query = new Parse.Query("_User")
         query.equalTo("username", username)
         let user = await query.first({useMasterKey:true})
 
-        // Getsaved and completed
+        // Get saved and completed
         return { saved: user.get("saved"), completed: user.get("completed") }
     }
 
+    /**
+     * Get the posts made by a user
+     * 
+     * @param {String} sessionToken Corresponds to the current user
+     * @returns {Array<Number>} Contains the id's of posts created by the current user
+     */
     static async getUserPosts(sessionToken) {
         // Get User id from sessionToken
         let query = new Parse.Query("_Session")
@@ -163,6 +203,12 @@ class User {
         return res
     }
 
+    /**
+     * Changes the profile picture of a user by editing the corresponding Parse user object
+     * 
+     * @param {String} sessionToken Corresponds to the current user
+     * @param {String} picture URI of the picture to upload
+     */
     static async changeProfilePicture(sessionToken, picture) {
         // Get User id from sessionToken
         let query = new Parse.Query("_Session")
@@ -180,6 +226,12 @@ class User {
         await user.save(null, {useMasterKey:true})
     }
 
+    /**
+     * Changes the cover picture of a user by editing the corresponding Parse user object
+     * 
+     * @param {String} sessionToken Corresponds to the current user
+     * @param {String} picture URI of the picture to upload
+     */
     static async changeCoverPicture(sessionToken, picture) {
         // Get User id from sessionToken
         let query = new Parse.Query("_Session")
@@ -197,6 +249,12 @@ class User {
         await user.save(null, {useMasterKey:true})
     }
 
+    /**
+     * Gets information on a user in order for the current user to view another user's profile
+     * 
+     * @param {String} username Corresponds to the user to get information on
+     * @returns {Object} Contains information on corresponding user
+     */
     static async getViewUserInfo(username) {
         // Get User object from username
         let query = new Parse.Query("_User")
@@ -205,6 +263,12 @@ class User {
         return user
     }
 
+    /**
+     * Gets the posts made by a specified user
+     * 
+     * @param {String} username Corresponds to the user whose posts are to get
+     * @returns {Array<Number>} Contains id's of the posts created by corresponding user
+     */
     static async getViewUserPosts(username) {
         // Get User info from username
         let query = new Parse.Query("_User")
@@ -227,6 +291,13 @@ class User {
         return res
     }
 
+    /**
+     * Sends a friend request from the current user to another user
+     * 
+     * @param {String} sessionToken Corresponds to the current user who's sending a friend request
+     * @param {String} username Corresponds to the user receiving the friend request
+     * @returns {String} Message indicating success of sending friend request
+     */
     static async sendFriendRequest(sessionToken, username) {
         // Get User id from sessionToken
         let query = new Parse.Query("_Session")
@@ -269,6 +340,13 @@ class User {
         return "Sent friend request"
     }
 
+    /**
+     * Accepts a friend request sent to the current user from another user
+     * 
+     * @param {String} sessionToken Corresponds to the current user accepting a friend request
+     * @param {String} username Corresponds to the user who sent the friend request
+     * @returns {String} Message indicating success of accepting friend request
+     */
     static async acceptFriendRequest(sessionToken, username) {
         // Get User id from sessionToken
         let query = new Parse.Query("_Session")
@@ -327,6 +405,13 @@ class User {
         return "Accepted friend request"
     }
 
+    /**
+     * Declines a friend request sent to the current user from another user
+     * 
+     * @param {String} sessionToken Corresponds to the current user declining a friend request
+     * @param {String} username Corresponds to the user who sent the friend request
+     * @returns {String} Message indicating success of declining friend request
+     */
     static async declineFriendRequest(sessionToken, username) {
         // Get User id from sessionToken
         let query = new Parse.Query("_Session")
@@ -363,6 +448,13 @@ class User {
         return "Declined friend request"
     }
     
+    /**
+     * Adds a hike to the current user's saved array
+     * 
+     * @param {String} username Corresponds to the current user saving the hike
+     * @param {Number} hikeId Id of the hike to save
+     * @returns {Array<Number>} Contains the id's of the current user's saved hikes after addition of new hike
+     */
     static async savePost(username, hikeId) {
         // Get User object from username
         let query = new Parse.Query("_User")
@@ -383,6 +475,13 @@ class User {
         }
     }
 
+    /**
+     * Removes a hike from the current user's saved array
+     * 
+     * @param {String} username Corresponds to the current user unsaving the hike
+     * @param {Number} hikeId Id of the hike to unsave
+     * @returns {Array<Number>} Contains the id's of the current user's saved hikes after removal of hike
+     */
     static async unsavePost(username, hikeId) {
         // Get User object from username
         let query = new Parse.Query("_User")
@@ -398,12 +497,20 @@ class User {
             }
         }
 
+        // Set user's saved array to res and saves to Parse
         user.set("saved", res)
-            await user.save(null, {useMasterKey:true})
+        await user.save(null, {useMasterKey:true})
             
         return res
     }
 
+    /**
+     * Adds a hike to the current user's completed array
+     * 
+     * @param {String} username Corresponds to the current user completing the hike
+     * @param {Number} hikeId Id of the hike to complete
+     * @returns {Array<Number>} Contains the id's of the current user's completed hikes after addition of new hike
+     */
     static async completePost(username, hikeId) {
         // Get User object from username
         let query = new Parse.Query("_User")
@@ -424,6 +531,13 @@ class User {
         }
     }
 
+    /**
+     * Removes a hike from the current user's completed array
+     * 
+     * @param {String} username Corresponds to the current user uncompleting the hike
+     * @param {Number} hikeId Id of the hike to complete
+     * @returns {Array<Number>} Contains the id's of the current user's completed hikes after removal of hike
+     */
     static async uncompletePost(username, hikeId) {
         // Get User object from username
         let query = new Parse.Query("_User")
@@ -439,6 +553,7 @@ class User {
             }
         }
 
+        // Sets user's completed array to res and saves to Parse
         user.set("completed", res)
         await user.save(null, {useMasterKey:true})
             

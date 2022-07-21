@@ -1,9 +1,16 @@
+/**
+ * @fileoverview This file contains the Trails routing methods for the GoHike app API. It handles getting information on trails by calling on an instance of the Trails class in the models directory.
+ */
 const express = require('express');
 const router = express.Router();
 const Trails = require('../models/trails');
 
+/**
+ * Get request for getting all the trails in the Parse database
+ */
 router.get('/', async (req, res) => {
     try {
+        // Gets all trails by calling Trails method
         const trails = await Trails.getAllTrails()
         res.status(201).json({ trails: trails })
     } catch {
@@ -11,9 +18,13 @@ router.get('/', async (req, res) => {
     }
 })
 
+/**
+ * Get request for getting all the pictures posted about a specified hike
+ */
 router.get('/hike-pictures/:trailId', async (req, res) => {
     try {
         const trailId = req.params.trailId
+        // Gets information on trail by calling Trails method
         const results = await Trails.getTrailPictures(trailId)
         res.status(201).json({ pictures: results })
     } catch (err) {
@@ -22,9 +33,13 @@ router.get('/hike-pictures/:trailId', async (req, res) => {
     }
 })
 
+/**
+ * Get request for getting information on a trail based on its name
+ */
 router.get('/:trailName', async (req, res) => {
     try {
         const trailName = req.params.trailName
+        // Gets information on trail by calling Trails method
         const trail = await Trails.getTrailByName((trailName.replaceAll("+", " ")).toLowerCase())
         res.status(201).json({ trail })
     } catch {
@@ -32,9 +47,13 @@ router.get('/:trailName', async (req, res) => {
     }
 })
 
+/**
+ * Get request for getting information on a trail based on its id
+ */
 router.get('/id/:trailId', async (req, res) => {
     try {
         const trailId = req.params.trailId
+        // Gets information on a trail by calling Trails method
         const trail = await Trails.getTrailById(trailId)
         res.status(201).json({ trail })
     } catch (err) {
