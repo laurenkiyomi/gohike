@@ -210,8 +210,12 @@ export function SearchBar({ setSearchInputResult, setCenter, setSelectedHike,
             " ", "+")}`).then((data) => {
             setSearchInputResult(data.data.trail)
             setSelectedHike(null)
-            setCenter({ lat: data?.data?.trail[0]?.latitude, 
+            if (data?.data?.trail[0] != undefined) {
+                setCenter({ lat: data?.data?.trail[0]?.latitude, 
                 lng: data?.data?.trail[0]?.longitude  })
+            } else {
+                setCenter({ lat: 37.4816056542292, lng: -122.17105672877193 })
+            }
             setSpinner(false)
         })
     }
@@ -228,8 +232,12 @@ export function SearchBar({ setSearchInputResult, setCenter, setSelectedHike,
             (data) => {
                 setSearchInputResult(data.data.saved)
                 setSelectedHike(null)
-                setCenter({ lat: data?.data?.saved[0]?.latitude, 
+                if (data?.data?.saved[0] != undefined) {
+                    setCenter({ lat: data?.data?.saved[0]?.latitude, 
                     lng: data?.data?.saved[0]?.longitude  })
+                } else {
+                    setCenter({lat: 37.4816056542292,lng: -122.17105672877193})
+                }
                 setSpinner(false)
             })
     }
@@ -246,8 +254,12 @@ export function SearchBar({ setSearchInputResult, setCenter, setSelectedHike,
             (data) => {
                 setSearchInputResult(data.data.completed)
                 setSelectedHike(null)
-                setCenter({ lat: data?.data?.completed[0]?.latitude, 
+                if (data?.data?.completed[0] != undefined) {
+                    setCenter({ lat: data?.data?.completed[0]?.latitude, 
                     lng: data?.data?.completed[0]?.longitude  })
+                } else {
+                    setCenter({lat: 37.4816056542292, lng: -122.17105672877193})
+                }
                 setSpinner(false)
         }).catch((err) => {
             console.log(err)
