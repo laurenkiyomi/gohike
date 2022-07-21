@@ -1,5 +1,6 @@
 /**
- * @fileoverview This file implements the Feed component so that users can view posts from other users and share their own posts.
+ * @fileoverview This file implements the Feed component so that users can view 
+ * posts from other users and share their own posts.
  */
 import * as React from "react"
 import "./Feed.css"
@@ -9,22 +10,64 @@ import axios from "axios";
 import Select from 'react-select';
 import PostGrid from "./PostGrid";
 
+/**
+ * Renders CreatePost and PostGrid component
+ * 
+ * @param {boolean} transparent State var holding state of Navbar background 
+ * @param {function} setTransparent Sets the boolean in transparent
+ * @param {{username: string, sessionToken: string, firstName: string, 
+ * lastName: string}} currUser Holds info on current user from local storage
+ * @returns Feed component
+ */
 export default function Feed({ transparent, setTransparent, currUser }) {
+    /**
+      * URL to get all trails in database
+      * @type {string}
+      */
     const TRAILS_URL = "http://localhost:3001/trails/"
-    // const FRIENDS_POSTS_URL = `http://localhost:3001/posts/friends/${currUser.sessionToken}`
+    /**
+      * URL to get all posts in database
+      * @type {string}
+      */
     const POSTS_URL = "http://localhost:3001/posts"
+    /**
+      * All trails in database including name and hike id
+      * @type {Array<{name: string, value: number}>}
+      */
     const [trailsList, setTrailsList] = React.useState([])
+    /**
+      * Post number offset to render
+      * @type {number}
+      */
     const [numPosts, setNumPosts] = React.useState(5)
+    /**
+      * Post id's of posts to render
+      * @type {Array<number>}
+      */
     const [posts, setPosts] = React.useState(null)
+    /**
+      * State of whether to render loading page or not
+      * @type {boolean}
+      */
     const [spinner, setSpinner] = React.useState(false)
+    /**
+      * Navigation tool
+      * @type {hook}
+      */
     const history = useNavigate()
 
+    /**
+     * Fetches post id's to render
+     */
     async function fetchData() {
       let data = await axios.get(POSTS_URL)
       setSpinner(true)
       setPosts(data.data.posts)
     }
 
+    /**
+     * Fetches data on the trails on every render
+     */
     React.useEffect(async () => {
       // Navigate to login page if user isn't logged in
       if (currUser == null) {
@@ -39,24 +82,65 @@ export default function Feed({ transparent, setTransparent, currUser }) {
       setTrailsList(data.data.trails)
     }, [])
 
+    /**
+     * Fetches post data every time numPosts changes
+     */
     React.useEffect(async () => {
       fetchData()
     }, [numPosts])
    
+    // Return React component
     return (
       <nav className="feed">
-        <CreatePost trailsList={trailsList} currUser={currUser} fetchData={fetchData}/>
-        {spinner ? <PostGrid posts={posts} currUser={currUser} /> : <LoadingScreen/>}
+        <CreatePost 
+          trailsList={trailsList} 
+          currUser={currUser} 
+          fetchData={fetchData}/>
+        {spinner ? 
+          <PostGrid 
+            posts={posts} 
+            currUser={currUser} /> : 
+          <LoadingScreen/>}
       </nav>
     )
   }
 
-  export function CreatePost({ trailsList, currUser, fetchData }) {
+  /**
+   * Renders form box for users to create a new post
+   * 
+   * @param {Array<{name: string, value: number}>} trailsList
+   * @param {{username: string, sessionToken: string, firstName: string, 
+   * lastName: string}} currUser
+   * @returns CreatePost component
+   */
+  export function CreatePost({ trailsList, currUser }) {
+    /**
+     * URL for making post request to create new post
+     * @type {string}
+     */
     const CREATE_POST_URL = "http://localhost:3001/posts/create"
+    /**
+     * Url of picture input
+     * @type {string}
+     */
     const [picture, setPicture] = React.useState(null)
+    /**
+     * Name and id of trail selected by user
+     * @type {{name: string, value: number}}
+     */
     const [trail, setTrail] = React.useState("")
+    /**
+     * Caption of post typed by user
+     * @type {string}
+     */
     const [caption, setCaption] = React.useState("")
 
+    /**
+     * Converts buffer to base64
+     * 
+     * @param {string} buffer 
+     * @returns {string} base64 string of picture data
+     */
     const _arrayBufferToBase64 = (buffer) => {
       var binary = '';
       var bytes = new Uint8Array( buffer );
@@ -84,8 +168,10 @@ export default function Feed({ transparent, setTransparent, currUser }) {
         let base64String = _arrayBufferToBase64(arrayBuffer)
         base64String = "data:image/jpeg;base64," + base64String
         // Upload to Parse
-        await axios.post(CREATE_POST_URL, { hikeId: trail.value, caption, sessionToken: currUser?.sessionToken, picture: base64String })
+        await axios.post(CREATE_POST_URL, { hikeId: trail.value, caption, 
+          sessionToken: currUser?.sessionToken, picture: base64String })
 
+        // Resets form
         event.target[1].value = ""
         setPicture(null)
         setTrail("")
@@ -95,8 +181,11 @@ export default function Feed({ transparent, setTransparent, currUser }) {
       }
     }
     
+    // Return React component
     return (
-        <form className="create-post-form" onSubmit={handleCreatePost}>
+        <form 
+          className="create-post-form" 
+          onSubmit={handleCreatePost}>
           <input
             type="text"
             className="caption-post-input"
@@ -105,7 +194,8 @@ export default function Feed({ transparent, setTransparent, currUser }) {
             placeholder={`How was your hike, ${currUser?.firstName}?`}
             required
           />
-          <div className="add-to-post">
+          <div 
+            className="add-to-post">
             <Select
               options={trailsList}
               value={trail}
@@ -113,8 +203,12 @@ export default function Feed({ transparent, setTransparent, currUser }) {
               onChange={(value) => {setTrail(value)}}
               className="trail-post-input"
             />
-            <label className="upload-images-label" htmlFor="file-input">
-              <img className="upload-images-icon" src="https://icon-library.com/images/image-icon-png/image-icon-png-6.jpg"/>
+            <label 
+              className="upload-images-label" 
+              htmlFor="file-input">
+              <img 
+                className="upload-images-icon" 
+                src="https://icon-library.com/images/image-icon-png/image-icon-png-6.jpg"/>
             </label>
             <input 
               type="file"
@@ -126,7 +220,8 @@ export default function Feed({ transparent, setTransparent, currUser }) {
               }}
               required
             />
-            <button className="post-button">Post</button>
+            <button 
+              className="post-button">Post</button>
           </div>
         </form>
     )

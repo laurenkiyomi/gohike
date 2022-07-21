@@ -1,5 +1,7 @@
 /**
- * @fileoverview This file implements the Find Hikes page component so that users can find hikes near them. It uses the Google Maps API to render a map with markers at hike locations.
+ * @fileoverview This file implements the Find Hikes page component so that 
+ * users can find hikes near them. It uses the Google Maps API to render a map 
+ * with markers at hike locations.
  */
 import * as React from "react"
 import "./FindHikes.css"
@@ -8,29 +10,68 @@ import axios from 'axios';
 import GoogleMapReact from 'google-map-react';
 import { Routes, Route, Link, useParams } from 'react-router-dom'
 
+/**
+ * Renders SideBar and GoogleMaps component
+ * 
+ * @param {boolean} transparent State var holding state of Navbar background 
+ * @param {function} setTransparent Sets the boolean in transparent
+ * @param {{username: string, sessionToken: string, firstName: string, 
+ * lastName: string}} currUser Holds info on current user from local storage
+ * @returns Find Hikes component
+ */
 export default function FindHikes({ transparent, setTransparent, currUser }) {
     const params = useParams()
+    /**
+     * Holds id of hike if clicked on from the Feed page
+     * @type {number}
+     */
     const id = params.id
+    /**
+     * Holds id of a hike selected in the sidebar
+     * @param {number}
+     */
     const [selectedHike, setSelectedHike] = React.useState(null)
-    const [center, setCenter] = React.useState({ lat: 37.4816056542292, lng: -122.17105672877193  })
+    /**
+     * Coordinates of center of GoogleMap component
+     * @type {{lat: number, lng: number}}
+     */
+    const [center, setCenter] = React.useState(
+      { lat: 37.4816056542292, lng: -122.17105672877193  })
+    /**
+     * Value of zoom for GoogleMap component
+     * @type {number}
+     */
     const [zoom, setZoom] = React.useState(11);
+    /**
+     * Info on hikes found from search
+     * @type {Array<hike>}
+     */
     const [searchInputResult, setSearchInputResult] = React.useState([])
 
+    // Fetches data on a specific hike on every render
     React.useEffect(async () => {
       if (transparent) {
         setTransparent(false)
       }
 
+      // Fetch data
       if (id != undefined) {
         let data = await axios.get(`http://localhost:3001/trails/id/${id}`)
         setSearchInputResult(Array.from(data.data.trail))
-        setCenter({ lat: data.data.trail[0].latitude, lng: data.data.trail[0].longitude })
+        setCenter({ lat: data.data.trail[0].latitude, 
+          lng: data.data.trail[0].longitude })
       }
     }, [])
 
+    // Return React component
     return (
       <nav className="find-hikes" >
-        <SideBar searchInputResult={searchInputResult} setSearchInputResult={setSearchInputResult} setCenter={setCenter} selectedHike={selectedHike} setSelectedHike={setSelectedHike} currUser={currUser}/>
+        <SideBar 
+          searchInputResult={searchInputResult} 
+          setSearchInputResult={setSearchInputResult} 
+          setCenter={setCenter} selectedHike={selectedHike} 
+          setSelectedHike={setSelectedHike} 
+          currUser={currUser}/>
         <div className="map-div">
           <GoogleMapReact
             bootstrapURLKeys={{ key: "AIzaSyDEc_o7C5X1ljM7fq27LLr5QdZPfrQlQZA" }}
@@ -55,11 +96,27 @@ export default function FindHikes({ transparent, setTransparent, currUser }) {
     )
   }
 
-export function Marker({ lat, lng, setCenter, setSelectedHike, selectedHike, trail }) {
-
+  /**
+   * Marker components on Google Map for each hike in search results
+   * 
+   * @param {number} lat Latitude of hike location
+   * @param {number} lng Longitude of hike location
+   * @param {function} setCenter Sets center of Google Map
+   * @param {function} setSelectedHike Used on click
+   * @param {number}  selectedHike Id of selected hike
+   * @param {hike}  trail Info on hike  
+   * @returns 
+   */
+export function Marker({ lat, lng, setCenter, setSelectedHike, selectedHike, 
+  trail }) {
+  /**
+   * Handles click of marker
+   */
   function handleClick() {
+    // Set center of Google Map to this marker
     setCenter({ lat, lng })
 
+    // Open and close selected hike
     if (selectedHike != trail) {
       setSelectedHike(trail)
     } else {
@@ -68,9 +125,12 @@ export function Marker({ lat, lng, setCenter, setSelectedHike, selectedHike, tra
     
   }
 
+  // Return React component
   return (
     <div className="marker">
-      <span className="material-icons md-48 marker-icon" onClick={handleClick}>add_location</span>
+      <span 
+        className="material-icons md-48 marker-icon" 
+        onClick={handleClick}>add_location</span>
     </div>
   )
 }
