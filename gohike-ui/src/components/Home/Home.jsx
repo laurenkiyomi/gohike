@@ -41,7 +41,6 @@ export default function Home({ transparent, setTransparent }) {
     }
   }, [])
 
-  navigator.geolocation.getCurrentPosition()
   // Return React component
   return (
     <div className="home">
