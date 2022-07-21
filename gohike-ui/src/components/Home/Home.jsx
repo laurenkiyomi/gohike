@@ -42,6 +42,12 @@ export default function Home({ transparent, setTransparent }) {
   }, [])
 
 
+  navigator.geolocation.getCurrentPosition(function(position) {
+    console.log("Latitude is :", position.coords.latitude);
+    console.log("Longitude is :", position.coords.longitude);
+  });
+
+  navigator.geolocation.getCurrentPosition()
   // Return React component
   return (
     <div className="home">
@@ -112,9 +118,6 @@ export default function Home({ transparent, setTransparent }) {
           }
         ]}
       ><img className="collage-item img-three" src={imageThree}/></Plx> */}
-      </div>
-      <div>
-        hi there
       </div>
     </div>
   )
