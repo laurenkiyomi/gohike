@@ -254,21 +254,55 @@ export function SearchBar({ setSearchInputResult, setCenter, setSelectedHike,
         })
     }
 
+    /**
+     * Filters search results for hikes near the user. Displays nothing if 
+     * user's location is not available
+     */
     async function handleNearMe() {
         setSelect("near-me")
-        setSpinner(true)
-        // Fetches completed hikes
-        await axios.get(
-            "http://localhost:3001/trails/near-me/lat/37.3100859140489/lng/-122.0456891308477")
-            .then((data) => {
-                setSearchInputResult(data.data.trails)
-                setSelectedHike(null)
-                setCenter({ lat: data?.data?.trails[0]?.latitude, 
-                    lng: data?.data?.trails[0]?.longitude  })
+        // Only get hikes near user if location is available
+        if (navigator.geolocation) {
+            setSpinner(true)
+
+            // Get user location
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                // Fetches completed hikes
+                await axios.get(
+                    `http://localhost:3001/trails/near-me/lat/
+                    ${position.coords.latitude}/lng/${position.coords.longitude}
+                    `).then((data) => {
+                        setSearchInputResult(data.data.trails)
+                        setSelectedHike(null)
+
+                        // Set center to current location if no hikes to display
+                        if (data?.data?.trails[0] != undefined) {
+                            setCenter({ lat: data?.data?.trails[0]?.latitude, 
+                            lng: data?.data?.trails[0]?.longitude  })
+                        } else {
+                            setCenter({ lat: position.coords.latitude, 
+                                lng: position.coords.longitude })
+                        }
+                        
+                        setSpinner(false)
+                }).catch((err) => {
+                    console.log(err)
+                })
+            }, () => {
+                // Getting location fails
                 setSpinner(false)
-        }).catch((err) => {
-            console.log(err)
-        })
+                setSearchInputResult([])
+                setSelectedHike(null)
+                setCenter({ lat: 37.4816056542292, lng: -122.17105672877193  })
+                alert('Unable to retrieve your location')
+            })
+
+        } else {
+            // Browser does not support geolocation
+            alert('Your browser does not support geolocation');
+            setSearchInputResult([])
+            setSelectedHike(null)
+            setCenter({ lat: 37.4816056542292, lng: -122.17105672877193  })
+        }
     }
 
     /**
