@@ -231,8 +231,12 @@ export function SearchBar({ setSearchInputResult, setCenter, setSelectedHike,
             " ", "+")}`).then((data) => {
             setSearchInputResult(data.data.trail)
             setSelectedHike(null)
-            setCenter({ lat: data?.data?.trail[0]?.latitude, 
+            if (data?.data?.trail[0] != undefined) {
+                setCenter({ lat: data?.data?.trail[0]?.latitude, 
                 lng: data?.data?.trail[0]?.longitude  })
+            } else {
+                setCenter({ lat: 37.4816056542292, lng: -122.17105672877193 })
+            }
             setSpinner(false)
         })
     }
@@ -249,8 +253,12 @@ export function SearchBar({ setSearchInputResult, setCenter, setSelectedHike,
             (data) => {
                 setSearchInputResult(data.data.saved)
                 setSelectedHike(null)
-                setCenter({ lat: data?.data?.saved[0]?.latitude, 
+                if (data?.data?.saved[0] != undefined) {
+                    setCenter({ lat: data?.data?.saved[0]?.latitude, 
                     lng: data?.data?.saved[0]?.longitude  })
+                } else {
+                    setCenter({lat: 37.4816056542292,lng: -122.17105672877193})
+                }
                 setSpinner(false)
             })
     }
@@ -267,12 +275,67 @@ export function SearchBar({ setSearchInputResult, setCenter, setSelectedHike,
             (data) => {
                 setSearchInputResult(data.data.completed)
                 setSelectedHike(null)
-                setCenter({ lat: data?.data?.completed[0]?.latitude, 
+                if (data?.data?.completed[0] != undefined) {
+                    setCenter({ lat: data?.data?.completed[0]?.latitude, 
                     lng: data?.data?.completed[0]?.longitude  })
+                } else {
+                    setCenter({lat: 37.4816056542292, lng: -122.17105672877193})
+                }
                 setSpinner(false)
         }).catch((err) => {
             console.log(err)
         })
+    }
+
+    /**
+     * Filters search results for hikes near the user. Displays nothing if 
+     * user's location is not available
+     */
+    async function handleNearMe() {
+        setSelect("near-me")
+        // Only get hikes near user if location is available
+        if (navigator.geolocation) {
+            setSpinner(true)
+
+            // Get user location
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                // Fetches completed hikes
+                await axios.get(
+                    `http://localhost:3001/trails/near-me/lat/
+                    ${position.coords.latitude}/lng/${position.coords.longitude}
+                    `).then((data) => {
+                        setSearchInputResult(data.data.trails)
+                        setSelectedHike(null)
+
+                        // Set center to current location if no hikes to display
+                        if (data?.data?.trails[0] != undefined) {
+                            setCenter({ lat: data?.data?.trails[0]?.latitude, 
+                            lng: data?.data?.trails[0]?.longitude  })
+                        } else {
+                            setCenter({ lat: position.coords.latitude, 
+                                lng: position.coords.longitude })
+                        }
+                        
+                        setSpinner(false)
+                }).catch((err) => {
+                    console.log(err)
+                })
+            }, () => {
+                // Getting location fails
+                setSpinner(false)
+                setSearchInputResult([])
+                setSelectedHike(null)
+                setCenter({ lat: 37.4816056542292, lng: -122.17105672877193  })
+                alert('Unable to retrieve your location')
+            })
+
+        } else {
+            // Browser does not support geolocation
+            alert('Your browser does not support geolocation');
+            setSearchInputResult([])
+            setSelectedHike(null)
+            setCenter({ lat: 37.4816056542292, lng: -122.17105672877193  })
+        }
     }
 
     /**
@@ -299,6 +362,10 @@ export function SearchBar({ setSearchInputResult, setCenter, setSelectedHike,
                 <li className={`side-bar-completed-button 
                     ${select == "completed" ? "active" : ""}`} 
                     onClick={handleCompleted}>Completed</li>
+                <li className={`side-bar-near-me-button 
+                    ${select == "near-me" ? "active" : ""}`} 
+                    onClick={handleNearMe}
+                    >Near Me</li>
             </ul>
             {select == "all" ? 
                 <form 
