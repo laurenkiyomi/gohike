@@ -57,7 +57,7 @@ router.get('/likes', async (req, res) => {
 })
 
 /**
- * Get request for getting the friends of the current user based on their 
+ * Get request for getting posts from friends of the current user based on their 
  * session token
  */
 router.get('/friends/:sessionToken', async (req, res) => {

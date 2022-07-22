@@ -36,7 +36,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
       */
     const [trailsList, setTrailsList] = React.useState([])
     /**
-      * Stats var that holds post number offset to render
+      * State var that holds post number offset to render
       * @type {number}
       */
     const [numPosts, setNumPosts] = React.useState(5)
