@@ -207,7 +207,7 @@
     margin-left: 27%;
     z-index: 2;
     width: 25%;
-    height: 70%;
+    height: 80%;
     margin-top: 35px;
     background-color: white;
     border-radius: 10px;
@@ -271,9 +271,38 @@
 .hike-popout p {
     margin-left: 5%;
     margin-right: 5%;
+    font-size: 1.5vh;
 }
 
 .hike-popout .hike-type {
     color: #60270d;
     margin-top: 10px;
+}
+
+/*Comments*/
+.comment-form {
+    margin-left: 5%;
+    margin-bottom: 2%;
+    font-size: 1.5vh;
+    margin-top: 0px;
+}
+
+.comment-section {
+    font-size: 1.5vh;
+    margin-top: 1%;
+    width: 90%;
+    align-self: center;
+    margin-bottom: 0px;
+}
+
+.comment-section p {
+    font-size: 1.5vh;
+    font-weight: bolder;
+    margin-left: 0px;
+}
+
+.comments {
+    height: 150px;
+    border: 1px solid black;
+    border-radius: 5px;
 }

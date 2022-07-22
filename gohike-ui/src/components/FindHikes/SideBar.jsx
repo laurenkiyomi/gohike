@@ -109,6 +109,12 @@ export function HikePopout({ selectedHike, setSelectedHike }) {
     const [images, setImages] = React.useState(null)
 
     /**
+     * State var that holds the comment on change of the input
+     * @type {string}
+     */
+    const [comment, setComment] = React.useState('')
+
+    /**
      * Sets images state variable on every render
      */
     React.useEffect(async () => {
@@ -171,6 +177,21 @@ export function HikePopout({ selectedHike, setSelectedHike }) {
                     `Trail Condition: ${selectedHike?.conditionStatus}`}
                 </span>
                 <p>{`"${selectedHike?.summary}"`}</p> 
+                <div className="comment-section">
+                    <p>Comments</p>
+                    <div className="comments"></div>
+                </div>
+                <div className="comment-form">
+                    <input 
+                            className="comment-input" 
+                            autoComplete="off"
+                            type="text"
+                            placeholder="Leave a comment"
+                            value={comment}
+                            onChange={(event)=>setComment(event.target.value)}>
+                    </input>
+                    <button className="comment-button">Submit</button>
+                </div>
         </div>
     )
 }
