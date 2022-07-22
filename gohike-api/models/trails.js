@@ -80,6 +80,15 @@ class Trails {
                     img = addTrail.get("imgSqSmall")
                 }
 
+                // Get comments
+                let comments = []
+                if (addTrail.get("comments") == undefined || addTrail.get(
+                    "comments") == null) {
+                        comments = []
+                } else {
+                    comments = addTrail.get("comments")
+                }
+
                 //
                 trail.push({ 
                     id: addTrail.get("hikeId"), 
@@ -95,7 +104,8 @@ class Trails {
                     low: addTrail.get("low"), 
                     longitude: addTrail.get("longitude"), 
                     latitude: addTrail.get("latitude"), 
-                    img
+                    img,
+                    comments
                 })
 
                 previous = addTrail.get("name")
@@ -133,6 +143,15 @@ class Trails {
             img = trail.get("imgSqSmall")
         }
 
+        // Get comments
+        let comments = []
+        if (trail.get("comments") == undefined || trail.get(
+            "comments") == null) {
+                comments = []
+        } else {
+            comments = trail.get("comments")
+        }
+
         // Pushes corresponding hike to the res array
         res.push({ 
             id: trail.get("hikeId"), 
@@ -148,7 +167,8 @@ class Trails {
             low: trail.get("low"), 
             longitude: trail.get("longitude"), 
             latitude: trail.get("latitude"), 
-            img
+            img,
+            comments
         })
         
         return res
@@ -234,6 +254,15 @@ class Trails {
                     img = addTrail.get("imgSqSmall")
                 }
 
+                // Get comments
+                let comments = []
+                if (addTrail.get("comments") == undefined || addTrail.get(
+                    "comments") == null) {
+                        comments = []
+                } else {
+                    comments = addTrail.get("comments")
+                }
+
                 // Add trail to resulting array
                 trail.push({ 
                     id: addTrail.get("hikeId"), 
@@ -249,7 +278,8 @@ class Trails {
                     low: addTrail.get("low"), 
                     longitude: addTrail.get("longitude"), 
                     latitude: addTrail.get("latitude"), 
-                    img
+                    img,
+                    comments
                 })
 
                 previous = addTrail.get("name")
@@ -282,6 +312,35 @@ class Trails {
         }
 
         return res
+    }
+
+    /**
+     * Leave comments on a trail
+     * 
+     * @param {number} trailId Id of trail to leave comment on
+     * @param {string} comment 
+     * @param {string} username Of user leaving comment
+     * @returns {string} Message indicating success
+     */
+    static async leaveComment(trailId, comment, username) {
+        // Get trail with trailId in database
+        let query = new Parse.Query("Trail")
+        query.equalTo("hikeId", parseInt(trailId))
+        let trail = await query.first({useMasterKey:true})
+
+        // Get comments array
+        let comments = trail.get("comments")
+        // Edit comments array
+        if (comments == undefined || comments == null || comments.length == 0) {
+            trail.set("comments", [{username, comment}])
+            await trail.save(null, {useMasterKey:true})
+        } else {
+            let newComments = [{username, comment}]
+            trail.set("comments", newComments.concat(comments)) 
+            await trail.save(null, {useMasterKey:true})
+        }
+
+        return "Left comment"
     }
 }
 
