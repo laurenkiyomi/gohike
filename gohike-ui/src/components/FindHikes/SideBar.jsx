@@ -129,6 +129,11 @@ export function HikePopout({ selectedHike, setSelectedHike, username }) {
      * Handles submit of comment form
      */
     async function leaveComment() {
+        // Return without doing anything if comment is empty
+        if (comment == '') {
+            return
+        }
+
         await axios.put(
             `http://localhost:3001/trails/comment/${selectedHike.id}`, { 
             username, comment }).then((data) => {

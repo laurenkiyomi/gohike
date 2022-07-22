@@ -186,7 +186,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
         <form 
           className="create-post-form" 
           onSubmit={handleCreatePost}>
-          <input
+          <textarea
             type="text"
             className="caption-post-input"
             onChange={(event) => setCaption(event.target.value)}
