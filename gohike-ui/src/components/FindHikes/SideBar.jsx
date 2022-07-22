@@ -220,8 +220,8 @@ export function HikePopout({ selectedHike, setSelectedHike, username }) {
                     <p>{`Comments • ${numComments}`}</p>
                     <div className="comments">
                         {comments.length == 0 ? 
-                        "No comments" : (comments.map((comment, 
-                        index) => {
+                        <span className="no-comments">No comments</span> : 
+                        (comments.map((comment, index) => {
                             return (
                                 <span key={index} className="comment">
                                     <span className="name">

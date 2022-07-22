@@ -337,3 +337,8 @@
     padding-top: 3px;
     padding-bottom: 2px;
 }
+
+.no-comments {
+    align-self: flex-start;
+    margin-top: 10px;
+}
