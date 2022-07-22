@@ -335,8 +335,8 @@ class Trails {
             trail.set("comments", [{username, comment}])
             await trail.save(null, {useMasterKey:true})
         } else {
-            comments.push({username, comment})
-            trail.set("comments", comments) 
+            let newComments = [{username, comment}]
+            trail.set("comments", newComments.concat(comments)) 
             await trail.save(null, {useMasterKey:true})
         }
 

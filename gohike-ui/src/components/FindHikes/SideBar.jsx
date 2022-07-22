@@ -58,7 +58,8 @@ export default function SideBar({ searchInputResult, setSearchInputResult,
             { selectedHike ? 
                 <HikePopout 
                     selectedHike={selectedHike} 
-                    setSelectedHike={setSelectedHike} /> : 
+                    setSelectedHike={setSelectedHike}
+                    username={currUser.username} /> : 
                 ""}
         </>
     )
@@ -98,21 +99,54 @@ export function SearchResults({ searchInputResult, setSelectedHike, currUser,
  * 
  * @param {number} selectedHike Id of selected hike
  * @param {function} setSelectedHike 
+ * @param {string} username Of current user
  * @returns Hike Popout component
  */
-export function HikePopout({ selectedHike, setSelectedHike }) {
+export function HikePopout({ selectedHike, setSelectedHike, username }) {
     /**
      * State var that holds all images posted about hike in order of most to 
      * least liked
      * @type {Array<string>} Contains image url's
      */
     const [images, setImages] = React.useState(null)
-
     /**
      * State var that holds the comment on change of the input
      * @type {string}
      */
     const [comment, setComment] = React.useState('')
+    /**
+     * State var that holds the number of comments
+     * @type {number}
+     */
+    const [numComments, setNum] = React.useState(selectedHike.comments.length)
+    /**
+     * State var that holds the comments
+     * @type {Array<{username: string, comment: string}>}
+     */
+     const [comments, setComments] = React.useState(selectedHike.comments)
+
+    /**
+     * Handles submit of comment form
+     */
+    async function leaveComment() {
+        await axios.put(
+            `http://localhost:3001/trails/comment/${selectedHike.id}`, { 
+            username, comment }).then((data) => {
+                setComment('')
+                setNum((old) => old + 1)
+            }
+        )
+    }
+
+    /**
+     * Rerender comments every time a new one is added
+     */
+    React.useEffect(async () => {
+        // Fetch data
+        let data = await axios.get(
+            `http://localhost:3001/trails/id/${selectedHike?.id}`)
+        setComments(data.data.trail[0].comments)
+    }, [numComments])
 
     /**
      * Sets images state variable on every render
@@ -178,10 +212,10 @@ export function HikePopout({ selectedHike, setSelectedHike }) {
                 </span>
                 <p>{`"${selectedHike?.summary}"`}</p> 
                 <div className="comment-section">
-                    <p>Comments</p>
+                    <p>{`Comments • ${numComments}`}</p>
                     <div className="comments">
-                        {selectedHike?.comments.length == 0 ? 
-                        "No comments" : (selectedHike?.comments.map((comment, 
+                        {comments.length == 0 ? 
+                        "No comments" : (comments.map((comment, 
                         index) => {
                             return (
                                 <span key={index} className="comment">
@@ -205,7 +239,9 @@ export function HikePopout({ selectedHike, setSelectedHike }) {
                             value={comment}
                             onChange={(event)=>setComment(event.target.value)}>
                     </input>
-                    <button className="comment-button">Submit</button>
+                    <button className="comment-button" onClick={leaveComment}>
+                        Submit
+                    </button>
                 </div>
         </div>
     )
