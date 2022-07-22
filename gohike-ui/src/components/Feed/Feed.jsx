@@ -29,7 +29,13 @@ export default function Feed({ transparent, setTransparent, currUser }) {
       * URL to get all posts in database
       * @type {string}
       */
-    const POSTS_URL = "http://localhost:3001/posts"
+    const FRIENDS_POSTS_URL = 
+      `http://localhost:3001/posts/friends/${currUser.sessionToken}`
+    /**
+      * URL to get friends posts in database
+      * @type {string}
+      */
+     const POSTS_URL = "http://localhost:3001/posts"
     /**
       * State var that holds all trails in database including name and hike id
       * @type {Array<{name: string, value: number}>}
@@ -60,7 +66,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
      * Fetches post id's to render
      */
     async function fetchData() {
-      let data = await axios.get(POSTS_URL)
+      let data = await axios.get(FRIENDS_POSTS_URL)
       setSpinner(true)
       setPosts(data.data.posts)
     }
@@ -86,7 +92,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
      * Fetches post data every time numPosts changes
      */
     React.useEffect(async () => {
-      fetchData()
+      await fetchData()
     }, [numPosts])
    
     // Return React component
@@ -94,8 +100,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
       <nav className="feed">
         <CreatePost 
           trailsList={trailsList} 
-          currUser={currUser} 
-          fetchData={fetchData}/>
+          currUser={currUser} />
         {spinner ? 
           <PostGrid 
             posts={posts} 
