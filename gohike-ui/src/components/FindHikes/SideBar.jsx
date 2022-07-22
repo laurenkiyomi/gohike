@@ -179,7 +179,22 @@ export function HikePopout({ selectedHike, setSelectedHike }) {
                 <p>{`"${selectedHike?.summary}"`}</p> 
                 <div className="comment-section">
                     <p>Comments</p>
-                    <div className="comments"></div>
+                    <div className="comments">
+                        {selectedHike?.comments.length == 0 ? 
+                        "No comments" : (selectedHike?.comments.map((comment, 
+                        index) => {
+                            return (
+                                <span key={index} className="comment">
+                                    <span className="name">
+                                        {`${comment.username}:`}
+                                    </span>
+                                    <span className="writing">
+                                        {comment.comment}
+                                    </span>
+                                </span>
+                            )
+                        }))}
+                    </div>
                 </div>
                 <div className="comment-form">
                     <input 
