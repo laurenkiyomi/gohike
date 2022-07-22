@@ -30,31 +30,48 @@ export default function Navbar({ currUser, setCurrUser, transparent }) {
    * @type {boolean}
    */
   const [friendsOpen, setFriendsOpen] = React.useState(false)
+  /**
+   * Navigatation tool
+   * @type {hook}
+   */
+  const history = useNavigate()
  
   // Return React component
   return (
     <nav className={`navbar ${transparent ? "transparent" : ""}`}>
       <Logo className="nav-logo"/>
-      <Link 
-        to="/"><button 
+      <button 
         className="nav-button" 
-        onClick={() => {setDropdownOpen(false)}}>Home</button></Link>
-      <Link 
-        to="/find-hikes">
-        <button 
-          className="nav-button" 
-          onClick={() => {setDropdownOpen(false)}}>
-          Find Hikes
-        </button>
-      </Link>
-      <Link 
-        to="/feed">
-        <button 
-          className="nav-button" 
-          onClick={() => {setDropdownOpen(false)}}>
-          Feed
-        </button>
-      </Link>
+        onClick={() => {
+          history('/')
+          setDropdownOpen(false)
+        }}>
+        Home
+      </button>
+      <button 
+        className="nav-button" 
+        onClick={() => {
+          if (currUser == null) {
+            history('/login')
+          } else {
+            history('/find-hikes')
+          }
+          setDropdownOpen(false)
+        }}>
+        Find Hikes
+      </button>
+      <button 
+        className="nav-button" 
+        onClick={() => {
+          if (currUser == null) {
+            history('/login')
+          } else {
+            history('/feed')
+          }
+          setDropdownOpen(false)
+        }}>
+        Feed
+      </button>
       {currUser ? (
         <>
           <button 
@@ -87,13 +104,12 @@ export default function Navbar({ currUser, setCurrUser, transparent }) {
               friendsOpen={friendsOpen} 
               setFriendsOpen={setFriendsOpen}/>}
         </>) : 
-        <Link 
-          to="/login">
           <button 
-            className="nav-button login-button">
+            className="nav-button login-button"
+            onClick={() => history('/login')}>
             Log In
           </button>
-        </Link>}
+       }
     </nav>
   )
 }
@@ -125,12 +141,12 @@ export function Dropdown({ view, setCurrUser, currUser, setDropdownOpen,
    * OnClick handler of Logout button
    */
   const handleLogout = async() => {
+    history('/')
     axios.post(LOGOUT_URL, { sessionToken: currUser.sessionToken }).then((results) => {
       setCurrUser(null)
       localStorage.clear()
       setDropdownOpen(false)
       setFriendsOpen(false)
-      history('/')
     }).catch((err) => {
       console.log("Failed to logout")
     })
