@@ -8,7 +8,7 @@ import "./FindHikes.css"
 import SideBar from "./SideBar";
 import axios from 'axios';
 import GoogleMapReact from 'google-map-react';
-import { Routes, Route, Link, useParams } from 'react-router-dom'
+import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
 
 /**
  * Renders SideBar and GoogleMaps component

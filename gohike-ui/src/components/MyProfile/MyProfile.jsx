@@ -264,7 +264,7 @@ export function ProfileBanner({ currUser, posts, profileData,
 }
 
 /**
- * Renders information on hikes that the logged in user has completed
+ * Renders information on hikes that logged in user has completed
  * @returns Stats component
  */
 export function Stats() {
