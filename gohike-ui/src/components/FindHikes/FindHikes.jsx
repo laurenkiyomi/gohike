@@ -27,8 +27,8 @@ export default function FindHikes({ transparent, setTransparent, currUser }) {
      */
     const id = params.id
     /**
-     * State var that holds id of a hike selected in the sidebar
-     * @param {number}
+     * State var that holds info of a hike selected in the sidebar
+     * @param {hike}
      */
     const [selectedHike, setSelectedHike] = React.useState(null)
     /**
@@ -103,7 +103,7 @@ export default function FindHikes({ transparent, setTransparent, currUser }) {
    * @param {number} lng Longitude of hike location
    * @param {function} setCenter Sets center of Google Map
    * @param {function} setSelectedHike Used on click
-   * @param {number}  selectedHike Id of selected hike
+   * @param {hike}  selectedHike Info of selected hike
    * @param {hike}  trail Info on hike  
    * @returns 
    */

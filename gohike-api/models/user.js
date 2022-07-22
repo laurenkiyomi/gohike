@@ -78,6 +78,15 @@ class User {
                 img = addTrail.get("imgSqSmall")
             }
 
+            // Get comments
+            let comments = []
+            if (addTrail.get("comments") == undefined || addTrail.get(
+                "comments") == null) {
+                    comments = []
+            } else {
+                comments = addTrail.get("comments")
+            }
+
             // Set important information for hike
             savedRes.push({ 
                 id: addTrail.get("hikeId"), 
@@ -93,7 +102,8 @@ class User {
                 low: addTrail.get("low"), 
                 longitude: addTrail.get("longitude"), 
                 latitude: addTrail.get("latitude"), 
-                img
+                img,
+                comments
             })
         }
 
@@ -140,6 +150,15 @@ class User {
                 img = addTrail.get("imgSqSmall")
             }
 
+            // Get comments
+            let comments = []
+            if (addTrail.get("comments") == undefined || addTrail.get(
+                "comments") == null) {
+                    comments = []
+            } else {
+                comments = addTrail.get("comments")
+            }
+
             // Set important information for hike
             completedRes.push({ 
                 id: addTrail.get("hikeId"), 
@@ -155,7 +174,8 @@ class User {
                 low: addTrail.get("low"), 
                 longitude: addTrail.get("longitude"), 
                 latitude: addTrail.get("latitude"), 
-                img
+                img,
+                comments
             })
         }
 

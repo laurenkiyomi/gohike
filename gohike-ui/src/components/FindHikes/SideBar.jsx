@@ -16,7 +16,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
  * @param {Array<hike>} searchInputResult Hikes pertaining to search result
  * @param {function} setSearchInputResult
  * @param {function} setCenter Sets center of Google Map
- * @param {number} selectedHike
+ * @param {hike} selectedHike
  * @param {function} setSelectedHike
  * @param {{username: string, sessionToken: string, firstName: string, 
  * lastName: string}} currUser Holds info on current user from local storage

@@ -81,4 +81,22 @@ router.get('/id/:trailId', async (req, res) => {
     }
 })
 
+/**
+ * Put request for leaving a comment on a trail
+ */
+ router.put('/comment/:trailId', async (req, res) => {
+    try {
+        const trailId = req.params.trailId
+        const comment = req.body.comment
+        const username = req.body.username
+        // Leaves comment by calling Trails method
+        let msg = await Trails.leaveComment(trailId, comment, username)
+        res.status(201).json({ msg })
+    } catch (err) {
+        console.log(err)
+        res.status(400).json({ msg: "Could not put comment" })
+    }
+})
+
+
 module.exports = router;
