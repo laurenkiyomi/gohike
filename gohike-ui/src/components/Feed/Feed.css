@@ -25,6 +25,7 @@
     margin-top: 15px;
     margin-bottom: 7.5px;
     max-width: 750px;
+    filter: drop-shadow(0px 1px 1px #536268); 
 }
 
 .caption-post-input {
@@ -40,6 +41,8 @@
         rgba(167, 184, 205, 0.8), rgba(167, 184, 205, 0.8)), #536268;
     border: 0px;
     color: black;
+    max-width: 100%;
+    min-width: 100%;
 }
 
 .add-to-post {
@@ -105,12 +108,18 @@
     margin-bottom: 7.5px;
     height: 400px;
     max-width: 750px;
+    filter: drop-shadow(0px 1px 1px #536268); 
 }
 
 .post-card h1 {
     font-family: 'Gothic A1', sans-serif;
     margin: 0px;
     font-size: 2.75vh;
+    cursor: pointer;
+}
+
+.post-card h1:hover {
+    color: #60270d;
 }
 
 .post-card h2 {
@@ -118,6 +127,12 @@
     margin: 5px 0px 10px 0px;
     font-size: 1.7vh;
     color: #536268;
+    cursor: pointer;
+    width: 25%;
+}
+
+.post-card h2:hover {
+    color: lightgray;
 }
 
 .post-card span:active {
