@@ -4,6 +4,8 @@
  */
 import * as React from "react"
 import logo from "../Images/Logo.png"
+import mountains from "../Images/Mountains.png"
+import sun from "../Images/SunLogo.png"
 import imageOne from "../Images/four.jpeg"
 import imageTwo from "../Images/seven.jpeg"
 import imageThree from "../Images/two.jpeg"
@@ -11,6 +13,7 @@ import "./Home.css"
 import Plx from "react-plx";
 import axios from 'axios'
 import { Link } from 'react-router-dom';
+
 
 /**
  * Renders Home page with animations and on scroll effects
@@ -41,11 +44,18 @@ export default function Home({ transparent, setTransparent }) {
     }
   }, [])
 
+
+
   // Return React component
   return (
     <div className="home">
       <div className="hero">
-        <img className="hero-logo" src={logo}/>
+        <div className="hero-logo">
+          <div className="logo-container">
+            <img className="sun" src={sun}/>
+            <img className="mountains" src={mountains}/>
+          </div>
+        </div>
         <h1 className="hero-text appear">GOHIKE</h1>
       </div>
       <div className="about">

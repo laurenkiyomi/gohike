@@ -43,6 +43,23 @@ export default function App() {
    * @type {boolean}
    */
   const [transparent, setTransparent] = React.useState(true)
+  /**
+   * State variable to help tell when to change navbar color
+   * @type {boolean}
+   */
+  const [color, setColor] = React.useState(false)
+  /**
+  * Function to trigger navbar to change color
+  */
+  const changeColor = () => {
+    if (window.scrollY >= 750) {
+      setColor(true)
+    } else {
+      setColor(false)
+    }
+  }
+
+  window.addEventListener('scroll', changeColor)
 
   // Return React component
   return (
@@ -51,6 +68,7 @@ export default function App() {
         <main>
           {/*Always shows Navbar*/}
           <Navbar 
+            color={color}
             currUser={currUser} 
             setCurrUser={setCurrUser} 
             transparent={transparent} />

@@ -1,6 +1,6 @@
 /*Navbar*/
 .navbar {
-    position: absolute;
+    position: fixed;
     background-color: white;
     display: flex;
     flex-direction: row;
@@ -54,6 +54,11 @@ button {
 .transparent {
     background-color: transparent;
     filter: none; 
+}
+
+.color {
+    background-color: #536268;
+    transition: background-color .5s;
 }
 
 .transparent .nav-button {

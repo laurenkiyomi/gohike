@@ -7,19 +7,20 @@ import * as React from "react"
 import Logo from "./Logo"
 import "./Navbar.css"
 import axios from 'axios'
-import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 /**
  * Navigation bar that changes background color based on the page and shows 
  * whether a user is logged in or not
  * 
+ * @param {boolean} color Whether or not Navbar should have color on homepage
  * @param {{username: string, sessionToken: string, firstName: string, 
  * lastName: string}} currUser Holds info on current user from local storage
  * @param {function} setCurrUser
  * @param {boolean} transparent Hold the state of the Navbar background
  * @returns Navbar component
  */
-export default function Navbar({ currUser, setCurrUser, transparent }) {
+export default function Navbar({ color, currUser, setCurrUser, transparent }) {
   /**
    * State of the dropdown visibility when logged in
    * @type {boolean}
@@ -38,7 +39,8 @@ export default function Navbar({ currUser, setCurrUser, transparent }) {
  
   // Return React component
   return (
-    <nav className={`navbar ${transparent ? "transparent" : ""}`}>
+    <nav className={`navbar ${transparent ? "transparent" : ""} 
+      ${color ? (useLocation().pathname == '/') ? "color" : "" : ""}`}>
       <Logo className="nav-logo"/>
       <button 
         className="nav-button" 
