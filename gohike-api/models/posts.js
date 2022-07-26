@@ -21,7 +21,7 @@ class Posts {
   constructor() {
     this.super();
   }
-
+  
   /**
    * Creates a new Post object and saves new post to Parse
    *
