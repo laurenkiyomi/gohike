@@ -62,30 +62,40 @@ export default function Feed({ transparent, setTransparent, currUser }) {
    */
   const history = useNavigate();
 
-  /**
+   /**
    * Fetches post id's to render
    */
   async function fetchData() {
+    setSpinner(true)
     let data = await axios.get(FRIENDS_POSTS_URL);
-    setSpinner(true);
-    
+
     // Only get hikes near user if location is available
     if (navigator.geolocation) {
       // Get user location
       navigator.geolocation.getCurrentPosition(
         async (position) => {
-          setPosts(pq.create(data.data.posts, position.coords.latitude, position.coords.longitude))
+          localStorage.setItem(
+            "posts",
+            JSON.stringify(
+              pq.create(
+                data.data.posts,
+                position.coords.latitude,
+                position.coords.longitude
+              )
+            )
+          );
+          setSpinner(false)
         },
         () => {
           // Getting location fails
-          setPosts(data.data.posts);
-          setSpinner(false);
+          localStorage.setItem("posts", JSON.stringify(data.data.posts));
+          setSpinner(false)
         }
       );
     } else {
       // Browser does not support geolocation
-      setPosts(data.data.posts);
-      setSpinner(false);
+      localStorage.setItem("posts", JSON.stringify(data.data.posts));
+      setSpinner(false)
     }
   }
 
@@ -110,14 +120,20 @@ export default function Feed({ transparent, setTransparent, currUser }) {
    * Fetches post data every time numPosts changes
    */
   React.useEffect(async () => {
-    await fetchData();
+    setSpinner(true)
+    if (JSON.parse(localStorage.getItem("posts")) == null) {
+      await fetchData()
+    }
+    
+    setPosts(JSON.parse(localStorage.getItem("posts")) )
+    setSpinner(false)
   }, [numPosts]);
 
   // Return React component
   return (
     <nav className="feed">
       <CreatePost trailsList={trailsList} currUser={currUser} />
-      {spinner ? (
+      {!spinner ? (
         <PostGrid posts={posts} currUser={currUser} />
       ) : (
         <LoadingScreen />
