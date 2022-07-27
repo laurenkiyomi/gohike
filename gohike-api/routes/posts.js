@@ -63,13 +63,14 @@ router.get("/likes", async (req, res) => {
  * Get request for getting posts from friends of the current user based on their
  * session token
  */
-router.get("/friends/:sessionToken", async (req, res) => {
+router.get("/friends/:username", async (req, res) => {
   try {
-    let sessionToken = req.params.sessionToken;
+    let username = req.params.username;
     // Gets likes array by calling Posts method
-    let posts = await Posts.getFriendPosts(sessionToken);
+    let posts = await Posts.getFriendPosts(username);
     res.status(201).json({ posts });
-  } catch {
+  } catch (err) {
+    console.log(err)
     res.status(400).json({ msg: "Failed to get friends' posts" });
   }
 });

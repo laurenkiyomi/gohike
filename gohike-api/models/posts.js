@@ -87,7 +87,8 @@ class Posts {
         let friend = await query4.first({ useMasterKey: true });
 
         // Add post to friend's feed array
-        let feed = [post.id]
+        let feed = [{ id: post.id, lat: trail.get("latitude"), 
+        lng: trail.get('longitude')}]
         if (friend.get("feed") != null && friend.get("feed") != undefined) {
           feed = feed.concat(friend.get("feed"))
         }
@@ -104,41 +105,22 @@ class Posts {
   /**
    * Gets all posts made by the current user's friends
    *
-   * @param {String} sessionToken Corresponds to session of the current user
-   * @returns {Array<Number>} Contains the id's of all posts made by the
-   * current user's friends
+   * @param {string} username Corresponds to username of the current user
+   * @returns {Array<{ id: number, lat: number, lng: number }>} Contains the 
+   * id and location of all posts made by the current user's friends
    */
-  static async getFriendPosts(sessionToken) {
-    // Get User pointer from sessionToken
-    let query = new Parse.Query("_Session");
-    query.equalTo("sessionToken", sessionToken);
-    let session = await query.first({ useMasterKey: true });
-    let userId = session.get("user").id;
+  static async getFriendPosts(username) {
+    // Get User from username
+    let query = new Parse.Query("_User");
+    query.equalTo("username", username);
+    let user = await query.first({ useMasterKey: true });
 
-    // Get User object's friends from user pointer
-    let query4 = new Parse.Query("_User");
-    query4.equalTo("objectId", userId);
-    let user = await query4.first({ useMasterKey: true });
-    let friends = user.get("friends");
-
-    // Return empty array if user has no friends
-    if (friends == undefined || friends.length == 0) {
-      return [];
+    // Return user's feed array
+    if (user.get("feed") == undefined || user.get("feed") == null) {
+      return []
+    } else {
+      return user.get("feed")
     }
-
-    // Add post id to posts array if it is from the user's friend
-    let posts = [];
-    for (let i = 0; i < friends.length; i++) {
-      let query3 = new Parse.Query("_User");
-      query3.equalTo("username", friends[i]);
-      let friend = await query3.first({ useMasterKey: true });
-
-      if (friend.get("posts") != null && friend.get("posts") != undefined) {
-        posts = posts.concat(friend.get("posts"));
-      }
-    }
-
-    return posts;
   }
 
   /**

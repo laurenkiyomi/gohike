@@ -29,7 +29,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
    * URL to get all posts in database
    * @type {string}
    */
-  const FRIENDS_POSTS_URL = `http://localhost:3001/posts/`;
+  const FRIENDS_POSTS_URL = `http://localhost:3001/posts/friends/${currUser?.username}`;
   /**
    * URL to get friends posts in database
    * @type {string}
