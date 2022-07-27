@@ -46,7 +46,7 @@ class Posts {
     query2.equalTo("hikeId", hikeId);
     let trail = await query2.first({ useMasterKey: true });
 
-    // Get User object from user id
+    // Get User object from username
     let query3 = new Parse.Query("_User");
     query3.equalTo("objectId", user.id);
     let userObject = await query3.first({ useMasterKey: true });
@@ -64,33 +64,19 @@ class Posts {
     });
     let post = await newPost.save();
 
-    return { msg: "Created new post" };
-  }
+    // Add post to user's personal posts array
+    let posts = [{ id: post.id, lat: trail.get("latitude"), 
+    lng: trail.get('longitude')}]
+    if (userObject.get("posts") != null && userObject.get("posts") != undefined) {
+      posts = posts.concat(userObject.get("posts"))
+    }
 
-  /**
-   * Write a newly created post to a user's friends' feeds for the fan out on 
-   * write method
-   * 
-   * @param {string} username Of user who created new post
-   * @param {number} hikeId Of the newly created post
-   * @param {number} postId Of the newly created post
-   * @returns {string} Message to indicate successful write
-   */
-  static async writePost(username, hikeId, postId) {
-    // Get User object from username
-    let query = new Parse.Query("_User");
-    query.equalTo("username", username);
-    let user = await query.first({ useMasterKey: true });
-
-    // Get hike longitude and latitude from hikeId
-    let query2 = new Parse.Query("Trail");
-    query2.equalTo("hikeId", hikeId);
-    let trail = await query2.first({ useMasterKey: true });
-    let latitude = trail.get("latitude")
-    let longitude = trail.get("longitude")
+    // Set and save user's posts
+    userObject.set("posts", posts)
+    await userObject.save(null, { useMasterKey: true })
 
     // Get friends from user object
-    let friends = user.get("friends")
+    let friends = userObject.get("friends")
     // Write the post id to all friends' posts array
     if (friends != undefined && friends.length != 0) {
       for (let i = 0; i < friends.length; i++) {
@@ -100,7 +86,7 @@ class Posts {
         let friend = await query4.first({ useMasterKey: true });
 
         // Add post to friend's feed array
-        let feed = [{ id: postId, lat: latitude, lng: longitude }]
+        let feed = [post.id]
         if (friend.get("feed") != null && friend.get("feed") != undefined) {
           feed = feed.concat(friend.get("feed"))
         }
@@ -111,7 +97,7 @@ class Posts {
       }
     }
 
-    return "Wrote post to feeds"
+    return { msg: "Created new post" };
   }
 
   /**
