@@ -211,7 +211,7 @@ class User {
    * Get the posts made by a user
    *
    * @param {string} sessionToken Corresponds to the current user
-   * @returns {Array<{ id: number, lat: number, lng: number>} Contains id and 
+   * @returns {Array<{ id: number, lat: number, lng: number>}} Contains id and 
    * location of posts created by current user
    */
   static async getUserPosts(username) {

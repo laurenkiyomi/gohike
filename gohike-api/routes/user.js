@@ -64,7 +64,7 @@ router.get("/:sessionToken", async (req, res) => {
     // Gets user data by calling User method
     let userData = await User.getUserInfo(sessionToken);
     res.status(201).json({ user: userData });
-  } catch {
+  } catch (err) {
     res.status(400).json({ msg: "Could not retrieve user info." });
   }
 });
@@ -73,11 +73,11 @@ router.get("/:sessionToken", async (req, res) => {
  * Get request for getting the id's of posts made by the current user based on
  * their session token stored in local storage
  */
-router.get("/posts/:username", async (req, res) => {
+router.get("/posts/:sessionToken", async (req, res) => {
   try {
-    const username = req.params.username;
+    const sessionToken = req.params.sessionToken;
     // Gets current user's posts by calling User method
-    let posts = await User.getUserPosts(username);
+    let posts = await User.getUserPosts(sessionToken);
     res.status(201).json({ posts });
   } catch (err) {
     console.log(err);
@@ -143,7 +143,7 @@ router.get("/view/posts/:username", async (req, res) => {
   try {
     const username = req.params.username;
     // Gets post id's by calling User method
-    let posts = await User.getUserPosts(username);
+    let posts = await User.getViewUserPosts(username);
     res.status(201).json({ posts });
   } catch {
     res.status(400).json({ msg: "Could not retrieve user posts." });

@@ -20,7 +20,7 @@ import { useLocation, useNavigate } from "react-router-dom";
  * @param {boolean} transparent Hold the state of the Navbar background
  * @returns Navbar component
  */
-export default function Navbar({ color, currUser, setCurrUser, transparent }) {
+export default function Navbar({ currUser, setCurrUser, transparent }) {
   /**
    * State of the dropdown visibility when logged in
    * @type {boolean}
@@ -40,8 +40,7 @@ export default function Navbar({ color, currUser, setCurrUser, transparent }) {
   // Return React component
   return (
     <nav
-      className={`navbar ${transparent ? "transparent" : ""} 
-      ${color ? (useLocation().pathname == "/" ? "color" : "") : ""}`}
+      className={`navbar ${transparent ? "transparent" : ""}`}
     >
       <Logo className="nav-logo" />
       <button
@@ -237,19 +236,19 @@ export function FriendRequests({ friendsOpen, currUser }) {
    * Fetches friend request data on every render
    */
   React.useEffect(async () => {
-    let data = await axios.get(
-      `http://localhost:3001/user/${currUser.sessionToken}`
-    );
+      let data = await axios.get(
+        `http://localhost:3001/user/${currUser?.sessionToken}`
+      );
 
-    if (
-      data.data.user.incomingFriendRequests == null ||
-      data.data.user.incomingFriendRequests == undefined ||
-      data.data.user.incomingFriendRequests.length == 0
-    ) {
-      setFriendRequests([]);
-    } else {
-      setFriendRequests(data.data.user.incomingFriendRequests);
-    }
+      if (
+        data.data.user.incomingFriendRequests == null ||
+        data.data.user.incomingFriendRequests == undefined ||
+        data.data.user.incomingFriendRequests.length == 0
+      ) {
+        setFriendRequests([]);
+      } else {
+        setFriendRequests(data.data.user.incomingFriendRequests);
+      }
   }, []);
 
   // Don't return until friend requests data is set

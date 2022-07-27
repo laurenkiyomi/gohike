@@ -68,7 +68,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
   async function fetchData() {
     let data = await axios.get(FRIENDS_POSTS_URL);
     setSpinner(true);
-
+    
     // Only get hikes near user if location is available
     if (navigator.geolocation) {
       // Get user location
