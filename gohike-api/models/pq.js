@@ -14,6 +14,23 @@ class pq {
   }
 
   /**
+   * 
+   * @param {Array<{ id: string, lat: number, lng: number, priority: 
+   * number }>} arr Post id's for a user's feed in unsorted order
+   * @param {*} userLat Latitude of current user
+   * @param {*} userLng Longitude of current user
+   * @returns 
+   */
+  static create(arr, userLat, userLng) {
+    let pq = []
+    for (let i = 0; i < arr.length; i++) {
+      pq = this.insert(pq, arr[i].id, arr[i].lat, arr[i].lng, userLat, userLng)
+    }
+
+    return pq
+  }
+
+  /**
    * Converts a number in degrees to radians
    *
    * @param {number} deg
@@ -63,11 +80,11 @@ class pq {
   /**
    * Shifts node up to maintain heap property of priority queue
    *
-   * @param {Array<{ postId: string, priority: number }} arr Priority queue to
-   * insert into
+   * @param {Array<{ id: string, lat: number, lng: number, priority: 
+   * number }>} arr Priority queue to insert into
    * @param {number} index Index of current node
-   * @returns {Array<{ postId: string, priority: number }} Priority queue with
-   * newly inserted post
+   * @returns {Array<{ id: string, lat: number, lng: number, priority: 
+   * number }>} Priority queue with newly inserted post
    */
   static shiftUp(arr, index) {
     while (
@@ -75,9 +92,9 @@ class pq {
       arr[this.parentIndex(index)].priority < arr[index].priority
     ) {
       // Swap parent and current node
-      var temp = arr[i];
-      arr[i] = arr[j];
-      arr[j] = temp;
+      var temp = arr[index];
+      arr[index] = arr[this.parentIndex(index)];
+      arr[this.parentIndex(index)] = temp;
 
       // Update index to parent of index
       index = this.parentIndex(index);
@@ -88,32 +105,35 @@ class pq {
 
   /**
    *
-   * @param {Array<{ postId: string, priority: number }>} arr Priority queue
+   * @param {Array<{ id: string, lat: number, lng: number, priority: 
+   * number }>} arr Priority queue
    * containing post id's from friends of the user
    * @param {string} postId Of the post to insert
-   * @param {number} postLng Longitude of the hike the post to insert is about
    * @param {number} postLat Latitude of the hike the post to insert is about
-   * @param {number} userLng Longitude of the user of which the pq we are
-   * inserting into is from
+   * @param {number} postLng Longitude of the hike the post to insert is about
    * @param {number} userLat Latitude of the user of which the pq we are
    * inserting into is from
-   * @returns {Array<{ postId: string, priority: number }} Priority queue with
-   * newly inserted post
+   * @param {number} userLng Longitude of the user of which the pq we are
+   * inserting into is from
+   * @returns {Array<{ id: string, lat: number, lng: number, priority: 
+   * number }>} Priority queue with newly inserted post
    */
-  static insert(arr, postId, postLng, postLat, userLng, userLat) {
+  static insert(arr, postId, postLat, postLng, userLat, userLng) {
     // let posts about hikes closest to the user have higher priority
-    let priority = this.getDistanceFromLatLonInKm(
-      postLng,
+    let priority = -1 * this.getDistanceFromLatLonInKm(
       postLat,
-      userLng,
-      userLat
+      postLng,
+      userLat,
+      userLng
     );
 
     // Insert post at the end and shift up accordingly
-    arr.push({ postId, priority });
+    arr.push({ id: postId, priority, lat: postLat, lng: postLng });
     let insertedPq = this.shiftUp(arr, arr.length - 1);
 
     // Return new pq
     return insertedPq;
   }
 }
+
+export {pq}

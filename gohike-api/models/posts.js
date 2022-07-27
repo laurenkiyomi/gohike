@@ -3,7 +3,6 @@
  * to implement a Posts class and is called by the the Posts routing methods.
  */
 require("dotenv").config();
-const pq = require("./pq");
 var Parse = require("parse/node");
 Parse.initialize(
   process.env.APP_ID,

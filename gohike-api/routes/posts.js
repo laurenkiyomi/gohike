@@ -1,5 +1,7 @@
 /**
- * @fileoverview This file contains the Posts routing methods for the GoHike app API. It handles creation of and interaction with posts by calling on an instance of the Posts class in the models directory.
+ * @fileoverview This file contains the Posts routing methods for the GoHike 
+ * app API. It handles creation of and interaction with posts by calling on an 
+ * instance of the Posts class in the models directory.
  */
 const express = require("express");
 const router = express.Router();

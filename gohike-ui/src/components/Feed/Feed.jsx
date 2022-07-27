@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Select from "react-select";
 import PostGrid from "./PostGrid";
+import { pq } from "../../../../gohike-api/models/pq";
 
 /**
  * Renders CreatePost and PostGrid component
@@ -67,7 +68,25 @@ export default function Feed({ transparent, setTransparent, currUser }) {
   async function fetchData() {
     let data = await axios.get(FRIENDS_POSTS_URL);
     setSpinner(true);
-    setPosts(data.data.posts);
+
+    // Only get hikes near user if location is available
+    if (navigator.geolocation) {
+      // Get user location
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          setPosts(pq.create(data.data.posts, position.coords.latitude, position.coords.longitude))
+        },
+        () => {
+          // Getting location fails
+          setPosts(data.data.posts);
+          setSpinner(false);
+        }
+      );
+    } else {
+      // Browser does not support geolocation
+      setPosts(data.data.posts);
+      setSpinner(false);
+    }
   }
 
   /**
