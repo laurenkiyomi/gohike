@@ -73,11 +73,11 @@ router.get("/:sessionToken", async (req, res) => {
  * Get request for getting the id's of posts made by the current user based on
  * their session token stored in local storage
  */
-router.get("/posts/:sessionToken", async (req, res) => {
+router.get("/posts/:username", async (req, res) => {
   try {
-    const sessionToken = req.params.sessionToken;
+    const username = req.params.username;
     // Gets current user's posts by calling User method
-    let posts = await User.getUserPosts(sessionToken);
+    let posts = await User.getUserPosts(username);
     res.status(201).json({ posts });
   } catch (err) {
     console.log(err);
@@ -143,7 +143,7 @@ router.get("/view/posts/:username", async (req, res) => {
   try {
     const username = req.params.username;
     // Gets post id's by calling User method
-    let posts = await User.getViewUserPosts(username);
+    let posts = await User.getUserPosts(username);
     res.status(201).json({ posts });
   } catch {
     res.status(400).json({ msg: "Could not retrieve user posts." });

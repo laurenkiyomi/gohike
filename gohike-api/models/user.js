@@ -210,34 +210,21 @@ class User {
   /**
    * Get the posts made by a user
    *
-   * @param {String} sessionToken Corresponds to the current user
-   * @returns {Array<Number>} Contains id's of posts created by current user
+   * @param {string} sessionToken Corresponds to the current user
+   * @returns {Array<{ id: number, lat: number, lng: number>} Contains id and 
+   * location of posts created by current user
    */
-  static async getUserPosts(sessionToken) {
-    // Get User id from sessionToken
-    let query = new Parse.Query("_Session");
-    query.equalTo("sessionToken", sessionToken);
-    let session = await query.first({ useMasterKey: true });
-    let userId = session.get("user").id;
+  static async getUserPosts(username) {
+    // Get User from username
+    let query = new Parse.Query("_User");
+    query.equalTo("username", username);
+    let user = await query.first({ useMasterKey: true });
 
-    // Get user info
-    let query2 = new Parse.Query("_User");
-    query2.equalTo("objectId", userId);
-    let user = await query2.first({ useMasterKey: true });
-
-    // Get all Post objects
-    let query3 = new Parse.Query("Post");
-    let posts = await query3.find({ useMasterKey: true });
-
-    // Create array with necessary info for each post
-    let res = [];
-    for (let i = 0; i < posts.length; i++) {
-      if (posts[i].get("user").id == userId) {
-        res.push(posts[i].id);
-      }
+    if (user.get("posts") == undefined || user.get("posts") == null) {
+      return []
+    } else {
+      return user.get("posts")
     }
-
-    return res;
   }
 
   /**
@@ -299,35 +286,6 @@ class User {
     query.equalTo("username", username);
     let user = await query.first({ useMasterKey: true });
     return user;
-  }
-
-  /**
-   * Gets the posts made by a specified user
-   *
-   * @param {String} username Corresponds to the user whose posts are to get
-   * @returns {Array<Number>} Contains id's of the posts created by
-   * corresponding user
-   */
-  static async getViewUserPosts(username) {
-    // Get User info from username
-    let query = new Parse.Query("_User");
-    query.equalTo("username", username);
-    let user = await query.first({ useMasterKey: true });
-    let userId = user.id;
-
-    // Get all Post objects
-    let query2 = new Parse.Query("Post");
-    let posts = await query2.find({ useMasterKey: true });
-
-    // Create array with necessary info for each post
-    let res = [];
-    for (let i = 0; i < posts.length; i++) {
-      if (posts[i].get("user").id == userId) {
-        res.push(posts[i].id);
-      }
-    }
-
-    return res;
   }
 
   /**

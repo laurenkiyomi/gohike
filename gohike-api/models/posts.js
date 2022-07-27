@@ -68,6 +68,7 @@ class Posts {
     let posts = [{ id: post.id, lat: trail.get("latitude"), 
     lng: trail.get('longitude')}]
     if (userObject.get("posts") != null && userObject.get("posts") != undefined) {
+      console.log(userObject.get("posts"))
       posts = posts.concat(userObject.get("posts"))
     }
 
