@@ -31,6 +31,23 @@ router.post("/create", async (req, res) => {
 });
 
 /**
+ * Put request for writing a newly created to post to the post creator's 
+ * friends' feeds
+ */
+router.put("/write/:username/:hikeId/:postId", async (req, res) => {
+  try {
+    // Get correct params
+    let username = req.params.username
+    let hikeId = parseInt(req.params.hikeId)
+    let postId = req.params.postId
+    let msg = await Posts.writePost(username, hikeId, postId)
+    res.status(201).json({ msg });
+  } catch (err) {
+    res.status(400).json({ msg: "Failed to write post" });
+  }
+})
+
+/**
  * Get request for getting all posts in the Parse database
  */
 router.get("/", async (req, res) => {

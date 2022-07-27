@@ -3,6 +3,7 @@
  * to implement a Posts class and is called by the the Posts routing methods.
  */
 require("dotenv").config();
+const pq = require("./pq");
 var Parse = require("parse/node");
 Parse.initialize(
   process.env.APP_ID,
@@ -21,15 +22,15 @@ class Posts {
   constructor() {
     this.super();
   }
-  
+
   /**
    * Creates a new Post object and saves new post to Parse
    *
-   * @param {String} sessionToken Corresponds to the session of the post
+   * @param {string} sessionToken Corresponds to the session of the post
    * creator
-   * @param {Number} hikeId Id of the Trail that the post is about
-   * @param {String} caption Description of post created by the user
-   * @param {*} picture Picture of the hike taken by the user
+   * @param {number} hikeId Id of the Trail that the post is about
+   * @param {string} caption Description of post created by the user
+   * @param {string} picture Picture of the hike taken by the user
    * @returns {Object} Contains message indicating successful creation of
    * new post
    */
@@ -45,7 +46,7 @@ class Posts {
     query2.equalTo("hikeId", hikeId);
     let trail = await query2.first({ useMasterKey: true });
 
-    // Get User object from username
+    // Get User object from user id
     let query3 = new Parse.Query("_User");
     query3.equalTo("objectId", user.id);
     let userObject = await query3.first({ useMasterKey: true });
@@ -61,9 +62,56 @@ class Posts {
       trail,
       picture,
     });
-    await newPost.save();
+    let post = await newPost.save();
 
     return { msg: "Created new post" };
+  }
+
+  /**
+   * Write a newly created post to a user's friends' feeds for the fan out on 
+   * write method
+   * 
+   * @param {string} username Of user who created new post
+   * @param {number} hikeId Of the newly created post
+   * @param {number} postId Of the newly created post
+   * @returns {string} Message to indicate successful write
+   */
+  static async writePost(username, hikeId, postId) {
+    // Get User object from username
+    let query = new Parse.Query("_User");
+    query.equalTo("username", username);
+    let user = await query.first({ useMasterKey: true });
+
+    // Get hike longitude and latitude from hikeId
+    let query2 = new Parse.Query("Trail");
+    query2.equalTo("hikeId", hikeId);
+    let trail = await query2.first({ useMasterKey: true });
+    let latitude = trail.get("latitude")
+    let longitude = trail.get("longitude")
+
+    // Get friends from user object
+    let friends = user.get("friends")
+    // Write the post id to all friends' posts array
+    if (friends != undefined && friends.length != 0) {
+      for (let i = 0; i < friends.length; i++) {
+        // Get friend object
+        let query4 = new Parse.Query("_User")
+        query4.equalTo("username", friends[i])
+        let friend = await query4.first({ useMasterKey: true });
+
+        // Add post to friend's feed array
+        let feed = [{ id: postId, lat: latitude, lng: longitude }]
+        if (friend.get("feed") != null && friend.get("feed") != undefined) {
+          feed = feed.concat(friend.get("feed"))
+        }
+
+        // Set and save friend's feed
+        friend.set("feed", feed)
+        await friend.save(null, { useMasterKey: true });
+      }
+    }
+
+    return "Wrote post to feeds"
   }
 
   /**
@@ -95,7 +143,6 @@ class Posts {
     let posts = [];
     for (let i = 0; i < friends.length; i++) {
       let query3 = new Parse.Query("_User");
-      query3.descending("createdAt");
       query3.equalTo("username", friends[i]);
       let friend = await query3.first({ useMasterKey: true });
 
