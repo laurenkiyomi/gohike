@@ -124,27 +124,6 @@ class Posts {
   }
 
   /**
-   * Gets all posts in the Parse database
-   *
-   * @returns @returns {Array<Number>} Contains the id's of all posts in the
-   * Parse database
-   */
-  static async getAllPosts() {
-    // Get all Post objects
-    let query = new Parse.Query("Post");
-    query.descending("createdAt");
-    let posts = await query.find({ useMasterKey: true });
-
-    // Add all post id's to res array
-    let res = [];
-    for (let i = 0; i < posts.length; i++) {
-      res.push(posts[i].id);
-    }
-
-    return res;
-  }
-
-  /**
    * Queries Parse for information on a specific post
    *
    * @param {Number} postId Corresponds to the post to return

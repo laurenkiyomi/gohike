@@ -31,19 +31,6 @@ router.post("/create", async (req, res) => {
 });
 
 /**
- * Get request for getting all posts in the Parse database
- */
-router.get("/", async (req, res) => {
-  try {
-    // Gets all posts by calling Posts method
-    let posts = await Posts.getAllPosts();
-    res.status(201).json({ posts });
-  } catch {
-    res.status(400).json({ msg: "Failed to get posts" });
-  }
-});
-
-/**
  * Get request for getting the likes array of a post based on its postId
  */
 router.get("/likes", async (req, res) => {
