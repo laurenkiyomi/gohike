@@ -33,6 +33,11 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
    */
   const [password, setPassword] = React.useState("");
   /**
+   * Spinner for loading state
+   * @type {boolean}
+   */
+  const [spinner, setSpinner] = React.useState(false);
+  /**
    * Holds error message
    * @type {string}
    */
@@ -72,6 +77,7 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
    */
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setSpinner(true)
 
     // Only get hikes near user if location is available
     if (navigator.geolocation) {
@@ -92,8 +98,10 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
               // Update feed and location if location has changed since last time
               // Set local storage
               if (
-                loginUser.data.location.lat - position.coords.latitude > 1 || loginUser.data.location.lat - position.coords.latitude < -1  ||
-                loginUser.data.location.lng - position.coords.longitude > 1 || loginUser.data.location.lng - position.coords.longitude < -1
+                loginUser.data.location.lat - position.coords.latitude > 1 ||
+                loginUser.data.location.lat - position.coords.latitude < -1 ||
+                loginUser.data.location.lng - position.coords.longitude > 1 ||
+                loginUser.data.location.lng - position.coords.longitude < -1
               ) {
                 // Update feed and location
                 await axios
@@ -144,6 +152,7 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
               }
 
               // Reset login form
+              setSpinner(false)
               setUsername("");
               setPassword("");
               history("/");
@@ -155,34 +164,31 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
         },
         async () => {
           // Getting location fails
-          // Can still login but cannot 
+          // Can still login but cannot get location
           await axios
-          .post(LOGIN_URL, { username, password })
-          .then(async (loginUser) => {
-            setCurrUser({
-              username: loginUser.data.username,
-              sessionToken: loginUser.data.sessionToken,
-              firstName: loginUser.data.firstName,
-              lastName: loginUser.data.lastName,
-            });
+            .post(LOGIN_URL, { username, password })
+            .then(async (loginUser) => {
+              setCurrUser({
+                username: loginUser.data.username,
+                sessionToken: loginUser.data.sessionToken,
+                firstName: loginUser.data.firstName,
+                lastName: loginUser.data.lastName,
+              });
 
-            // Set cache
-            localStorage.setItem("username", loginUser.data.username);
-            localStorage.setItem(
-              "sessionToken",
-              loginUser.data.sessionToken
-            );
-            localStorage.setItem("firstName", loginUser.data.firstName);
-            localStorage.setItem("lastName", loginUser.data.lastName);
-            localStorage.setItem(
-              "posts",
-              JSON.stringify(loginUser.data.posts)
-            );
-            localStorage.setItem(
-              "location",
-              JSON.stringify(loginUser.data.location)
-            );
-          });
+              // Set cache
+              localStorage.setItem("username", loginUser.data.username);
+              localStorage.setItem("sessionToken", loginUser.data.sessionToken);
+              localStorage.setItem("firstName", loginUser.data.firstName);
+              localStorage.setItem("lastName", loginUser.data.lastName);
+              localStorage.setItem(
+                "posts",
+                JSON.stringify(loginUser.data.posts)
+              );
+              localStorage.setItem(
+                "location",
+                JSON.stringify(loginUser.data.location)
+              );
+            });
 
           // Reset login form
           setUsername("");
@@ -192,7 +198,7 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
       );
     } else {
       // Browser does not support geolocation
-      alert("Please allow access to current location before logging in")
+      alert("Please allow access to current location before logging in");
     }
   };
 
@@ -234,7 +240,11 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
             placeholder="Password"
             required
           />
-          <button className="login-page-button">Log In</button>
+          {spinner ? (
+            <button className="login-page-button">Preparing your account!</button>
+          ) : (
+            <button className="login-page-button">Log In</button>
+          )}
         </form>
         <div className="need-account">
           <p>Need an account?</p>

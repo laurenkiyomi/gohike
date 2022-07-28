@@ -39,9 +39,7 @@ export default function Navbar({ currUser, setCurrUser, transparent }) {
 
   // Return React component
   return (
-    <nav
-      className={`navbar ${transparent ? "transparent" : ""}`}
-    >
+    <nav className={`navbar ${transparent ? "transparent" : ""}`}>
       <Logo className="nav-logo" />
       <button
         className="nav-button"
@@ -167,7 +165,10 @@ export function Dropdown({
   const handleLogout = async () => {
     history("/");
     axios
-      .post(LOGOUT_URL, { sessionToken: currUser.sessionToken })
+      .post(LOGOUT_URL, {
+        sessionToken: currUser.sessionToken,
+        feed: JSON.parse(localStorage.getItem("posts")),
+      })
       .then((results) => {
         setCurrUser(null);
         localStorage.clear();
@@ -236,19 +237,19 @@ export function FriendRequests({ friendsOpen, currUser }) {
    * Fetches friend request data on every render
    */
   React.useEffect(async () => {
-      let data = await axios.get(
-        `http://localhost:3001/user/${currUser?.sessionToken}`
-      );
+    let data = await axios.get(
+      `http://localhost:3001/user/${currUser?.sessionToken}`
+    );
 
-      if (
-        data.data.user.incomingFriendRequests == null ||
-        data.data.user.incomingFriendRequests == undefined ||
-        data.data.user.incomingFriendRequests.length == 0
-      ) {
-        setFriendRequests([]);
-      } else {
-        setFriendRequests(data.data.user.incomingFriendRequests);
-      }
+    if (
+      data.data.user.incomingFriendRequests == null ||
+      data.data.user.incomingFriendRequests == undefined ||
+      data.data.user.incomingFriendRequests.length == 0
+    ) {
+      setFriendRequests([]);
+    } else {
+      setFriendRequests(data.data.user.incomingFriendRequests);
+    }
   }, []);
 
   // Don't return until friend requests data is set
