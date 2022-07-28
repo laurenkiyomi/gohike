@@ -86,11 +86,20 @@ class Authorization {
    * @param {String} sessionToken Corresponds to the session to destroy
    * @returns {Object} Contains message indicating successful logout
    */
-  static async logoutUser(sessionToken) {
+  static async logoutUser(sessionToken, feed) {
     // Get session by session token
     let query = new Parse.Query("_Session");
     query.equalTo("sessionToken", sessionToken);
     let sessionToDestroy = await query.first({ useMasterKey: true });
+
+    // Get User object from object Id
+    let query2 = new Parse.Query("_User");
+    query2.equalTo("objectId", sessionToDestroy.get("user").id);
+    let user = await query.first({ useMasterKey: true });
+
+    // Reset user's feed
+    user.set("feed", feed)
+    await user.save(null, { useMasterKey: true })
 
     // Destroy session
     sessionToDestroy.destroy({ useMasterKey: true });

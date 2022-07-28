@@ -75,8 +75,10 @@ router.post("/logout", async (req, res) => {
   try {
     // Gets session token in order to destroy corresponding session
     let sessionToken = req.body.sessionToken;
+    // Get feed to update user's Parse data
+    let feed = req.body.feed;
     // Destroys session by calling Authorization methods
-    let logoutUser = await Authorization.logoutUser(sessionToken);
+    let logoutUser = await Authorization.logoutUser(sessionToken, feed);
 
     res.status(201).json({ msg: logoutUser.msg });
   } catch {
