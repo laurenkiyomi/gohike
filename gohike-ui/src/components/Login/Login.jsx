@@ -80,62 +80,86 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
         async (position) => {
           // Login user by making post request
           await axios
-          .post(LOGIN_URL, { username, password })
-          .then(function (loginUser) {
-            setCurrUser({
-              username: loginUser.data.username,
-              sessionToken: loginUser.data.sessionToken,
-              firstName: loginUser.data.firstName,
-              lastName: loginUser.data.lastName,
+            .post(LOGIN_URL, { username, password })
+            .then(async (loginUser) => {
+              setCurrUser({
+                username: loginUser.data.username,
+                sessionToken: loginUser.data.sessionToken,
+                firstName: loginUser.data.firstName,
+                lastName: loginUser.data.lastName,
+              });
+
+              // Update feed and location if location has changed since last time
+              // Set local storage
+              if (
+                loginUser.data.location.lat - position.coords.latitude > 1 || loginUser.data.location.lat - position.coords.latitude < -1  ||
+                loginUser.data.location.lng - position.coords.longitude > 1 || loginUser.data.location.lng - position.coords.longitude < -1
+              ) {
+                // Update feed and location
+                await axios
+                  .put("http://localhost:3001/user/update-location", {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                    username: loginUser.data.username,
+                  })
+                  .then((data) => {
+                    // Set cache
+                    localStorage.setItem("username", loginUser.data.username);
+                    localStorage.setItem(
+                      "sessionToken",
+                      loginUser.data.sessionToken
+                    );
+                    localStorage.setItem("firstName", loginUser.data.firstName);
+                    localStorage.setItem("lastName", loginUser.data.lastName);
+
+                    // Set feed/location cache
+                    localStorage.setItem(
+                      "posts",
+                      JSON.stringify(data.data.posts)
+                    );
+                    localStorage.setItem(
+                      "location",
+                      JSON.stringify(data.data.location)
+                    );
+                  });
+              }
+              // Otherwise just set local storage
+              else {
+                // Set cache
+                localStorage.setItem("username", loginUser.data.username);
+                localStorage.setItem(
+                  "sessionToken",
+                  loginUser.data.sessionToken
+                );
+                localStorage.setItem("firstName", loginUser.data.firstName);
+                localStorage.setItem("lastName", loginUser.data.lastName);
+                localStorage.setItem(
+                  "posts",
+                  JSON.stringify(loginUser.data.posts)
+                );
+                localStorage.setItem(
+                  "location",
+                  JSON.stringify(loginUser.data.location)
+                );
+              }
+
+              // Reset login form
+              setUsername("");
+              setPassword("");
+              history("/");
+            })
+            .catch((err) => {
+              setError("Invalid Username or Password");
+              errorRef.current.focus();
             });
-
-            // Update feed and location if location has changed since last time
-            // Set local storage
-            if (loginUser.data.location.lat != position.coords.latitude || 
-              loginUser.data.location.lng != position.coords.longitude) {
-              // Update feed and location
-              await axios.put("http://localhost:3001/user/update-location", { 
-                lat: position.coords.latitude, 
-                lng: position.coords.longitude, username: loginUser.data.username })
-                .then((data) => {
-                  // Set cache
-                  localStorage.setItem("username", loginUser.data.username);
-                  localStorage.setItem("sessionToken", loginUser.data.sessionToken);
-                  localStorage.setItem("firstName", loginUser.data.firstName);
-                  localStorage.setItem("lastName", loginUser.data.lastName);
-                  localStorage.setItem("posts", JSON.stringify(data.data.posts));
-                  localStorage.setItem("location", JSON.stringify(data.data.location));
-                })
-            }
-            // Otherwise just set local storage
-            else {
-              // Set cache
-              localStorage.setItem("username", loginUser.data.username);
-              localStorage.setItem("sessionToken", loginUser.data.sessionToken);
-              localStorage.setItem("firstName", loginUser.data.firstName);
-              localStorage.setItem("lastName", loginUser.data.lastName);
-              localStorage.setItem("posts", JSON.stringify(loginUser.data.posts));
-              localStorage.setItem("location", JSON.stringify(loginUser.data.location));
-            }
-
-            // Reset login form
-            setUsername("");
-            setPassword("");
-            history("/");
-          })
-          .catch((err) => {
-            setError("Invalid Username or Password");
-            errorRef.current.focus();
-          });
         },
         () => {
           // Getting location fails
-          
+          alert("Please allow access to current location before logging in")
         }
       );
     } else {
       // Browser does not support geolocation
-      
     }
   };
 
