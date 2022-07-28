@@ -32,6 +32,7 @@ describe("Login", function () {
 
 describe("View Profile", function () {
   it("Navigate to personal profile", function () {
+    cy.wait(4000)
     // Navigate to personal profile
     cy.get("span")
       .contains("expand_more")
@@ -58,42 +59,10 @@ describe("View Profile", function () {
   });
 });
 
-describe("Feed", function () {
-  it("Navigate to feed page", function () {
-    // Navigate to feed page
-    cy.get("nav")
-      .contains("Feed")
-      .click()
-      .then((res) => {
-        cy.location().should((loc) => {
-          expect(loc.pathname).to.eq("/feed");
-        });
-        cy.wait(5000)
-      });
-  });
-
-  it("Check feed elements", function () {
-    // Check basic elements of feed page
-    cy.wait(5000)
-    cy.get(".create-post-form").should("be.visible");
-    cy.get(".post-grid").should("be.visible");
-  });
-
-  it("Click on first post", function () {
-    // Click on trail name to navigate to find hikes page
-    cy.get(".post-trail")
-      .first()
-      .click()
-      .then((res) => {
-        cy.location().should((loc) => {
-          expect(loc.pathname).to.include("/find-hikes");
-        });
-      });
-  });
-});
-
 describe("Find Hikes", function () {
   it("Search up a hike", function () {
+    // Navigate to find hikes page
+    cy.get(".nav-button").contains("Find Hikes").click();
     // Search up the Watchung hike
     cy.get(".hike-search-input").type("Watchung");
     cy.get(".hike-search-button")
