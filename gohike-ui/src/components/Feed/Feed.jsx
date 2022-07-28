@@ -62,11 +62,11 @@ export default function Feed({ transparent, setTransparent, currUser }) {
    */
   const history = useNavigate();
 
-   /**
+  /**
    * Fetches post id's to render
    */
   async function fetchData() {
-    setSpinner(true)
+    setSpinner(true);
     let data = await axios.get(FRIENDS_POSTS_URL);
 
     // Only get hikes near user if location is available
@@ -84,18 +84,18 @@ export default function Feed({ transparent, setTransparent, currUser }) {
               )
             )
           );
-          setSpinner(false)
+          setSpinner(false);
         },
         () => {
           // Getting location fails
           localStorage.setItem("posts", JSON.stringify(data.data.posts));
-          setSpinner(false)
+          setSpinner(false);
         }
       );
     } else {
       // Browser does not support geolocation
       localStorage.setItem("posts", JSON.stringify(data.data.posts));
-      setSpinner(false)
+      setSpinner(false);
     }
   }
 
@@ -120,13 +120,13 @@ export default function Feed({ transparent, setTransparent, currUser }) {
    * Fetches post data every time numPosts changes
    */
   React.useEffect(async () => {
-    setSpinner(true)
+    setSpinner(true);
     if (JSON.parse(localStorage.getItem("posts")) == null) {
-      await fetchData()
+      await fetchData();
     }
-    
-    setPosts(JSON.parse(localStorage.getItem("posts")) )
-    setSpinner(false)
+
+    setPosts(JSON.parse(localStorage.getItem("posts")));
+    setSpinner(false);
   }, [numPosts]);
 
   // Return React component
@@ -134,7 +134,11 @@ export default function Feed({ transparent, setTransparent, currUser }) {
     <nav className="feed">
       <CreatePost trailsList={trailsList} currUser={currUser} />
       {!spinner ? (
-        <PostGrid posts={posts} currUser={currUser} />
+        posts != null ? (
+          <PostGrid posts={posts} currUser={currUser} />
+        ) : (
+          <LoadingScreen />
+        )
       ) : (
         <LoadingScreen />
       )}
@@ -206,8 +210,8 @@ export function CreatePost({ trailsList, currUser }) {
       base64String = "data:image/jpeg;base64," + base64String;
 
       // Get trail id
-      let trailId = trail.value
-      let captionValue = caption
+      let trailId = trail.value;
+      let captionValue = caption;
 
       // Resets form
       event.target[1].value = "";
@@ -222,7 +226,6 @@ export function CreatePost({ trailsList, currUser }) {
         sessionToken: currUser?.sessionToken,
         picture: base64String,
       });
-
     } catch {
       console.log("Failed to create post.");
     }
@@ -245,7 +248,7 @@ export function CreatePost({ trailsList, currUser }) {
           menuPosition="fixed"
           styles={{
             menuPortal: (provided) => ({ ...provided, zIndex: 9999 }),
-            menu: (provided) => ({ ...provided, zIndex: 9999 })
+            menu: (provided) => ({ ...provided, zIndex: 9999 }),
           }}
           options={trailsList}
           value={trail}

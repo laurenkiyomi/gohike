@@ -70,9 +70,7 @@ export default function PostGrid({ posts, currUser }) {
                 postId: postObj.id,
               });
 
-              let data = await axios.get(GET_POST_URL, {
-                sessionToken: currUser.sessionToken,
-              });
+              let data = await axios.get(GET_POST_URL);
               setLikes(data.data.post.likes);
               setLiked(true);
             }
