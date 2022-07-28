@@ -20,6 +20,7 @@ router.post("/register", async (req, res) => {
   let username = infoUser.username;
   let password = infoUser.password;
   let email = infoUser.email;
+  let location = infoUser.location
 
   // Creates new user by calling Authorization methods
   try {
@@ -29,7 +30,8 @@ router.post("/register", async (req, res) => {
       age,
       username,
       password,
-      email
+      email,
+      location
     );
     res
       .status(201)

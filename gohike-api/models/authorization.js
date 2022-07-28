@@ -37,7 +37,8 @@ class Authorization {
     age,
     username,
     password,
-    email
+    email,
+    location
   ) {
     // Create empty Parse _User object
     let user = new Parse.User();
@@ -49,6 +50,7 @@ class Authorization {
     user.set("username", username);
     user.set("password", password);
     user.set("email", email);
+    user.set("location", location);
     user.set("saved", []);
     user.set("completed", []);
     user.set("posts", []);
