@@ -12,6 +12,7 @@ Parse.initialize(
 Parse.serverURL = "https://parseapi.back4app.com/";
 const { parse } = require("path");
 const { post } = require("../routes/authorization");
+const pq = require("./pqservice");
 
 /**
  * This class handles creation of posts, getting posts, and interacting with
@@ -64,36 +65,58 @@ class Posts {
     let post = await newPost.save();
 
     // Add post to user's personal posts array
-    let posts = [{ id: post.id, lat: trail.get("latitude"), 
-    lng: trail.get('longitude')}]
-    if (userObject.get("posts") != null && userObject.get("posts") != undefined) {
-      console.log(userObject.get("posts"))
-      posts = posts.concat(userObject.get("posts"))
+    let posts = [
+      { id: post.id, lat: trail.get("latitude"), lng: trail.get("longitude") },
+    ];
+    if (
+      userObject.get("posts") != null &&
+      userObject.get("posts") != undefined
+    ) {
+      posts = posts.concat(userObject.get("posts"));
     }
 
     // Set and save user's posts
-    userObject.set("posts", posts)
-    await userObject.save(null, { useMasterKey: true })
+    userObject.set("posts", posts);
+    await userObject.save(null, { useMasterKey: true });
 
     // Get friends from user object
-    let friends = userObject.get("friends")
+    let friends = userObject.get("friends");
     // Write the post id to all friends' posts array
     if (friends != undefined && friends.length != 0) {
       for (let i = 0; i < friends.length; i++) {
         // Get friend object
-        let query4 = new Parse.Query("_User")
-        query4.equalTo("username", friends[i])
+        let query4 = new Parse.Query("_User");
+        query4.equalTo("username", friends[i]);
         let friend = await query4.first({ useMasterKey: true });
 
+        // Get user's last location
+        let lat = friend.get("location").lat;
+        let lng = friend.get("location").lng;
+
         // Add post to friend's feed array
-        let feed = [{ id: post.id, lat: trail.get("latitude"), 
-        lng: trail.get('longitude')}]
-        if (friend.get("feed") != null && friend.get("feed") != undefined) {
-          feed = feed.concat(friend.get("feed"))
+        let feed;
+        if (friend.get("feed") == undefined || friend.get("feed") == null) {
+          feed = pq.insert(
+            [],
+            post.id,
+            trail.get("latitude"),
+            trail.get("longitude"),
+            lat,
+            lng
+          );
+        } else {
+          feed = pq.insert(
+            friend.get("feed"),
+            post.id,
+            trail.get("latitude"),
+            trail.get("longitude"),
+            lat,
+            lng
+          );
         }
 
         // Set and save friend's feed
-        friend.set("feed", feed)
+        friend.set("feed", feed);
         await friend.save(null, { useMasterKey: true });
       }
     }
@@ -105,7 +128,7 @@ class Posts {
    * Gets all posts made by the current user's friends
    *
    * @param {string} username Corresponds to username of the current user
-   * @returns {Array<{ id: number, lat: number, lng: number }>} Contains the 
+   * @returns {Array<{ id: number, lat: number, lng: number }>} Contains the
    * id and location of all posts made by the current user's friends
    */
   static async getFriendPosts(username) {
@@ -116,9 +139,9 @@ class Posts {
 
     // Return user's feed array
     if (user.get("feed") == undefined || user.get("feed") == null) {
-      return []
+      return [];
     } else {
-      return user.get("feed")
+      return user.get("feed");
     }
   }
 
