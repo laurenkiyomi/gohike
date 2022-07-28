@@ -128,7 +128,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
   React.useEffect(async () => {
     if (JSON.parse(localStorage.getItem("posts")) == null && posts == null) {
       setSpinner(true);
-      await sleep(4000).then(() => {
+      await sleep(10000).then(() => {
         setSpinner(false);
       });
     }
