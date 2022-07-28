@@ -153,13 +153,46 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
               errorRef.current.focus();
             });
         },
-        () => {
+        async () => {
           // Getting location fails
-          alert("Please allow access to current location before logging in")
+          // Can still login but cannot 
+          await axios
+          .post(LOGIN_URL, { username, password })
+          .then(async (loginUser) => {
+            setCurrUser({
+              username: loginUser.data.username,
+              sessionToken: loginUser.data.sessionToken,
+              firstName: loginUser.data.firstName,
+              lastName: loginUser.data.lastName,
+            });
+
+            // Set cache
+            localStorage.setItem("username", loginUser.data.username);
+            localStorage.setItem(
+              "sessionToken",
+              loginUser.data.sessionToken
+            );
+            localStorage.setItem("firstName", loginUser.data.firstName);
+            localStorage.setItem("lastName", loginUser.data.lastName);
+            localStorage.setItem(
+              "posts",
+              JSON.stringify(loginUser.data.posts)
+            );
+            localStorage.setItem(
+              "location",
+              JSON.stringify(loginUser.data.location)
+            );
+          });
+
+          // Reset login form
+          setUsername("");
+          setPassword("");
+          history("/");
         }
       );
     } else {
       // Browser does not support geolocation
+      alert("Please allow access to current location before logging in")
     }
   };
 

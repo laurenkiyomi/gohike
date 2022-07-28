@@ -22,6 +22,7 @@ describe("Login", function () {
     cy.get(".login-page-button")
       .click()
       .then((res) => {
+        cy.wait(10000)
         cy.location().should((loc) => {
           expect(loc.pathname).to.eq("/");
         });
