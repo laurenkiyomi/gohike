@@ -62,42 +62,44 @@ export default function Feed({ transparent, setTransparent, currUser }) {
    */
   const history = useNavigate();
 
-  /**
-   * Fetches post id's to render
-   */
-  async function fetchData() {
-    setSpinner(true);
-    let data = await axios.get(FRIENDS_POSTS_URL);
+  // /**
+  //  * Fetches post id's to render
+  //  */
+  // async function fetchData() {
+  //   // setSpinner(true);
+  //   let data = await axios.get(FRIENDS_POSTS_URL);
 
-    // Only get hikes near user if location is available
-    if (navigator.geolocation) {
-      // Get user location
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          localStorage.setItem(
-            "posts",
-            JSON.stringify(
-              pq.create(
-                data.data.posts,
-                position.coords.latitude,
-                position.coords.longitude
-              )
-            )
-          );
-          setSpinner(false);
-        },
-        () => {
-          // Getting location fails
-          localStorage.setItem("posts", JSON.stringify(data.data.posts));
-          setSpinner(false);
-        }
-      );
-    } else {
-      // Browser does not support geolocation
-      localStorage.setItem("posts", JSON.stringify(data.data.posts));
-      setSpinner(false);
-    }
-  }
+  //   // Only get hikes near user if location is available
+  //   if (navigator.geolocation) {
+  //     console.log("hi")
+  //     // Get user location
+  //     navigator.geolocation.getCurrentPosition(
+  //       async (position) => {
+  //         localStorage.setItem(
+  //           "posts",
+  //           JSON.stringify(
+  //             pq.create(
+  //               data.data.posts,
+  //               position.coords.latitude,
+  //               position.coords.longitude
+  //             )
+  //           )
+  //         );
+  //         console.log("bye")
+  //         // setSpinner(false);
+  //       },
+  //       () => {
+  //         // Getting location fails
+  //         localStorage.setItem("posts", JSON.stringify(data.data.posts));
+  //         // setSpinner(false);
+  //       }
+  //     );
+  //   } else {
+  //     // Browser does not support geolocation
+  //     localStorage.setItem("posts", JSON.stringify(data.data.posts));
+  //     // setSpinner(false);
+  //   }
+  // }
 
   /**
    * Fetches data on the trails on every render
@@ -116,31 +118,36 @@ export default function Feed({ transparent, setTransparent, currUser }) {
     setTrailsList(data.data.trails);
   }, []);
 
+  const sleep = (milliseconds) => {
+    return new Promise((resolve) => setTimeout(resolve, milliseconds));
+  };
+
   /**
    * Fetches post data every time numPosts changes
    */
   React.useEffect(async () => {
-    setSpinner(true);
-    if (JSON.parse(localStorage.getItem("posts")) == null) {
-      await fetchData();
+    if (JSON.parse(localStorage.getItem("posts")) == null && posts == null) {
+      setSpinner(true);
+      await sleep(4000).then(() => {
+        setSpinner(false);
+      });
     }
 
     setPosts(JSON.parse(localStorage.getItem("posts")));
-    setSpinner(false);
   }, [numPosts]);
+
+  if (posts == null) {
+    return null;
+  }
 
   // Return React component
   return (
     <nav className="feed">
       <CreatePost trailsList={trailsList} currUser={currUser} />
-      {!spinner ? (
-        posts != null ? (
-          <PostGrid posts={posts} currUser={currUser} />
-        ) : (
-          <LoadingScreen />
-        )
-      ) : (
+      {spinner ? (
         <LoadingScreen />
+      ) : (
+        <PostGrid posts={posts} currUser={currUser} />
       )}
     </nav>
   );
