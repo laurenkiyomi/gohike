@@ -3,6 +3,7 @@
  * to implement an User class and is called by the the User routing methods.
  */
 require("dotenv").config();
+const pq = require("./pqservice");
 var Parse = require("parse/node");
 const { use } = require("../routes/user");
 Parse.initialize(
@@ -565,12 +566,12 @@ class User {
   }
 
   /**
-   * Updated a user's location
+   * Updated a user's location and feed priority queue
    * 
    * @param {number} lat Of the current user
    * @param {number} lng Of the current user
    * @param {string} username Of the current user
-   * @returns {string} Message to indicate successful update of location
+   * @returns { location, posts }} Updated location and feed
    */
   static async updateLocation(lat, lng, username) {
     // Get User object from username
@@ -581,7 +582,19 @@ class User {
     // Set location
     user.set("location", { lat, lng })
     await user.save(null, { useMasterKey: true });
-    return "Updated user location"
+
+    // Create new priority queue and set it
+    let feed = user.get("feed")
+    if (feed == undefined || feed == null || feed.length == 0) {
+      // Do nothing
+    } else {
+      feed = pq.create(feed, lat, lng)
+      // Set feed
+      user.set("feed", feed)
+    }
+
+    await user.save(null, { useMasterKey: true });
+    return { location: { lat, lng }, posts: feed }
   }
 }
 

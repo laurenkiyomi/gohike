@@ -289,7 +289,7 @@ router.put("/update-location", async (req, res) => {
     
     // Update location by calling User method
     let updated = await User.updateLocation(lat, lng, username)
-    res.status(201).json({ msg: updated });
+    res.status(201).json({ location: updated.location, posts: updated.posts });
   } catch (err) {
     res.status(400).json({ msg: "Failed to update location" });
   }
