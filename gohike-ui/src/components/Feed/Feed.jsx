@@ -62,45 +62,6 @@ export default function Feed({ transparent, setTransparent, currUser }) {
    */
   const history = useNavigate();
 
-  // /**
-  //  * Fetches post id's to render
-  //  */
-  // async function fetchData() {
-  //   // setSpinner(true);
-  //   let data = await axios.get(FRIENDS_POSTS_URL);
-
-  //   // Only get hikes near user if location is available
-  //   if (navigator.geolocation) {
-  //     console.log("hi")
-  //     // Get user location
-  //     navigator.geolocation.getCurrentPosition(
-  //       async (position) => {
-  //         localStorage.setItem(
-  //           "posts",
-  //           JSON.stringify(
-  //             pq.create(
-  //               data.data.posts,
-  //               position.coords.latitude,
-  //               position.coords.longitude
-  //             )
-  //           )
-  //         );
-  //         console.log("bye")
-  //         // setSpinner(false);
-  //       },
-  //       () => {
-  //         // Getting location fails
-  //         localStorage.setItem("posts", JSON.stringify(data.data.posts));
-  //         // setSpinner(false);
-  //       }
-  //     );
-  //   } else {
-  //     // Browser does not support geolocation
-  //     localStorage.setItem("posts", JSON.stringify(data.data.posts));
-  //     // setSpinner(false);
-  //   }
-  // }
-
   /**
    * Fetches data on the trails on every render
    */
