@@ -277,4 +277,22 @@ router.put("/uncomplete", async (req, res) => {
   }
 });
 
+/**
+ * Put request to update a user's last location
+ */
+router.put("/update-location", async (req, res) => {
+  try {
+    // Gets location of current user
+    let lat = req.body.lat
+    let lng = req.body.lng
+    let username = req.body.username
+    
+    // Update location by calling User method
+    let updated = await User.updateLocation(lat, lng, username)
+    res.status(201).json({ msg: updated });
+  } catch (err) {
+    res.status(400).json({ msg: "Failed to update location" });
+  }
+})
+
 module.exports = router;

@@ -75,6 +75,7 @@ class Authorization {
       sessionToken: loginUser.getSessionToken(),
       firstName: loginUser.get("firstName"),
       lastName: loginUser.get("lastName"),
+      location: loginUser.get("location")
     };
   }
 

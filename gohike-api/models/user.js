@@ -563,6 +563,26 @@ class User {
 
     return res;
   }
+
+  /**
+   * Updated a user's location
+   * 
+   * @param {number} lat Of the current user
+   * @param {number} lng Of the current user
+   * @param {string} username Of the current user
+   * @returns {string} Message to indicate successful update of location
+   */
+  static async updateLocation(lat, lng, username) {
+    // Get User object from username
+    let query = new Parse.Query("_User");
+    query.equalTo("username", username);
+    let user = await query.first({ useMasterKey: true });
+
+    // Set location
+    user.set("location", { lat, lng })
+    await user.save(null, { useMasterKey: true });
+    return "Updated user location"
+  }
 }
 
 
