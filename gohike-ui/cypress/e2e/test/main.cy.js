@@ -68,11 +68,13 @@ describe("Feed", function () {
         cy.location().should((loc) => {
           expect(loc.pathname).to.eq("/feed");
         });
+        cy.wait(5000)
       });
   });
 
   it("Check feed elements", function () {
     // Check basic elements of feed page
+    cy.wait(5000)
     cy.get(".create-post-form").should("be.visible");
     cy.get(".post-grid").should("be.visible");
   });
