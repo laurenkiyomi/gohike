@@ -37,7 +37,8 @@ class Authorization {
     age,
     username,
     password,
-    email
+    email,
+    location
   ) {
     // Create empty Parse _User object
     let user = new Parse.User();
@@ -49,6 +50,7 @@ class Authorization {
     user.set("username", username);
     user.set("password", password);
     user.set("email", email);
+    user.set("location", location);
     user.set("saved", []);
     user.set("completed", []);
     user.set("posts", []);
@@ -73,6 +75,8 @@ class Authorization {
       sessionToken: loginUser.getSessionToken(),
       firstName: loginUser.get("firstName"),
       lastName: loginUser.get("lastName"),
+      location: loginUser.get("location"),
+      posts: loginUser.get("feed")
     };
   }
 
@@ -82,11 +86,20 @@ class Authorization {
    * @param {String} sessionToken Corresponds to the session to destroy
    * @returns {Object} Contains message indicating successful logout
    */
-  static async logoutUser(sessionToken) {
+  static async logoutUser(sessionToken, feed) {
     // Get session by session token
     let query = new Parse.Query("_Session");
     query.equalTo("sessionToken", sessionToken);
     let sessionToDestroy = await query.first({ useMasterKey: true });
+
+    // Get User object from object Id
+    let query2 = new Parse.Query("_User");
+    query2.equalTo("objectId", sessionToDestroy.get("user").id);
+    let user = await query.first({ useMasterKey: true });
+
+    // Reset user's feed
+    user.set("feed", feed)
+    await user.save(null, { useMasterKey: true })
 
     // Destroy session
     sessionToDestroy.destroy({ useMasterKey: true });

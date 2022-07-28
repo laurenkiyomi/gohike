@@ -1,5 +1,7 @@
 /**
- * @fileoverview This file contains the Posts routing methods for the GoHike app API. It handles creation of and interaction with posts by calling on an instance of the Posts class in the models directory.
+ * @fileoverview This file contains the Posts routing methods for the GoHike 
+ * app API. It handles creation of and interaction with posts by calling on an 
+ * instance of the Posts class in the models directory.
  */
 const express = require("express");
 const router = express.Router();
@@ -31,19 +33,6 @@ router.post("/create", async (req, res) => {
 });
 
 /**
- * Get request for getting all posts in the Parse database
- */
-router.get("/", async (req, res) => {
-  try {
-    // Gets all posts by calling Posts method
-    let posts = await Posts.getAllPosts();
-    res.status(201).json({ posts });
-  } catch {
-    res.status(400).json({ msg: "Failed to get posts" });
-  }
-});
-
-/**
  * Get request for getting the likes array of a post based on its postId
  */
 router.get("/likes", async (req, res) => {
@@ -63,13 +52,14 @@ router.get("/likes", async (req, res) => {
  * Get request for getting posts from friends of the current user based on their
  * session token
  */
-router.get("/friends/:sessionToken", async (req, res) => {
+router.get("/friends/:username", async (req, res) => {
   try {
-    let sessionToken = req.params.sessionToken;
+    let username = req.params.username;
     // Gets likes array by calling Posts method
-    let posts = await Posts.getFriendPosts(sessionToken);
+    let posts = await Posts.getFriendPosts(username);
     res.status(201).json({ posts });
-  } catch {
+  } catch (err) {
+    console.log(err)
     res.status(400).json({ msg: "Failed to get friends' posts" });
   }
 });

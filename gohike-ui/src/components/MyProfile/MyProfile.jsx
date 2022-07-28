@@ -143,7 +143,7 @@ export default function MyProfile({ transparent, setTransparent, currUser }) {
     setProfileData(data.data.user);
 
     let data2 = await axios.get(
-      `http://localhost:3001/user/posts/${currUser.sessionToken}`
+      `http://localhost:3001/user/posts/${currUser.username}`
     );
     setPosts(data2.data.posts);
   };

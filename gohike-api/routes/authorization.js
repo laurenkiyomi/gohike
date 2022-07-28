@@ -20,6 +20,7 @@ router.post("/register", async (req, res) => {
   let username = infoUser.username;
   let password = infoUser.password;
   let email = infoUser.email;
+  let location = infoUser.location
 
   // Creates new user by calling Authorization methods
   try {
@@ -29,7 +30,8 @@ router.post("/register", async (req, res) => {
       age,
       username,
       password,
-      email
+      email,
+      location
     );
     res
       .status(201)
@@ -58,6 +60,8 @@ router.post("/login", async (req, res) => {
         sessionToken: loginUser.sessionToken,
         firstName: loginUser.firstName,
         lastName: loginUser.lastName,
+        location: loginUser.location,
+        posts: loginUser.posts
       });
   } catch {
     res.status(400).json({ msg: "Failed to login user" });
@@ -71,8 +75,10 @@ router.post("/logout", async (req, res) => {
   try {
     // Gets session token in order to destroy corresponding session
     let sessionToken = req.body.sessionToken;
+    // Get feed to update user's Parse data
+    let feed = req.body.feed;
     // Destroys session by calling Authorization methods
-    let logoutUser = await Authorization.logoutUser(sessionToken);
+    let logoutUser = await Authorization.logoutUser(sessionToken, feed);
 
     res.status(201).json({ msg: logoutUser.msg });
   } catch {

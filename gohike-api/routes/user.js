@@ -64,7 +64,7 @@ router.get("/:sessionToken", async (req, res) => {
     // Gets user data by calling User method
     let userData = await User.getUserInfo(sessionToken);
     res.status(201).json({ user: userData });
-  } catch {
+  } catch (err) {
     res.status(400).json({ msg: "Could not retrieve user info." });
   }
 });
@@ -143,9 +143,9 @@ router.get("/view/posts/:username", async (req, res) => {
   try {
     const username = req.params.username;
     // Gets post id's by calling User method
-    let posts = await User.getViewUserPosts(username);
+    let posts = await User.getUserPosts(username);
     res.status(201).json({ posts });
-  } catch {
+  } catch (err) {
     res.status(400).json({ msg: "Could not retrieve user posts." });
   }
 });
@@ -276,5 +276,23 @@ router.put("/uncomplete", async (req, res) => {
     res.status(400).json({ msg: "Failed to uncomplete hike" });
   }
 });
+
+/**
+ * Put request to update a user's last location
+ */
+router.put("/update-location", async (req, res) => {
+  try {
+    // Gets location of current user
+    let lat = req.body.lat
+    let lng = req.body.lng
+    let username = req.body.username
+    
+    // Update location by calling User method
+    let updated = await User.updateLocation(lat, lng, username)
+    res.status(201).json({ location: updated.location, posts: updated.posts });
+  } catch (err) {
+    res.status(400).json({ msg: "Failed to update location" });
+  }
+})
 
 module.exports = router;

@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Select from "react-select";
 import PostGrid from "./PostGrid";
+import { pq } from "../../../../gohike-api/models/pq";
 
 /**
  * Renders CreatePost and PostGrid component
@@ -29,7 +30,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
    * URL to get all posts in database
    * @type {string}
    */
-  const FRIENDS_POSTS_URL = `http://localhost:3001/posts/friends/${currUser.sessionToken}`;
+  const FRIENDS_POSTS_URL = `http://localhost:3001/posts/friends/${currUser?.username}`;
   /**
    * URL to get friends posts in database
    * @type {string}
@@ -62,15 +63,6 @@ export default function Feed({ transparent, setTransparent, currUser }) {
   const history = useNavigate();
 
   /**
-   * Fetches post id's to render
-   */
-  async function fetchData() {
-    let data = await axios.get(FRIENDS_POSTS_URL);
-    setSpinner(true);
-    setPosts(data.data.posts);
-  }
-
-  /**
    * Fetches data on the trails on every render
    */
   React.useEffect(async () => {
@@ -87,11 +79,15 @@ export default function Feed({ transparent, setTransparent, currUser }) {
     setTrailsList(data.data.trails);
   }, []);
 
+  const sleep = (milliseconds) => {
+    return new Promise((resolve) => setTimeout(resolve, milliseconds));
+  };
+
   /**
    * Fetches post data every time numPosts changes
    */
   React.useEffect(async () => {
-    await fetchData();
+    setPosts(JSON.parse(localStorage.getItem("posts")));
   }, [numPosts]);
 
   // Return React component
@@ -99,9 +95,9 @@ export default function Feed({ transparent, setTransparent, currUser }) {
     <nav className="feed">
       <CreatePost trailsList={trailsList} currUser={currUser} />
       {spinner ? (
-        <PostGrid posts={posts} currUser={currUser} />
-      ) : (
         <LoadingScreen />
+      ) : (
+        <PostGrid posts={posts} currUser={currUser} />
       )}
     </nav>
   );
@@ -169,19 +165,24 @@ export function CreatePost({ trailsList, currUser }) {
       // Convert the array to a base64 string
       let base64String = _arrayBufferToBase64(arrayBuffer);
       base64String = "data:image/jpeg;base64," + base64String;
-      // Upload to Parse
-      await axios.post(CREATE_POST_URL, {
-        hikeId: trail.value,
-        caption,
-        sessionToken: currUser?.sessionToken,
-        picture: base64String,
-      });
+
+      // Get trail id
+      let trailId = trail.value;
+      let captionValue = caption;
 
       // Resets form
       event.target[1].value = "";
       setPicture(null);
       setTrail("");
       setCaption("");
+
+      // Upload to Parse
+      let post = await axios.post(CREATE_POST_URL, {
+        hikeId: trailId,
+        caption: captionValue,
+        sessionToken: currUser?.sessionToken,
+        picture: base64String,
+      });
     } catch {
       console.log("Failed to create post.");
     }
@@ -200,6 +201,12 @@ export function CreatePost({ trailsList, currUser }) {
       />
       <div className="add-to-post">
         <Select
+          menuPortalTarget={document.body}
+          menuPosition="fixed"
+          styles={{
+            menuPortal: (provided) => ({ ...provided, zIndex: 9999 }),
+            menu: (provided) => ({ ...provided, zIndex: 9999 }),
+          }}
           options={trailsList}
           value={trail}
           placeholder="Select Trail"

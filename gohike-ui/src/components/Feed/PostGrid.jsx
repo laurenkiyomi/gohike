@@ -26,8 +26,8 @@ export default function PostGrid({ posts, currUser }) {
   return (
     <div className="post-grid">
       {posts.length == 0
-        ? "No posts to display"
-        : posts.map((postId, index) => {
+        ? <div className="no-posts">No posts to display</div>
+        : posts.map((postObj, index) => {
             /**
              * URL for put request to like a post
              * @type {string}
@@ -42,7 +42,7 @@ export default function PostGrid({ posts, currUser }) {
              * URL for get request to get info on a post
              * @type {string}
              */
-            const GET_POST_URL = `http://localhost:3001/posts/${postId}`;
+            const GET_POST_URL = `http://localhost:3001/posts/${postObj.id}`;
             /**
              * Holds info on post corresponding to postId
              * @type {{ username: string, trailName: string, hikeId:
@@ -67,12 +67,10 @@ export default function PostGrid({ posts, currUser }) {
             async function likePost() {
               await axios.put(LIKE_URL, {
                 username: currUser.username,
-                postId,
+                postId: postObj.id,
               });
 
-              let data = await axios.get(GET_POST_URL, {
-                sessionToken: currUser.sessionToken,
-              });
+              let data = await axios.get(GET_POST_URL);
               setLikes(data.data.post.likes);
               setLiked(true);
             }

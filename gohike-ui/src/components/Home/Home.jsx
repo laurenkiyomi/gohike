@@ -13,15 +13,22 @@ import "./Home.css";
 import Plx from "react-plx";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { pq } from "../../../../gohike-api/models/pq";
 
 /**
  * Renders Home page with animations and on scroll effects
  *
+ * @param {{username: string, sessionToken: string}} currUser Current user info
  * @param {boolean} transparent State var holding state of Navbar background
  * @param {function} setTransparent Sets the boolean in transparent
  * @returns Home component
  */
-export default function Home({ transparent, setTransparent }) {
+export default function Home({ currUser, transparent, setTransparent }) {
+  /**
+   * URL to get all posts in database
+   * @type {string}
+   */
+  const FRIENDS_POSTS_URL = `http://localhost:3001/posts/friends/${currUser?.username}`;
   /**
    * Animation helper
    */
@@ -34,9 +41,42 @@ export default function Home({ transparent, setTransparent }) {
   }
 
   /**
+   * Fetches post id's to render
+   */
+  async function fetchData() {
+    let data = await axios.get(FRIENDS_POSTS_URL);
+
+    // Only get hikes near user if location is available
+    if (navigator.geolocation) {
+      // Get user location
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          localStorage.setItem(
+            "posts",
+            JSON.stringify(
+              pq.create(
+                data.data.posts,
+                position.coords.latitude,
+                position.coords.longitude
+              )
+            )
+          );
+        },
+        () => {
+          // Getting location fails
+          localStorage.setItem("posts", JSON.stringify(data.data.posts));
+        }
+      );
+    } else {
+      // Browser does not support geolocation
+      localStorage.setItem("posts", JSON.stringify(data.data.posts));
+    }
+  }
+
+  /**
    * Makes animated components visible on render
    */
-  React.useEffect(() => {
+  React.useEffect(async () => {
     makeVisible();
     if (!transparent) {
       setTransparent(true);

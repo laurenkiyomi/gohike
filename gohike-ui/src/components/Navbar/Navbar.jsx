@@ -20,7 +20,7 @@ import { useLocation, useNavigate } from "react-router-dom";
  * @param {boolean} transparent Hold the state of the Navbar background
  * @returns Navbar component
  */
-export default function Navbar({ color, currUser, setCurrUser, transparent }) {
+export default function Navbar({ currUser, setCurrUser, transparent }) {
   /**
    * State of the dropdown visibility when logged in
    * @type {boolean}
@@ -39,10 +39,7 @@ export default function Navbar({ color, currUser, setCurrUser, transparent }) {
 
   // Return React component
   return (
-    <nav
-      className={`navbar ${transparent ? "transparent" : ""} 
-      ${color ? (useLocation().pathname == "/" ? "color" : "") : ""}`}
-    >
+    <nav className={`navbar ${transparent ? "transparent" : ""}`}>
       <Logo className="nav-logo" />
       <button
         className="nav-button"
@@ -168,7 +165,10 @@ export function Dropdown({
   const handleLogout = async () => {
     history("/");
     axios
-      .post(LOGOUT_URL, { sessionToken: currUser.sessionToken })
+      .post(LOGOUT_URL, {
+        sessionToken: currUser.sessionToken,
+        feed: JSON.parse(localStorage.getItem("posts")),
+      })
       .then((results) => {
         setCurrUser(null);
         localStorage.clear();
@@ -238,7 +238,7 @@ export function FriendRequests({ friendsOpen, currUser }) {
    */
   React.useEffect(async () => {
     let data = await axios.get(
-      `http://localhost:3001/user/${currUser.sessionToken}`
+      `http://localhost:3001/user/${currUser?.sessionToken}`
     );
 
     if (

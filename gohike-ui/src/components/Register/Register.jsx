@@ -282,48 +282,103 @@ export function RegisterPartTwo({
   };
 
   /**
+   * Gets location of new user to store in Parse
+   *
+   * @returns {{ lat: number, lng: number }} Location of new user
+   */
+  const getLocation = async () => {
+    // Only get hikes near user if location is available
+    if (navigator.geolocation) {
+      // Get user location
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          localStorage.setItem(
+            "location",
+            JSON.stringify({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            })
+          );
+          return 0;
+        },
+        () => {
+          // Getting location fails
+          return -1;
+        }
+      );
+    } else {
+      // Browser does not support geolocation
+      return -1;
+    }
+  };
+
+  /**
    * OnClick handler of form submission
    * @param {event} event
    */
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Post request to create new user
-    axios
-      .post(REGISTER_URL, {
-        firstName,
-        lastName,
-        age: parseInt(age),
-        username,
-        password,
-        email,
-      })
-      .then(function (registerUser) {
-        setCurrUser({
-          username: registerUser.data.username,
-          sessionToken: registerUser.data.sessionToken,
-          firstName: registerUser.data.firstName,
-          lastName: registerUser.data.lastName,
-        });
-        // Set local storage to hold necessary info on current user
-        localStorage.setItem("username", registerUser.data.username);
-        localStorage.setItem("sessionToken", registerUser.data.sessionToken);
-        localStorage.setItem("firstName", registerUser.data.firstName);
-        localStorage.setItem("lastName", registerUser.data.lastName);
+    // Only create new account near user if location is available
+    if (navigator.geolocation) {
+      // Get user location
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          // Post request to create new user
+          axios
+            .post(REGISTER_URL, {
+              firstName,
+              lastName,
+              age: parseInt(age),
+              username,
+              password,
+              email,
+              location: {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              },
+            })
+            .then(function (registerUser) {
+              setCurrUser({
+                username: registerUser.data.username,
+                sessionToken: registerUser.data.sessionToken,
+                firstName: registerUser.data.firstName,
+                lastName: registerUser.data.lastName,
+              });
+              // Set local storage to hold necessary info on current user
+              localStorage.setItem("username", registerUser.data.username);
+              localStorage.setItem(
+                "sessionToken",
+                registerUser.data.sessionToken
+              );
+              localStorage.setItem("firstName", registerUser.data.firstName);
+              localStorage.setItem("lastName", registerUser.data.lastName);
 
-        // Reset form
-        setFirstName("");
-        setLastName("");
-        setAge(0);
-        setUsername("");
-        setPassword("");
-        setEmail("");
-        history("/");
-      })
-      .catch((err) => {
-        setError("Failed to Register");
-        errorRef.current.focus();
-      });
+              // Reset form
+              setFirstName("");
+              setLastName("");
+              setAge(0);
+              setUsername("");
+              setPassword("");
+              setEmail("");
+              history("/");
+            })
+            .catch((err) => {
+              setError("Failed to Register");
+              errorRef.current.focus();
+            });
+        },
+        () => {
+          // Getting location fails
+          alert(
+            "Please enable access to your location before creating an account"
+          );
+        }
+      );
+    } else {
+      // Browser does not support geolocation
+      alert("Please enable access to your location before creating an account");
+    }
   };
 
   // Return React component
