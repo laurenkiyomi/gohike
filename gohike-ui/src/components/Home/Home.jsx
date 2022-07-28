@@ -41,6 +41,39 @@ export default function Home({ currUser, transparent, setTransparent }) {
   }
 
   /**
+   * Fetches post id's to render
+   */
+  async function fetchData() {
+    let data = await axios.get(FRIENDS_POSTS_URL);
+
+    // Only get hikes near user if location is available
+    if (navigator.geolocation) {
+      // Get user location
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          localStorage.setItem(
+            "posts",
+            JSON.stringify(
+              pq.create(
+                data.data.posts,
+                position.coords.latitude,
+                position.coords.longitude
+              )
+            )
+          );
+        },
+        () => {
+          // Getting location fails
+          localStorage.setItem("posts", JSON.stringify(data.data.posts));
+        }
+      );
+    } else {
+      // Browser does not support geolocation
+      localStorage.setItem("posts", JSON.stringify(data.data.posts));
+    }
+  }
+
+  /**
    * Makes animated components visible on render
    */
   React.useEffect(async () => {
