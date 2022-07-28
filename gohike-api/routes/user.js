@@ -143,9 +143,9 @@ router.get("/view/posts/:username", async (req, res) => {
   try {
     const username = req.params.username;
     // Gets post id's by calling User method
-    let posts = await User.getViewUserPosts(username);
+    let posts = await User.getUserPosts(username);
     res.status(201).json({ posts });
-  } catch {
+  } catch (err) {
     res.status(400).json({ msg: "Could not retrieve user posts." });
   }
 });
