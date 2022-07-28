@@ -15,12 +15,12 @@ Core Features
 Stretch Features
 1. On the Find Hikes page, users can filter hikes to find hikes near them (within a certain radius of their location)
 2. On the Find Hikes page, when the user clicks on a hike on the left sidebar, in addition to the map showing only a marker at the trailhead of that specific hike, a red line will appear on the map that marks the trail/path of the hike.
-3. On the Find Hikes page, users can rate and leave comments/reviews on hikes.
-4. On the Feed page, posts are sorted by most liked.
+3. On the Find Hikes page, users can leave comments/reviews on hikes.
+4. Speed up renders for if this app were to scale and have many users
 
-Complexity/Planned Problems
+Complexity/Problems
 1. I haven’t found an API that has all the data that I need. The Google Maps API doesn’t have the stats (length, difficulty, etc) for hikes, but I would like to use it to place markers on the map. On the other hand, the Hiker API returns stats for hikes but doesn’t have any endpoints other than all hikes. It also doesn’t return the longitude and latitude for hikes, but the Google Maps API returns a map with markers when given longitude and latitude. I need to find a way to combine these APIs or similar APIs to get all of the information I need.
-2. On the Find Hikes page, when a user clicks on a specific hike, I need to create some sort of filtering algorithm that queries the database to find all pictures from only that hike and then filters those pictures to only show the top ten most liked pictures for that hike. I want the way the pictures are displayed to involve some sort of unique animation and cursor interaction component.
+2. I realized that when adding features to my webpage, and if other users were to add features to my webpage in the future, it’s likely that some of my core features may break. It’s hard to keep track of this manually, so I implemented End-to-End testing for my application and have those tests run whenever a pull or push request is made.
 
 User Roles:
 - Hiker: a user who is seeking to track and share their hikes with friends
