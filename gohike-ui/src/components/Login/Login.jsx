@@ -121,10 +121,17 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
                     localStorage.setItem("lastName", loginUser.data.lastName);
 
                     // Set feed/location cache
-                    localStorage.setItem(
-                      "posts",
-                      JSON.stringify(data.data.posts)
-                    );
+                    if (JSON.stringify(data.data.posts) == undefined) {
+                      localStorage.setItem(
+                        "posts",
+                        JSON.stringify([])
+                      );
+                    } else {
+                      localStorage.setItem(
+                        "posts",
+                        JSON.stringify(data.data.posts)
+                      );
+                    }
                     localStorage.setItem(
                       "location",
                       JSON.stringify(data.data.location)
@@ -141,10 +148,17 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
                 );
                 localStorage.setItem("firstName", loginUser.data.firstName);
                 localStorage.setItem("lastName", loginUser.data.lastName);
-                localStorage.setItem(
-                  "posts",
-                  JSON.stringify(loginUser.data.posts)
-                );
+                if (JSON.stringify(loginUser.data.posts) == undefined) {
+                  localStorage.setItem(
+                    "posts",
+                    JSON.stringify([])
+                  );
+                } else {
+                  localStorage.setItem(
+                    "posts",
+                    JSON.stringify(loginUser.data.posts)
+                  );
+                }
                 localStorage.setItem(
                   "location",
                   JSON.stringify(loginUser.data.location)
@@ -180,10 +194,17 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
               localStorage.setItem("sessionToken", loginUser.data.sessionToken);
               localStorage.setItem("firstName", loginUser.data.firstName);
               localStorage.setItem("lastName", loginUser.data.lastName);
-              localStorage.setItem(
-                "posts",
-                JSON.stringify(loginUser.data.posts)
-              );
+              if (JSON.stringify(loginUser.data.posts) == undefined) {
+                localStorage.setItem(
+                  "posts",
+                  JSON.stringify([])
+                );
+              } else {
+                localStorage.setItem(
+                  "posts",
+                  JSON.stringify(loginUser.data.posts)
+                );
+              }
               localStorage.setItem(
                 "location",
                 JSON.stringify(loginUser.data.location)
