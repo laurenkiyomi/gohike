@@ -95,6 +95,11 @@ export default function Feed({ transparent, setTransparent, currUser }) {
     setPosts(JSON.parse(localStorage.getItem("posts")));
   }, [numPosts]);
 
+  // Listen for new post created by a friend
+  socket.on("update", () => {
+    // Get new feed
+  });
+
   // Return React component
   return (
     <nav className="feed">
@@ -188,8 +193,7 @@ export function CreatePost({ trailsList, currUser }) {
         sessionToken: currUser?.sessionToken,
         picture: base64String,
       }).then((newPost) => {
-        // Emit event that includes new post id to server
-        console.log(newPost.data.id)
+        // Emit event that includes new post id
         socket.emit("newpost", newPost.data.id);
       })
     } catch (err) {

@@ -19,14 +19,14 @@ app.use(bodyParser.json({ limit: "500mb" }));
 app.use(morgan("tiny"));
 app.use(cors());
 
-// Set up socket 
-const server = http.createServer(app)
+// Set up socket
+const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
     origin: "http://localhost:3000",
-    methods: ["GET", "POST", "PUT"]
-  }
-})
+    methods: ["GET", "POST", "PUT"],
+  },
+});
 
 // Routes to use for respective paths
 app.use("/authorization", authorization);
@@ -41,15 +41,15 @@ app.get("/", (req, res) => {
 
 // Handle socket connection
 io.on("connection", (socket) => {
-  console.log("New client connected")
+  console.log("New client connected");
   // Listen for creation of new post
-  socket.on("newpost", (arg) => {
-    console.log(arg); // world
+  socket.on("newpost", (postId) => {
+    socket.emit("update");
   });
 
   // Handle socket disconnection
   socket.on("disconnect", () => {
-    console.log("Disconnecting")
+    console.log("Disconnecting");
   });
 });
 
