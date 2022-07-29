@@ -50,12 +50,12 @@ export default function Feed({ transparent, setTransparent, currUser }) {
    * State var that holds post number offset to render
    * @type {number}
    */
-  const [numPosts, setNumPosts] = React.useState(5);
+  const [numPosts, setNumPosts] = React.useState(0);
   /**
    * State var that holds post id's of posts to render
    * @type {Array<number>}
    */
-  const [posts, setPosts] = React.useState(null);
+  const [posts, setPosts] = React.useState(JSON.parse(localStorage.getItem("posts")));
   /**
    * State of whether to render loading page or not
    * @type {boolean}
@@ -66,6 +66,20 @@ export default function Feed({ transparent, setTransparent, currUser }) {
    * @type {hook}
    */
   const history = useNavigate();
+
+  // Listen for new post created by a friend
+  socket.on("update", async () => {
+    // Get new feed
+    await axios.get(`http://localhost:3001/user/newFeed/${currUser?.username}`)
+      .then((data) => {
+        // Cache new posts in local storage
+        localStorage.setItem(
+          "posts",
+          JSON.stringify(data.data.feed)
+        )
+        window.location.reload(true)
+      })
+  });
 
   /**
    * Fetches data on the trails on every render
@@ -82,23 +96,11 @@ export default function Feed({ transparent, setTransparent, currUser }) {
 
     let data = await axios.get(TRAILS_URL);
     setTrailsList(data.data.trails);
-  }, []);
+  }, [numPosts]);
 
   const sleep = (milliseconds) => {
     return new Promise((resolve) => setTimeout(resolve, milliseconds));
   };
-
-  /**
-   * Fetches post data every time numPosts changes
-   */
-  React.useEffect(async () => {
-    setPosts(JSON.parse(localStorage.getItem("posts")));
-  }, [numPosts]);
-
-  // Listen for new post created by a friend
-  socket.on("update", () => {
-    // Get new feed
-  });
 
   // Return React component
   return (
@@ -107,7 +109,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
       {spinner ? (
         <LoadingScreen />
       ) : (
-        <PostGrid posts={posts} currUser={currUser} />
+        <PostGrid posts={posts} currUser={currUser} setPosts={setPosts}/>
       )}
     </nav>
   );

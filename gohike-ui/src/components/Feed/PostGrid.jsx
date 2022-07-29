@@ -6,7 +6,6 @@ import * as React from "react";
 import "./Feed.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Select from "react-select";
 
 /**
  * Holds all the rendered posts
@@ -14,14 +13,10 @@ import Select from "react-select";
  * @param {Array<number>} posts Id's of posts to render
  * @param {{username: string, sessionToken: string, firstName: string,
  * lastName: string}} currUser Holds info on current user from local storage
+ * @param {function} setPosts To set posts when there's an update to feed
  * @returns Post Grid component
  */
-export default function PostGrid({ posts, currUser }) {
-  // Don't return until posts are set
-  if (posts == null) {
-    return null;
-  }
-
+export default function PostGrid({ posts, currUser, setPosts }) {
   // Return React component
   return (
     <div className="post-grid">

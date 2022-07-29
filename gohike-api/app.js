@@ -23,7 +23,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST", "PUT"],
   },
 });
@@ -44,7 +44,7 @@ io.on("connection", (socket) => {
   console.log("New client connected");
   // Listen for creation of new post
   socket.on("newpost", (postId) => {
-    socket.emit("update");
+    socket.broadcast.emit("update");
   });
 
   // Handle socket disconnection
