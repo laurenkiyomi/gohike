@@ -9,7 +9,12 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Select from "react-select";
 import PostGrid from "./PostGrid";
+import io from "socket.io-client"
 import { pq } from "../../../../gohike-api/models/pq";
+
+// Set up socket
+let ENDPOINT = "http://localhost:3001"
+let socket = io(ENDPOINT)
 
 /**
  * Renders CreatePost and PostGrid component
