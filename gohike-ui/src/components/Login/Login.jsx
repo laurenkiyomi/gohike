@@ -7,6 +7,7 @@ import "./Login.css";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../Images/Logo.png";
+import LoadingScreen from "../LoadingScreen/LoadingScreen";
 
 /**
  * Holds form to log in users
@@ -77,7 +78,7 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
    */
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setSpinner(true)
+    setSpinner(true);
 
     // Only get hikes near user if location is available
     if (navigator.geolocation) {
@@ -122,10 +123,7 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
 
                     // Set feed/location cache
                     if (JSON.stringify(data.data.posts) == undefined) {
-                      localStorage.setItem(
-                        "posts",
-                        JSON.stringify([])
-                      );
+                      localStorage.setItem("posts", JSON.stringify([]));
                     } else {
                       localStorage.setItem(
                         "posts",
@@ -149,10 +147,7 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
                 localStorage.setItem("firstName", loginUser.data.firstName);
                 localStorage.setItem("lastName", loginUser.data.lastName);
                 if (JSON.stringify(loginUser.data.posts) == undefined) {
-                  localStorage.setItem(
-                    "posts",
-                    JSON.stringify([])
-                  );
+                  localStorage.setItem("posts", JSON.stringify([]));
                 } else {
                   localStorage.setItem(
                     "posts",
@@ -166,7 +161,7 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
               }
 
               // Reset login form
-              setSpinner(false)
+              setSpinner(false);
               setUsername("");
               setPassword("");
               history("/");
@@ -195,10 +190,7 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
               localStorage.setItem("firstName", loginUser.data.firstName);
               localStorage.setItem("lastName", loginUser.data.lastName);
               if (JSON.stringify(loginUser.data.posts) == undefined) {
-                localStorage.setItem(
-                  "posts",
-                  JSON.stringify([])
-                );
+                localStorage.setItem("posts", JSON.stringify([]));
               } else {
                 localStorage.setItem(
                   "posts",
@@ -225,53 +217,58 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
 
   // Return React component
   return (
-    <nav className="login">
-      <div className="login-section">
-        <img className="login-logo" src={logo} />
-        <h1 className="login-header">
-          Log in to plan your next hiking adventure and connect with friends.
-        </h1>
-        {error ? (
-          <p ref={errorRef} className="login-error" aria-live="assertive">
-            {error}
-          </p>
-        ) : (
-          ""
-        )}
-        <form className="form" onSubmit={handleSubmit}>
-          <input
-            className="username-input login-input"
-            type="text"
-            id="username"
-            ref={userRef}
-            autoComplete="off"
-            onChange={(event) => setUsername(event.target.value)}
-            value={username}
-            placeholder="Username"
-            required
-          />
-
-          <input
-            className="password-input login-input"
-            type="password"
-            id="password"
-            autoComplete="off"
-            onChange={(event) => setPassword(event.target.value)}
-            value={password}
-            placeholder="Password"
-            required
-          />
-          {spinner ? (
-            <button className="login-page-button">Preparing your account!</button>
-          ) : (
-            <button className="login-page-button">Log In</button>
-          )}
-        </form>
-        <div className="need-account">
-          <p>Need an account?</p>
-          <Link to="/register">Register Here</Link>
+    <>
+      {spinner ? (
+        <div className="loading-container">
+          <LoadingScreen />
         </div>
-      </div>
-    </nav>
+      ) : (
+        <nav className="login">
+          <div className="login-section">
+            <img className="login-logo" src={logo} />
+            <h1 className="login-header">
+              Log in to plan your next hiking adventure and connect with
+              friends.
+            </h1>
+            {error ? (
+              <p ref={errorRef} className="login-error" aria-live="assertive">
+                {error}
+              </p>
+            ) : (
+              ""
+            )}
+            <form className="form" onSubmit={handleSubmit}>
+              <input
+                className="username-input login-input"
+                type="text"
+                id="username"
+                ref={userRef}
+                autoComplete="off"
+                onChange={(event) => setUsername(event.target.value)}
+                value={username}
+                placeholder="Username"
+                required
+              />
+
+              <input
+                className="password-input login-input"
+                type="password"
+                id="password"
+                autoComplete="off"
+                onChange={(event) => setPassword(event.target.value)}
+                value={password}
+                placeholder="Password"
+                required
+              />
+              <button className="login-page-button">Log In</button>
+            </form>
+            <div className="need-account">
+              <p>Need an account?</p>
+              <Link to="/register">Register Here</Link>
+            </div>
+          </div>
+        </nav>
+      )}
+    </>
   );
 }
