@@ -7,6 +7,7 @@ import "./Register.css";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../Images/Logo.png";
+import LoadingScreen from "../LoadingScreen/LoadingScreen";
 
 /**
  * Allows users to create an account
@@ -53,6 +54,11 @@ export default function Register({ setCurrUser, transparent, setTransparent }) {
    */
   const [error, setError] = React.useState("");
   /**
+   * State variable to tell whether website is loading
+   * @type {boolean}
+   */
+  const [spinner, setSpinner] = React.useState(false);
+  /**
    * State variable holding whether or not user is on first part of form
    * @type {boolean}
    */
@@ -82,36 +88,43 @@ export default function Register({ setCurrUser, transparent, setTransparent }) {
   // Return React component
   return (
     <nav className="register">
-      {partOne ? (
-        <RegisterPartOne
-          firstName={firstName}
-          setFirstName={setFirstName}
-          lastName={lastName}
-          setLastName={setLastName}
-          age={age}
-          setAge={setAge}
-          setPartOne={setPartOne}
-        />
+      {spinner == false ? (
+        partOne ? (
+          <RegisterPartOne
+            firstName={firstName}
+            setFirstName={setFirstName}
+            lastName={lastName}
+            setLastName={setLastName}
+            age={age}
+            setAge={setAge}
+            setPartOne={setPartOne}
+          />
+        ) : (
+          <RegisterPartTwo
+            setSpinner={setSpinner}
+            username={username}
+            setUsername={setUsername}
+            password={password}
+            setPassword={setPassword}
+            firstName={firstName}
+            setFirstName={setFirstName}
+            lastName={lastName}
+            setLastName={setLastName}
+            age={age}
+            setAge={setAge}
+            email={email}
+            setEmail={setEmail}
+            error={error}
+            setError={setError}
+            setPartOne={setPartOne}
+            history={history}
+            setCurrUser={setCurrUser}
+          />
+        )
       ) : (
-        <RegisterPartTwo
-          username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
-          firstName={firstName}
-          setFirstName={setFirstName}
-          lastName={lastName}
-          setLastName={setLastName}
-          age={age}
-          setAge={setAge}
-          email={email}
-          setEmail={setEmail}
-          error={error}
-          setError={setError}
-          setPartOne={setPartOne}
-          history={history}
-          setCurrUser={setCurrUser}
-        />
+        <div className="loading-container">
+          <LoadingScreen />
+        </div>
       )}
     </nav>
   );
@@ -214,6 +227,7 @@ export function RegisterPartOne({
 /**
  * Second part of registration form
  *
+ * @param {function} setSpinner Sets loading state of page
  * @param {string} username
  * @param {function} setUsername
  * @param {string} password
@@ -234,6 +248,7 @@ export function RegisterPartOne({
  * @returns Register Part Two component
  */
 export function RegisterPartTwo({
+  setSpinner, 
   username,
   setUsername,
   password,
@@ -318,6 +333,7 @@ export function RegisterPartTwo({
    */
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setSpinner(true);
 
     // Only create new account near user if location is available
     if (navigator.geolocation) {
@@ -379,6 +395,7 @@ export function RegisterPartTwo({
       // Browser does not support geolocation
       alert("Please enable access to your location before creating an account");
     }
+    setSpinner(false);
   };
 
   // Return React component
