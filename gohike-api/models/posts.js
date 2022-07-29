@@ -121,7 +121,7 @@ class Posts {
       }
     }
 
-    return { msg: "Created new post" };
+    return { id: post.id };
   }
 
   /**
