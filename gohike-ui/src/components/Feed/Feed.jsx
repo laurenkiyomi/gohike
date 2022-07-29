@@ -182,13 +182,18 @@ export function CreatePost({ trailsList, currUser }) {
       setCaption("");
 
       // Upload to Parse
-      let post = await axios.post(CREATE_POST_URL, {
+      await axios.post(CREATE_POST_URL, {
         hikeId: trailId,
         caption: captionValue,
         sessionToken: currUser?.sessionToken,
         picture: base64String,
-      });
-    } catch {
+      }).then((newPost) => {
+        // Emit event that includes new post id to server
+        console.log(newPost.data.id)
+        socket.emit("newpost", newPost.data.id);
+      })
+    } catch (err) {
+      console.log(err)
       console.log("Failed to create post.");
     }
   };

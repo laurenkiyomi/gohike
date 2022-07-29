@@ -25,7 +25,7 @@ router.post("/create", async (req, res) => {
       picture
     );
 
-    res.status(201).json({ id: newPost.mid });
+    res.status(201).json({ id: newPost.id });
   } catch (err) {
     console.log(err);
     res.status(400).json({ msg: "Failed to create new post" });

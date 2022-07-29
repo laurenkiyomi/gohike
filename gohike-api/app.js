@@ -41,7 +41,9 @@ app.get("/", (req, res) => {
 
 // Handle socket connection
 io.on("connection", (socket) => {
-  socket.on("hello", (arg) => {
+  console.log("New client connected")
+  // Listen for creation of new post
+  socket.on("newpost", (arg) => {
     console.log(arg); // world
   });
 
