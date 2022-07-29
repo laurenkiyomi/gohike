@@ -596,6 +596,23 @@ class User {
     await user.save(null, { useMasterKey: true });
     return { location: { lat, lng }, posts: feed }
   }
+
+  /**
+   * Gets a current users feed when a friend of the user makes a new post
+   * 
+   * @param {string} username Of current user
+   * @returns {Array<{ lat: number, lng: number, id: string, priority: 
+   * number}>} Current user's feed
+   */
+  static async getNewFeed(username) {
+    // Get User object from username
+    let query = new Parse.Query("_User");
+    query.equalTo("username", username);
+    let user = await query.first({ useMasterKey: true });
+
+    // Returns user's feed
+    return user.get("feed")
+  }
 }
 
 
