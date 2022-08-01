@@ -9,4 +9,28 @@
     align-items: center;
     margin-top: 100px;
     color: #60270d;
+    padding: 0px;
+    font-family: 'Gothic A1', sans-serif;
+}
+
+.walking-man {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width:75px;
+    height: 100px;
+    background:url(../Images/walkingman.png) no-repeat;
+    margin: 0 auto;
+    animation: walk-cycle 1.0s steps(8) infinite;
+    filter: opacity(80%);
+}
+
+@keyframes walk-cycle {
+    0% {
+        background-position: 0px;
+    }
+    100%{
+        background-position: -600px;
+    }
 }

@@ -14,6 +14,7 @@ import Plx from "react-plx";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { pq } from "../../../../gohike-api/models/pq";
+import hikers from "../Images/hikers.png"
 
 /**
  * Renders Home page with animations and on scroll effects
@@ -151,6 +152,21 @@ export default function Home({ currUser, transparent, setTransparent }) {
           <img className="collage-item img-two" src={imageTwo} />
         </Plx>
       </div>
+      <div className="collage-title">ABOUT US</div>
+        <div className="collage-text">
+          GoHike is designed for you to get involved in the hiking community,
+          find hikes around your area, and more.
+        </div>
+        <div className="footer">
+          <span>
+            <div className="title">CONTACT US</div>
+            <div>Email: laurenklee02@gmail.com</div>
+            <div>Phone: 1-800-GOHIKE</div>
+            <div>Address: 123 Fake Street, San Francisco, CA</div>
+          </span>
+          <img src={hikers}/>
+        </div>
+        <div></div>
     </div>
   );
 }

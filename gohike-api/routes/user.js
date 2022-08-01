@@ -55,6 +55,21 @@ router.get("/completed/:username", async (req, res) => {
 });
 
 /**
+ * Get request for getting a user's feed when a friend has posted
+ */
+router.get("/newFeed/:username", async (req, res) => {
+  try {
+    // Get username of current user
+    const username = req.params.username;
+    // Gets current user's new feed by calling User method
+    let feed = await User.getNewFeed(username)
+    res.status(201).json({ feed })
+  } catch (err) {
+    res.status(400).json({ msg: "Could not retrieve updated feed." });
+  }
+})
+
+/**
  * Get request for getting information on the current user based on their
  * session token stored in local storage
  */

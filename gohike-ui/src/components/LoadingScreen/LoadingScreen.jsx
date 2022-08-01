@@ -11,5 +11,8 @@ import "./LoadingScreen.css";
  */
 export default function LoadingScreen() {
   // Return React component
-  return <div className="loading-screen">Loading...</div>;
+  return <div className="loading-screen">
+    <div className="walking-man"></div>
+    <div>Loading...</div>
+  </div>;
 }

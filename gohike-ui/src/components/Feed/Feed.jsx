@@ -9,7 +9,12 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Select from "react-select";
 import PostGrid from "./PostGrid";
+import io from "socket.io-client"
 import { pq } from "../../../../gohike-api/models/pq";
+
+// Set up socket
+let ENDPOINT = "http://localhost:3001"
+let socket = io(ENDPOINT)
 
 /**
  * Renders CreatePost and PostGrid component
@@ -45,12 +50,12 @@ export default function Feed({ transparent, setTransparent, currUser }) {
    * State var that holds post number offset to render
    * @type {number}
    */
-  const [numPosts, setNumPosts] = React.useState(5);
+  const [numPosts, setNumPosts] = React.useState(0);
   /**
    * State var that holds post id's of posts to render
    * @type {Array<number>}
    */
-  const [posts, setPosts] = React.useState(null);
+  const [posts, setPosts] = React.useState(JSON.parse(localStorage.getItem("posts")));
   /**
    * State of whether to render loading page or not
    * @type {boolean}
@@ -61,6 +66,20 @@ export default function Feed({ transparent, setTransparent, currUser }) {
    * @type {hook}
    */
   const history = useNavigate();
+
+  // Listen for new post created by a friend
+  socket.on("update", async () => {
+    // Get new feed
+    await axios.get(`http://localhost:3001/user/newFeed/${currUser?.username}`)
+      .then((data) => {
+        // Cache new posts in local storage
+        localStorage.setItem(
+          "posts",
+          JSON.stringify(data.data.feed)
+        )
+        window.location.reload(true)
+      })
+  });
 
   /**
    * Fetches data on the trails on every render
@@ -77,18 +96,11 @@ export default function Feed({ transparent, setTransparent, currUser }) {
 
     let data = await axios.get(TRAILS_URL);
     setTrailsList(data.data.trails);
-  }, []);
+  }, [numPosts]);
 
   const sleep = (milliseconds) => {
     return new Promise((resolve) => setTimeout(resolve, milliseconds));
   };
-
-  /**
-   * Fetches post data every time numPosts changes
-   */
-  React.useEffect(async () => {
-    setPosts(JSON.parse(localStorage.getItem("posts")));
-  }, [numPosts]);
 
   // Return React component
   return (
@@ -97,7 +109,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
       {spinner ? (
         <LoadingScreen />
       ) : (
-        <PostGrid posts={posts} currUser={currUser} />
+        <PostGrid posts={posts} currUser={currUser} setPosts={setPosts}/>
       )}
     </nav>
   );
@@ -177,13 +189,17 @@ export function CreatePost({ trailsList, currUser }) {
       setCaption("");
 
       // Upload to Parse
-      let post = await axios.post(CREATE_POST_URL, {
+      await axios.post(CREATE_POST_URL, {
         hikeId: trailId,
         caption: captionValue,
         sessionToken: currUser?.sessionToken,
         picture: base64String,
-      });
-    } catch {
+      }).then((newPost) => {
+        // Emit event that includes new post id
+        socket.emit("newpost", newPost.data.id);
+      })
+    } catch (err) {
+      console.log(err)
       console.log("Failed to create post.");
     }
   };
