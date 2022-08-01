@@ -17,9 +17,8 @@ Stretch Features
 - [x] On the Find Hikes page, users can filter hikes to find hikes that are within a 50 mile radius of them - I used the GeoLocation API to access a user’s location
 - [x] On the Find Hikes page, users can leave comments/reviews on hikes.
 - [x] Users can create hikes if they are not already on the map
-- [x] Live Feed: I learned about WebSockets and how to use Socket.IO. For logged in users, I connect the client to the server. Whenever a user posts, their respective client emits an event to the server. The server then broadcasts an event to all clients connected to the server. If any logged in user is a friend of the user who posted, their feed will then receive that event, which indicates that they should fetch the new post data and refresh.
+- [x] Live Feed - I learned about WebSockets and how to use Socket.IO. For logged in users, I connect the client to the server. Whenever a user posts, their respective client emits an event to the server. The server then broadcasts an event to all clients connected to the server. If any logged in user is a friend of the user who posted, their feed will then receive that event, which indicates that they should fetch the new post data and refresh.
 - [x] End to end automated testing - I created a dummy admin account, and wrote tests in Cypress that log in this user, test out the Feed page, look up hikes in the Find Hikes page, etc. Then, I wrote a testing script and used Github actions to install my app’s dependencies and run this testing script every time someone makes a push or pull request.
-- [x] When adding features to my webpage, it’s likely that some of my core features may break. Thus, I implemented End-to-End testing for my application—I have those tests automatically run whenever a pull or push request is made.
 - [x] Build unique custom animations - I animated a picture of a figure running that displays on the loading page as well as animated my logo to make it a sun rising above mountains
 
 
