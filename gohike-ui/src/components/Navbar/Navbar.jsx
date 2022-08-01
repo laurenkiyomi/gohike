@@ -20,7 +20,7 @@ import { useLocation, useNavigate } from "react-router-dom";
  * @param {boolean} transparent Hold the state of the Navbar background
  * @returns Navbar component
  */
-export default function Navbar({ currUser, setCurrUser, transparent }) {
+export default function Navbar({ color, currUser, setCurrUser, transparent }) {
   /**
    * State of the dropdown visibility when logged in
    * @type {boolean}
@@ -39,7 +39,10 @@ export default function Navbar({ currUser, setCurrUser, transparent }) {
 
   // Return React component
   return (
-    <nav className={`navbar ${transparent ? "transparent" : ""}`}>
+    <nav
+      className={`navbar ${transparent ? "transparent" : ""} 
+      ${color ? (useLocation().pathname == "/") ? "color" : "" : ""}`}
+    >
       <Logo className="nav-logo" />
       <button
         className="nav-button"
