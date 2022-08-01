@@ -16,11 +16,11 @@ Core Features
 Stretch Features
 - [x] On the Find Hikes page, users can filter hikes to find hikes that are within a 50 mile radius of them
 - [x] On the Find Hikes page, users can leave comments/reviews on hikes. - 2
-Users can create hikes if they are not already on the map
-Live Feed
-End to end testing
-When adding features to my webpage, it’s likely that some of my core features may break. Thus, I implemented End-to-End testing for my application—I have those tests automatically run whenever a pull or push request is made.
-Build unique custom animations
+- [x] Users can create hikes if they are not already on the map
+- [x] Live Feed
+- [x] End to end testing
+- [x] When adding features to my webpage, it’s likely that some of my core features may break. Thus, I implemented End-to-End testing for my application—I have those tests automatically run whenever a pull or push request is made.
+- [x] Build unique custom animations
 
 
 Complexity/Problems
