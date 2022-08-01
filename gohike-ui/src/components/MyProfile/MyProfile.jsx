@@ -128,7 +128,6 @@ export default function MyProfile({ transparent, setTransparent, currUser }) {
       setProfileData(data.data.user);
       return;
     } catch (err) {
-      console.log(err);
       console.log("Failed to change profile picture.");
     }
   };
@@ -282,7 +281,7 @@ export function ProfileBanner({
         </ul>
       </div>
       {select == "stats" ? (
-        <Stats />
+        <Stats profileData={profileData}/>
       ) : (
         <PostGrid posts={posts} currUser={currUser}></PostGrid>
       )}
@@ -292,8 +291,15 @@ export function ProfileBanner({
 
 /**
  * Renders information on hikes that logged in user has completed
+ * @param {{ completed: Array<number>, saved: Array<number> }} profileData data 
+ * on the current user
  * @returns Stats component
  */
-export function Stats() {
-  return <div>Stats</div>;
+export function Stats({ profileData }) {
+  return (
+    <div className="profile-stats">
+      <div>{`${profileData.completed.length} Completed Hikes`}</div>
+      <div>{`${profileData.saved.length} Saved Hikes`}</div>
+    </div>
+  )
 }
