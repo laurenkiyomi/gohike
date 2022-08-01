@@ -11,6 +11,7 @@
   background-color: #536268;
   overflow-x: hidden;
   position: relative;
+  padding-bottom: 50px;
 }
 
 /*Hero*/
@@ -36,6 +37,7 @@
   transition: opacity 2s ease-in;
   will-change: opacity;
   letter-spacing: .1em;
+  filter: drop-shadow(0px 1px 1px black); 
 }
 
 
@@ -43,6 +45,7 @@
 .hero-logo {
   margin: 0px;
   width: 200px;
+  filter: drop-shadow(0px 1px 1px black); 
 }
 
 .logo-container {
@@ -96,6 +99,7 @@
   align-items: center;
   width: 250px;
   text-align: center;
+  filter: drop-shadow(0px 1px 1px black); 
 }
 
 h2 {
@@ -144,23 +148,80 @@ h2 {
   position: relative;
   z-index: 4;
   margin-left: 20px;
-  width: 50vh;
+  width: 44vh;
   top: 0px;
 }
 
 .img-two {
   position: relative;
   z-index: 4;
-  margin-left: 450px;
-  width: 42vh;
+  margin-left: 400px;
+  width: 35vh;
 }
 
-/* .img-three {
-  position: relative;
-  width: 35vh;
-  z-index: 4;
-  margin-left: 1000px;
-} */
+.collage-title {
+  position: absolute;
+  width: 300px;
+  margin-left: 555px;
+  margin-top: 1350px;
+  font-family: 'Gothic A1', sans-serif;
+  color: white;
+  font-size: 4.5vh;
+  filter: drop-shadow(0px 1px 1px black); 
+}
+
+.collage-text {
+  position: absolute;
+  width: 600px;
+  margin-left: 850px;
+  margin-top: 1400px;
+  font-size: 3vh;
+  font-family: 'Gothic A1', sans-serif;
+  color: white;
+  filter: drop-shadow(0px 1px 1px black); 
+}
+
+/*Footer*/
+.footer {
+  width: 80%;
+  background-color: white;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: row;
+  background-color: #2c4047;
+  margin-top: -250px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  margin-bottom: 125px;
+  filter: drop-shadow(0px 1px 2px black); 
+  padding-left: 100px;
+}
+
+.footer .span {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer div {
+  margin: 15px 15px;
+  font-family: 'Gothic A1', sans-serif;
+  color: white;
+  filter: drop-shadow(0px 1px 1px black); 
+}
+
+.footer .title {
+  font-size: 3.5vh;
+}
+
+.footer img {
+  background-color: transparent;
+  height: 350px;
+  position: absolute;
+  margin-left: 423px;
+  margin-top: -149px;
+}
+
+
 
 
 
