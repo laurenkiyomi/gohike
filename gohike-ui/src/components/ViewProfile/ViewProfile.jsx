@@ -303,7 +303,7 @@ export function ViewProfileBanner({
       {select == "posts" ? (
         <PostGrid posts={posts} currUser={currUser}></PostGrid>
       ) : (
-        <About />
+        <About profileData={profileData}/>
       )}
     </>
   );
@@ -312,9 +312,16 @@ export function ViewProfileBanner({
 /**
  * Renders additional information on the user being viewed
  *
+ * @param {{ completed: Array<number>, saved: Array<number> }} profileData data 
+ * on the user
  * @returns About component
  */
-export function About() {
+export function About({ profileData }) {
   // Return React component
-  return <div>About</div>;
+  return (
+    <div className="profile-about">
+      <div>{`${profileData.completed.length} Completed Hikes`}</div>
+      <div>{`${profileData.saved.length} Saved Hikes`}</div>
+    </div>
+  )
 }

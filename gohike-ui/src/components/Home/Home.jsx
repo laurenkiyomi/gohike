@@ -138,7 +138,7 @@ export default function Home({ currUser, transparent, setTransparent }) {
           parallaxData={[
             {
               start: 750,
-              end: 1200,
+              end: 1250,
               properties: [
                 {
                   startValue: 0,
