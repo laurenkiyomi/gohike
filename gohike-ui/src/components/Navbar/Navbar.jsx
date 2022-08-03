@@ -8,6 +8,11 @@ import Logo from "./Logo";
 import "./Navbar.css";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import io from "socket.io-client";
+
+// Set up socket
+let ENDPOINT = "http://localhost:3001";
+let socket = io(ENDPOINT);
 
 /**
  * Navigation bar that changes background color based on the page and shows
@@ -41,7 +46,7 @@ export default function Navbar({ color, currUser, setCurrUser, transparent }) {
   return (
     <nav
       className={`navbar ${transparent ? "transparent" : ""} 
-      ${color ? (useLocation().pathname == "/") ? "color" : "" : ""}`}
+      ${color ? (useLocation().pathname == "/" ? "color" : "") : ""}`}
     >
       <Logo className="nav-logo" />
       <button
@@ -255,6 +260,28 @@ export function FriendRequests({ friendsOpen, currUser }) {
     }
   }, []);
 
+  // Listen for new friend request sent to current user
+  socket.on("updatefriendrequests", async (receiver) => {
+    // Update friend requests if receiver is current user
+    if (receiver == currUser.username) {
+      let data = await axios.get(
+        `http://localhost:3001/user/${currUser?.sessionToken}`
+      );
+
+      if (
+        data.data.user.incomingFriendRequests == null ||
+        data.data.user.incomingFriendRequests == undefined ||
+        data.data.user.incomingFriendRequests.length == 0
+      ) {
+        setFriendRequests([]);
+      } else {
+        setFriendRequests(data.data.user.incomingFriendRequests);
+      }
+    } else {
+      // Do nothing
+    }
+  });
+
   // Don't return until friend requests data is set
   if (friendRequests == null) {
     return null;
@@ -322,10 +349,14 @@ export function Request({
   const acceptFriend = async () => {
     try {
       // Make put request
-      await axios.put(ACCEPT_FRIEND_URL, {
-        sessionToken: currUser.sessionToken,
-        username,
-      });
+      await axios
+        .put(ACCEPT_FRIEND_URL, {
+          sessionToken: currUser.sessionToken,
+          username,
+        })
+        .then((data) => {
+          socket.emit("acceptedfriend", currUser?.username);
+        });
 
       // Reset friend requests
       let data = await axios.get(
@@ -351,10 +382,14 @@ export function Request({
   const declineFriend = async () => {
     try {
       // Make put request to decline friend request
-      await axios.put(DECLINE_FRIEND_URL, {
-        sessionToken: currUser.sessionToken,
-        username,
-      });
+      await axios
+        .put(DECLINE_FRIEND_URL, {
+          sessionToken: currUser.sessionToken,
+          username,
+        })
+        .then((data) => {
+          socket.emit("declinedfriend", currUser?.username);
+        });
 
       // Reset friend requests
       let data = await axios.get(
