@@ -46,7 +46,7 @@ export default function Navbar({ color, currUser, setCurrUser, transparent }) {
   return (
     <nav
       className={`navbar ${transparent ? "transparent" : ""} 
-      ${color ? (useLocation().pathname == "/") ? "color" : "" : ""}`}
+      ${color ? (useLocation().pathname == "/" ? "color" : "") : ""}`}
     >
       <Logo className="nav-logo" />
       <button
@@ -267,7 +267,7 @@ export function FriendRequests({ friendsOpen, currUser }) {
       let data = await axios.get(
         `http://localhost:3001/user/${currUser?.sessionToken}`
       );
-  
+
       if (
         data.data.user.incomingFriendRequests == null ||
         data.data.user.incomingFriendRequests == undefined ||
@@ -349,10 +349,14 @@ export function Request({
   const acceptFriend = async () => {
     try {
       // Make put request
-      await axios.put(ACCEPT_FRIEND_URL, {
-        sessionToken: currUser.sessionToken,
-        username,
-      });
+      await axios
+        .put(ACCEPT_FRIEND_URL, {
+          sessionToken: currUser.sessionToken,
+          username,
+        })
+        .then((data) => {
+          socket.emit("acceptedfriend", currUser?.username);
+        });
 
       // Reset friend requests
       let data = await axios.get(

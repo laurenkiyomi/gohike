@@ -167,6 +167,7 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
               history("/");
             })
             .catch((err) => {
+              setSpinner(false);
               setError("Invalid Username or Password");
               errorRef.current.focus();
             });

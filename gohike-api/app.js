@@ -57,6 +57,11 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("updatefriendrequests", receiver)
   })
 
+  // Listen for accepting a friend request
+  socket.on("acceptedfriend", (acceptor) => {
+    socket.broadcast.emit("updatefriendstatus", acceptor)
+  }) 
+
   // Handle socket disconnection
   socket.on("disconnect", () => {
     console.log("Disconnecting");

@@ -212,6 +212,7 @@ export default function ViewProfile({ transparent, setTransparent, currUser }) {
           acceptFriend={acceptFriend}
           addFriend={addFriend}
           friendStatus={friendStatus}
+          setFriendStatus={setFriendStatus}
         />
       ) : (
         <LoadingScreen />
@@ -233,6 +234,7 @@ export default function ViewProfile({ transparent, setTransparent, currUser }) {
  * @param {function} acceptFriend
  * @param {function} addFriend
  * @param {string} friendStatus
+ * @param {function} setFriendStatus
  * @returns
  */
 export function ViewProfileBanner({
@@ -243,9 +245,20 @@ export function ViewProfileBanner({
   setSelect,
   acceptFriend,
   addFriend,
-  friendStatus = { friendStatus },
+  friendStatus = { friendStatus }, 
+  setFriendStatus
 }) {
-  // Don't reutnr until profile data, posts, and friend status are set
+  // Listen for the viewed user accepting a friend request
+  socket.on("updatefriendstatus", async (acceptor) => {
+    // Update friend status if acceptor is vieweduser
+    if (acceptor == profileData.username) {
+      setFriendStatus("yes")
+    } else {
+      // Do nothing
+    }
+  });
+
+  // Don't return until profile data, posts, and friend status are set
   if (profileData == null || posts == null || friendStatus == "") {
     return null;
   }
