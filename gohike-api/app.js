@@ -47,7 +47,7 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("update");
   });
 
-  socket.on("newcomment", (username, comment) => {
+  socket.on("newcomment", () => {
     socket.broadcast.emit("updatecomments")
   })
 

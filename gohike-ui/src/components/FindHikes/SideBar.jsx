@@ -166,6 +166,7 @@ export function HikePopout({ selectedHike, setSelectedHike, username }) {
       .then((data) => {
         setComment("");
         setNum((old) => old + 1);
+        socket.emit("newcomment");
       });
   }
 
@@ -207,7 +208,7 @@ export function HikePopout({ selectedHike, setSelectedHike, username }) {
   socket.on("newcomment", async () => {
     // Increment numComments
     // This triggers comments to be refetched and rerendered
-    numComments++
+    setNum((old) => old + 1)
   });
 
   // Return React component
