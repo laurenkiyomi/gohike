@@ -62,6 +62,11 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("updatefriendstatus", acceptor)
   }) 
 
+  // Listen for declining a friend request
+  socket.on("declinedfriend", (decliner) => {
+    socket.broadcast.emit("declinefriendstatus", decliner)
+  }) 
+
   // Handle socket disconnection
   socket.on("disconnect", () => {
     console.log("Disconnecting");

@@ -258,6 +258,16 @@ export function ViewProfileBanner({
     }
   });
 
+  // Listen for the viewed user declining a friend request
+  socket.on("declinefriendstatus", async (decliner) => {
+    // Update friend status if acceptor is vieweduser
+    if (decliner == profileData.username) {
+      setFriendStatus("no")
+    } else {
+      // Do nothing
+    }
+  });
+
   // Don't return until profile data, posts, and friend status are set
   if (profileData == null || posts == null || friendStatus == "") {
     return null;

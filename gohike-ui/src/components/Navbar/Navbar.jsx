@@ -382,10 +382,14 @@ export function Request({
   const declineFriend = async () => {
     try {
       // Make put request to decline friend request
-      await axios.put(DECLINE_FRIEND_URL, {
-        sessionToken: currUser.sessionToken,
-        username,
-      });
+      await axios
+        .put(DECLINE_FRIEND_URL, {
+          sessionToken: currUser.sessionToken,
+          username,
+        })
+        .then((data) => {
+          socket.emit("declinedfriend", currUser?.username);
+        });
 
       // Reset friend requests
       let data = await axios.get(
