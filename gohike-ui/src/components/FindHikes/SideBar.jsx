@@ -205,7 +205,7 @@ export function HikePopout({ selectedHike, setSelectedHike, username }) {
   }
 
   // Listen for new comment created by another user
-  socket.on("newcomment", async () => {
+  socket.on("updatecomments", async () => {
     // Increment numComments
     // This triggers comments to be refetched and rerendered
     setNum((old) => old + 1)
