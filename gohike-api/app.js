@@ -47,8 +47,14 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("update");
   });
 
+  // Listen for comment on a hike
   socket.on("newcomment", () => {
     socket.broadcast.emit("updatecomments")
+  })
+
+  // Listen for sending a friend request
+  socket.on("sendfriendrequest", (receiver) => {
+    socket.broadcast.emit("updatefriendrequests", receiver)
   })
 
   // Handle socket disconnection
