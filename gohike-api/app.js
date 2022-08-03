@@ -47,6 +47,10 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("update");
   });
 
+  socket.on("newcomment", (username, comment) => {
+    socket.broadcast.emit("updatecomments")
+  })
+
   // Handle socket disconnection
   socket.on("disconnect", () => {
     console.log("Disconnecting");

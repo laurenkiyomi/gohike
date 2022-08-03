@@ -9,6 +9,11 @@ import axios from "axios";
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import io from "socket.io-client";
+
+// Set up socket
+let ENDPOINT = "http://localhost:3001";
+let socket = io(ENDPOINT);
 
 /**
  * Renders search bar and results of search
@@ -197,6 +202,13 @@ export function HikePopout({ selectedHike, setSelectedHike, username }) {
   if (images == null) {
     return null;
   }
+
+  // Listen for new comment created by another user
+  socket.on("newcomment", async () => {
+    // Increment numComments
+    // This triggers comments to be refetched and rerendered
+    numComments++
+  });
 
   // Return React component
   return (
