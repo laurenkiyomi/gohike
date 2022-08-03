@@ -9,6 +9,11 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import logo from "../Images/Logo.png";
 import PostGrid from "../Feed/PostGrid";
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
+import io from "socket.io-client";
+
+// Set up socket
+let ENDPOINT = "http://localhost:3001";
+let socket = io(ENDPOINT);
 
 /**
  * Allows logged in users to view and interact with other users
@@ -88,8 +93,11 @@ export default function ViewProfile({ transparent, setTransparent, currUser }) {
       await axios.put(ADD_FRIEND_URL, {
         sessionToken: currUser.sessionToken,
         username: profileData.username,
-      });
-      setFriendStatus("sent");
+      }).then(() => {
+        setFriendStatus("sent");
+        // Emit event to live send friend request
+        socket.emit("sendfriendrequest", profileData.username)
+      })
     } catch {
       console.log("Failed to add friend");
     }
