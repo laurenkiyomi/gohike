@@ -6,7 +6,7 @@
 describe("Login", function () {
   it("Navigate to login", function () {
     // Navigate to login page
-    cy.visit("http://localhost:3000/");
+    cy.visit("https://jolly-malabi-dc853c.netlify.app/");
     cy.get(".login-button").contains("Log In").click();
     cy.location().should((loc) => {
       expect(loc.pathname).to.eq("/login");
