@@ -37,12 +37,12 @@ jobs:
         run: npm install --legacy-peer-deps
       - name: Boot backend
         working-directory: gohike-api
-        run: npm run dev & npx wait-on http://localhost:3001
+        run: npm run dev & npx http://localhost:3001
         env:
           CI: true
-      - name: Boot frontend and run cypress tests
+      - name: Boot frontend
         working-directory: gohike-ui
-        run: npm run dev & npx wait-on http://localhost:3000
+        run: npm run dev & npx http://localhost:3000
         env:
           CI: true
       - name: Build with Jekyll
