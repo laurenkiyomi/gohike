@@ -1,5 +1,5 @@
 [build]
   base = "/gohike-ui/"
-  NPM_FLAGS = --legacy-peer-deps
+  NPM_FLAGS = "--legacy-peer-deps"
   publish = "dist"
   command = "npm run build"
