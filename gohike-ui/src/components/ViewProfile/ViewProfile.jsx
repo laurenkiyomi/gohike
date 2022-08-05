@@ -12,7 +12,11 @@ import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import io from "socket.io-client";
 
 // Set up socket
+<<<<<<< HEAD
 let ENDPOINT = "https://stark-hamlet-74597.herokuapp.com";
+=======
+let ENDPOINT = "http://localhost:3001";
+>>>>>>> 09b5ef1 (Initial commit)
 let socket = io(ENDPOINT);
 
 /**
@@ -29,17 +33,29 @@ export default function ViewProfile({ transparent, setTransparent, currUser }) {
    * URL for making put request to send friend request
    * @type {string}
    */
+<<<<<<< HEAD
   const ADD_FRIEND_URL = "hhttps://stark-hamlet-74597.herokuapp.com/user/addFriend";
+=======
+  const ADD_FRIEND_URL = "http://localhost:3001/user/addFriend";
+>>>>>>> 09b5ef1 (Initial commit)
   /**
    * URL for making put request to decline friend requeest
    * @type {string}
    */
+<<<<<<< HEAD
   const DECLINE_FRIEND_URL = "https://stark-hamlet-74597.herokuapp.com/user/declineFriend";
+=======
+  const DECLINE_FRIEND_URL = "http://localhost:3001/user/declineFriend";
+>>>>>>> 09b5ef1 (Initial commit)
   /**
    * URL for making put request to acceot friend requeest
    * @type {string}
    */
+<<<<<<< HEAD
   const ACCEPT_FRIEND_URL = "https://stark-hamlet-74597.herokuapp.com/user/acceptFriend";
+=======
+  const ACCEPT_FRIEND_URL = "http://localhost:3001/user/acceptFriend";
+>>>>>>> 09b5ef1 (Initial commit)
 
   /**
    * State var holding profile info on viewed user
@@ -140,12 +156,20 @@ export default function ViewProfile({ transparent, setTransparent, currUser }) {
    */
   const fetchData = async () => {
     // Get profile data
+<<<<<<< HEAD
     let data = await axios.get(`https://stark-hamlet-74597.herokuapp.com/user/view/${username}`);
+=======
+    let data = await axios.get(`http://localhost:3001/user/view/${username}`);
+>>>>>>> 09b5ef1 (Initial commit)
     setProfileData(data.data.user);
 
     // Get user's posts
     let data2 = await axios.get(
+<<<<<<< HEAD
       `https://stark-hamlet-74597.herokuapp.com/user/view/posts/${username}`
+=======
+      `http://localhost:3001/user/view/posts/${username}`
+>>>>>>> 09b5ef1 (Initial commit)
     );
     setPosts(data2.data.posts);
 

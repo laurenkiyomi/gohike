@@ -27,17 +27,29 @@ export default function PostGrid({ posts, currUser, setPosts }) {
              * URL for put request to like a post
              * @type {string}
              */
+<<<<<<< HEAD
             const LIKE_URL = "https://stark-hamlet-74597.herokuapp.com/posts/like";
+=======
+            const LIKE_URL = "http://localhost:3001/posts/like";
+>>>>>>> 09b5ef1 (Initial commit)
             /**
              * URL for put request to unlike a post
              * @type {string}
              */
+<<<<<<< HEAD
             const UNLIKE_URL = "https://stark-hamlet-74597.herokuapp.com/posts/unlike";
+=======
+            const UNLIKE_URL = "http://localhost:3001/posts/unlike";
+>>>>>>> 09b5ef1 (Initial commit)
             /**
              * URL for get request to get info on a post
              * @type {string}
              */
+<<<<<<< HEAD
             const GET_POST_URL = `https://stark-hamlet-74597.herokuapp.com/posts/${postObj.id}`;
+=======
+            const GET_POST_URL = `http://localhost:3001/posts/${postObj.id}`;
+>>>>>>> 09b5ef1 (Initial commit)
             /**
              * Holds info on post corresponding to postId
              * @type {{ username: string, trailName: string, hikeId:

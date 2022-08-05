@@ -270,7 +270,11 @@ export function RegisterPartTwo({
   /**
    * URL for making post request to create new user
    */
+<<<<<<< HEAD
   const REGISTER_URL = "https://stark-hamlet-74597.herokuapp.com/authorization/register";
+=======
+  const REGISTER_URL = "http://localhost:3001/authorization/register";
+>>>>>>> 09b5ef1 (Initial commit)
   /**
    * Reference to email input
    * @type {hook}
