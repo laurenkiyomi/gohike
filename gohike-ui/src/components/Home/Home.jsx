@@ -152,10 +152,12 @@ export default function Home({ currUser, transparent, setTransparent }) {
           <img className="collage-item img-two" src={imageTwo} />
         </Plx>
       </div>
-      <div className="collage-title">ABOUT US</div>
-        <div className="collage-text">
-          GoHike is designed for you to get involved in the hiking community,
-          find hikes around your area, and more.
+      <div className="collage-right">
+          <div className="collage-title">ABOUT US</div>
+          <div className="collage-text">
+            GoHike is designed for you to get involved in the hiking community,
+            find hikes around your area, and more.
+          </div>
         </div>
         <div className="footer">
           <span>

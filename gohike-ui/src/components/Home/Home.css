@@ -160,25 +160,25 @@ h2 {
   width: 35vh;
 }
 
-.collage-title {
+.collage-right {
+  display: flex;
+  flex-direction: column;
   position: absolute;
-  width: 300px;
-  margin-left: 555px;
-  margin-top: 1350px;
+  width: 600px;
+  align-items: flex-start;
   font-family: 'Cormorant Garamond', serif;
   color: white;
+  margin-left: 850px;
+  margin-top: 1350px;
+}
+
+.collage-title {
   font-size: 4.5vh;
   filter: drop-shadow(0px 1px 1px black); 
 }
 
-.collage-text {
-  position: absolute;
-  width: 600px;
-  margin-left: 850px;
-  margin-top: 1400px;
+.collage-text { 
   font-size: 3vh;
-  font-family: 'Gothic A1', sans-serif;
-  color: white;
   filter: drop-shadow(0px 1px 1px black); 
 }
 
