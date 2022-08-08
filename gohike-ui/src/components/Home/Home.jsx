@@ -166,7 +166,6 @@ export default function Home({ currUser, transparent, setTransparent }) {
             <div>Phone: 1-800-GOHIKE</div>
             <div>Address: 123 Fake Street, San Francisco, CA</div>
           </span>
-          <img src={hikers}/>
         </div>
         <div></div>
     </div>
