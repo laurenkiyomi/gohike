@@ -1,4 +1,4 @@
-# Capstone_Project
+# Deployement Repository for GoHike Capstone Project
 App Idea: An app where you can keep track/build a map of the hikes you’ve done and share with friends
 
 Core Features
