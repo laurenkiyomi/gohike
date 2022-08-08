@@ -58,7 +58,7 @@ export default function FindHikes({ transparent, setTransparent, currUser }) {
 
     // Fetch data
     if (id != undefined) {
-      let data = await axios.get(`https://stark-hamlet-74597.herokuapp.com/trails/id/${id}`);
+      let data = await axios.get(`https://gohike-api.herokuapp.com/trails/id/${id}`);
       setSearchInputResult(Array.from(data.data.trail));
       setCenter({
         lat: data.data.trail[0].latitude,

@@ -12,7 +12,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import io from "socket.io-client";
 
 // Set up socket
-let ENDPOINT = "https://stark-hamlet-74597.herokuapp.com";
+let ENDPOINT = "https://gohike-api.herokuapp.com";
 let socket = io(ENDPOINT);
 
 /**
@@ -159,7 +159,7 @@ export function HikePopout({ selectedHike, setSelectedHike, username }) {
     }
 
     await axios
-      .put(`https://stark-hamlet-74597.herokuapp.com/trails/comment/${selectedHike.id}`, {
+      .put(`https://gohike-api.herokuapp.com/trails/comment/${selectedHike.id}`, {
         username,
         comment,
       })
@@ -176,7 +176,7 @@ export function HikePopout({ selectedHike, setSelectedHike, username }) {
   React.useEffect(async () => {
     // Fetch data
     let data = await axios.get(
-      `https://stark-hamlet-74597.herokuapp.com/trails/id/${selectedHike?.id}`
+      `https://gohike-api.herokuapp.com/trails/id/${selectedHike?.id}`
     );
     setComments(data.data.trail[0].comments);
   }, [numComments]);
@@ -186,7 +186,7 @@ export function HikePopout({ selectedHike, setSelectedHike, username }) {
    */
   React.useEffect(async () => {
     let data = await axios.get(
-      `https://stark-hamlet-74597.herokuapp.com/trails/hike-pictures/${selectedHike.id}`
+      `https://gohike-api.herokuapp.com/trails/hike-pictures/${selectedHike.id}`
     );
     if (data.data.pictures == [] && selectedHike.img == "") {
       setImages([]);
@@ -329,7 +329,7 @@ export function SearchBar({
     event.preventDefault();
     setSpinner(true);
     await axios
-      .get(`https://stark-hamlet-74597.herokuapp.com/trails/${searchInput.replaceAll(" ", "+")}`)
+      .get(`https://gohike-api.herokuapp.com/trails/${searchInput.replaceAll(" ", "+")}`)
       .then((data) => {
         setSearchInputResult(data.data.trail);
         setSelectedHike(null);
@@ -353,7 +353,7 @@ export function SearchBar({
     setSpinner(true);
     // Fetches saved hikes
     await axios
-      .get(`https://stark-hamlet-74597.herokuapp.com/user/saved/${currUser.username}`)
+      .get(`https://gohike-api.herokuapp.com/user/saved/${currUser.username}`)
       .then((data) => {
         setSearchInputResult(data.data.saved);
         setSelectedHike(null);
@@ -377,7 +377,7 @@ export function SearchBar({
     setSpinner(true);
     // Fetches completed hikes
     await axios
-      .get(`https://stark-hamlet-74597.herokuapp.com/user/completed/${currUser.username}`)
+      .get(`https://gohike-api.herokuapp.com/user/completed/${currUser.username}`)
       .then((data) => {
         setSearchInputResult(data.data.completed);
         setSelectedHike(null);
@@ -412,7 +412,7 @@ export function SearchBar({
           // Fetches completed hikes
           await axios
             .get(
-              `https://stark-hamlet-74597.herokuapp.com/trails/near-me/lat/
+              `https://gohike-api.herokuapp.com/trails/near-me/lat/
                     ${position.coords.latitude}/lng/${position.coords.longitude}
                     `
             )
@@ -547,29 +547,29 @@ export function HikeCard({ hikeObject, setSelectedHike, currUser, setCenter }) {
    * URL for put request to add a hike to user's completed hikes
    * @type {string}
    */
-  const COMPLETE_HIKE_URL = "https://stark-hamlet-74597.herokuapp.com/user/complete";
+  const COMPLETE_HIKE_URL = "https://gohike-api.herokuapp.com/user/complete";
   /**
    * URL for put request to remove a hike to user's completed hikes
    * @type {string}
    */
-  const UNCOMPLETE_HIKE_URL = "https://stark-hamlet-74597.herokuapp.com/user/uncomplete";
+  const UNCOMPLETE_HIKE_URL = "https://gohike-api.herokuapp.com/user/uncomplete";
   /**
    * URL for put request to add a hike to user's saved hikes
    * @type {string}
    */
-  const SAVE_HIKE_URL = "https://stark-hamlet-74597.herokuapp.com/user/save";
+  const SAVE_HIKE_URL = "https://gohike-api.herokuapp.com/user/save";
   /**
    * URL for put request to remove a hike to user's saved hikes
    * @type {string}
    */
-  const UNSAVE_HIKE_URL = "https://stark-hamlet-74597.herokuapp.com/user/unsave";
+  const UNSAVE_HIKE_URL = "https://gohike-api.herokuapp.com/user/unsave";
 
   /**
    * Sets saved and completed state variables on every render
    */
   React.useEffect(async () => {
     const data = await axios.get(
-      `https://stark-hamlet-74597.herokuapp.com/user/saved-completed/${currUser.username}`
+      `https://gohike-api.herokuapp.com/user/saved-completed/${currUser.username}`
     );
 
     setSaved(data.data.saved);

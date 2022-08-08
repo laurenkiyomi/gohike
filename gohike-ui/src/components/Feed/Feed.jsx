@@ -13,7 +13,7 @@ import io from "socket.io-client"
 import { pq } from "../../../../gohike-api/models/pq";
 
 // Set up socket
-let ENDPOINT = "https://stark-hamlet-74597.herokuapp.com"
+let ENDPOINT = "https://gohike-api.herokuapp.com"
 let socket = io(ENDPOINT)
 
 /**
@@ -30,17 +30,17 @@ export default function Feed({ transparent, setTransparent, currUser }) {
    * URL to get all trails in database
    * @type {string}
    */
-  const TRAILS_URL = "https://stark-hamlet-74597.herokuapp.com/trails/";
+  const TRAILS_URL = "https://gohike-api.herokuapp.com/trails/";
   /**
    * URL to get all posts in database
    * @type {string}
    */
-  const FRIENDS_POSTS_URL = `https://stark-hamlet-74597.herokuapp.com/posts/friends/${currUser?.username}`;
+  const FRIENDS_POSTS_URL = `https://gohike-api.herokuapp.com/posts/friends/${currUser?.username}`;
   /**
    * URL to get friends posts in database
    * @type {string}
    */
-  const POSTS_URL = "https://stark-hamlet-74597.herokuapp.com/posts";
+  const POSTS_URL = "https://gohike-api.herokuapp.com/posts";
   /**
    * State var that holds all trails in database including name and hike id
    * @type {Array<{name: string, value: number}>}
@@ -70,7 +70,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
   // Listen for new post created by a friend
   socket.on("update", async () => {
     // Get new feed
-    await axios.get(`https://stark-hamlet-74597.herokuapp.com/user/newFeed/${currUser?.username}`)
+    await axios.get(`https://gohike-api.herokuapp.com/user/newFeed/${currUser?.username}`)
       .then((data) => {
         // Cache new posts in local storage
         localStorage.setItem(
@@ -128,7 +128,7 @@ export function CreatePost({ trailsList, currUser }) {
    * URL for making post request to create new post
    * @type {string}
    */
-  const CREATE_POST_URL = "https://stark-hamlet-74597.herokuapp.com/posts/create";
+  const CREATE_POST_URL = "https://gohike-api.herokuapp.com/posts/create";
   /**
    * State var that holds url of picture input
    * @type {string}

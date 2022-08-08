@@ -11,7 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 
 // Set up socket
-let ENDPOINT = "https://stark-hamlet-74597.herokuapp.com";
+let ENDPOINT = "https://gohike-api.herokuapp.com";
 let socket = io(ENDPOINT);
 
 /**
@@ -160,7 +160,7 @@ export function Dropdown({
    * URL to make post request for logging out
    * @type {string}
    */
-  const LOGOUT_URL = "https://stark-hamlet-74597.herokuapp.com/authorization/logout";
+  const LOGOUT_URL = "https://gohike-api.herokuapp.com/authorization/logout";
   /**
    * Navigatation tool
    * @type {hook}
@@ -246,7 +246,7 @@ export function FriendRequests({ friendsOpen, currUser }) {
    */
   React.useEffect(async () => {
     let data = await axios.get(
-      `https://stark-hamlet-74597.herokuapp.com/user/${currUser?.sessionToken}`
+      `https://gohike-api.herokuapp.com/user/${currUser?.sessionToken}`
     );
 
     if (
@@ -265,7 +265,7 @@ export function FriendRequests({ friendsOpen, currUser }) {
     // Update friend requests if receiver is current user
     if (receiver == currUser.username) {
       let data = await axios.get(
-        `https://stark-hamlet-74597.herokuapp.com/user/${currUser?.sessionToken}`
+        `https://gohike-api.herokuapp.com/user/${currUser?.sessionToken}`
       );
 
       if (
@@ -336,12 +336,12 @@ export function Request({
    * URL for put request to decline friend request
    * @type {string}
    */
-  const DECLINE_FRIEND_URL = "https://stark-hamlet-74597.herokuapp.com/user/declineFriend";
+  const DECLINE_FRIEND_URL = "https://gohike-api.herokuapp.com/user/declineFriend";
   /**
    * URL for put request to accept friend request
    * @type {string}
    */
-  const ACCEPT_FRIEND_URL = "https://stark-hamlet-74597.herokuapp.com/user/acceptFriend";
+  const ACCEPT_FRIEND_URL = "https://gohike-api.herokuapp.com/user/acceptFriend";
 
   /**
    * OnClick handler of accept friend request button
@@ -360,7 +360,7 @@ export function Request({
 
       // Reset friend requests
       let data = await axios.get(
-        `https://stark-hamlet-74597.herokuapp.com/user/${currUser.sessionToken}`
+        `https://gohike-api.herokuapp.com/user/${currUser.sessionToken}`
       );
       if (
         data.data.user.incomingFriendRequests == null ||
@@ -393,7 +393,7 @@ export function Request({
 
       // Reset friend requests
       let data = await axios.get(
-        `https://stark-hamlet-74597.herokuapp.com/user/${currUser.sessionToken}`
+        `https://gohike-api.herokuapp.com/user/${currUser.sessionToken}`
       );
       if (
         data.data.user.incomingFriendRequests == null ||

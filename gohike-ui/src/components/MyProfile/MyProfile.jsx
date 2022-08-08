@@ -24,12 +24,12 @@ export default function MyProfile({ transparent, setTransparent, currUser }) {
    * URL to make put request to change profile picture
    * @type {string}
    */
-  const EDIT_PROFILE_PIC_URL = "https://stark-hamlet-74597.herokuapp.com/user/profilePhoto";
+  const EDIT_PROFILE_PIC_URL = "https://gohike-api.herokuapp.com/user/profilePhoto";
   /**
    * URL to make put request to change cover picture
    * @type {string}
    */
-  const EDIT_COVER_PIC_URL = "https://stark-hamlet-74597.herokuapp.com/user/coverPhoto";
+  const EDIT_COVER_PIC_URL = "https://gohike-api.herokuapp.com/user/coverPhoto";
   /**
    * State var holding profile info on currUser
    * @type {{coverPic: string, profilePic: string, firstName: string,
@@ -90,7 +90,7 @@ export default function MyProfile({ transparent, setTransparent, currUser }) {
 
       // Re-fetch profile data
       let data = await axios.get(
-        `https://stark-hamlet-74597.herokuapp.com/user/${currUser.sessionToken}`
+        `https://gohike-api.herokuapp.com/user/${currUser.sessionToken}`
       );
       setProfileData(data.data.user);
       return;
@@ -123,7 +123,7 @@ export default function MyProfile({ transparent, setTransparent, currUser }) {
 
       // Re-fetch profile data
       let data = await axios.get(
-        `https://stark-hamlet-74597.herokuapp.com/user/${currUser.sessionToken}`
+        `https://gohike-api.herokuapp.com/user/${currUser.sessionToken}`
       );
       setProfileData(data.data.user);
       return;
@@ -137,12 +137,12 @@ export default function MyProfile({ transparent, setTransparent, currUser }) {
    */
   const fetchData = async () => {
     let data = await axios.get(
-      `https://stark-hamlet-74597.herokuapp.com/user/${currUser.sessionToken}`
+      `https://gohike-api.herokuapp.com/user/${currUser.sessionToken}`
     );
     setProfileData(data.data.user);
 
     let data2 = await axios.get(
-      `https://stark-hamlet-74597.herokuapp.com/user/posts/${currUser.username}`
+      `https://gohike-api.herokuapp.com/user/posts/${currUser.username}`
     );
     setPosts(data2.data.posts);
   };
