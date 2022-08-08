@@ -11,11 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 
 // Set up socket
-<<<<<<< HEAD
-let ENDPOINT = "https://stark-hamlet-74597.herokuapp.com/";
-=======
 let ENDPOINT = "http://localhost:3001";
->>>>>>> 09b5ef1 (Initial commit)
 let socket = io(ENDPOINT);
 
 /**
