@@ -29,11 +29,7 @@ export default function Home({ currUser, transparent, setTransparent }) {
    * URL to get all posts in database
    * @type {string}
    */
-<<<<<<< HEAD
-  const FRIENDS_POSTS_URL = `https://stark-hamlet-74597.herokuapp.com/posts/friends/${currUser?.username}`;
-=======
   const FRIENDS_POSTS_URL = `http://localhost:3001/posts/friends/${currUser?.username}`;
->>>>>>> 09b5ef1 (Initial commit)
   /**
    * Animation helper
    */

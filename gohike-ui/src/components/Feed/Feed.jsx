@@ -13,11 +13,7 @@ import io from "socket.io-client"
 import { pq } from "../../../../gohike-api/models/pq";
 
 // Set up socket
-<<<<<<< HEAD
-let ENDPOINT = "https://stark-hamlet-74597.herokuapp.com/"
-=======
 let ENDPOINT = "http://localhost:3001"
->>>>>>> 09b5ef1 (Initial commit)
 let socket = io(ENDPOINT)
 
 /**
@@ -34,29 +30,17 @@ export default function Feed({ transparent, setTransparent, currUser }) {
    * URL to get all trails in database
    * @type {string}
    */
-<<<<<<< HEAD
-  const TRAILS_URL = "https://stark-hamlet-74597.herokuapp.com/trails/";
-=======
   const TRAILS_URL = "http://localhost:3001/trails/";
->>>>>>> 09b5ef1 (Initial commit)
   /**
    * URL to get all posts in database
    * @type {string}
    */
-<<<<<<< HEAD
-  const FRIENDS_POSTS_URL = `https://stark-hamlet-74597.herokuapp.com/posts/friends/${currUser?.username}`;
-=======
   const FRIENDS_POSTS_URL = `http://localhost:3001/posts/friends/${currUser?.username}`;
->>>>>>> 09b5ef1 (Initial commit)
   /**
    * URL to get friends posts in database
    * @type {string}
    */
-<<<<<<< HEAD
-  const POSTS_URL = "https://stark-hamlet-74597.herokuapp.com/posts";
-=======
   const POSTS_URL = "http://localhost:3001/posts";
->>>>>>> 09b5ef1 (Initial commit)
   /**
    * State var that holds all trails in database including name and hike id
    * @type {Array<{name: string, value: number}>}
@@ -86,11 +70,7 @@ export default function Feed({ transparent, setTransparent, currUser }) {
   // Listen for new post created by a friend
   socket.on("update", async () => {
     // Get new feed
-<<<<<<< HEAD
-    await axios.get(`https://stark-hamlet-74597.herokuapp.com/user/newFeed/${currUser?.username}`)
-=======
     await axios.get(`http://localhost:3001/user/newFeed/${currUser?.username}`)
->>>>>>> 09b5ef1 (Initial commit)
       .then((data) => {
         // Cache new posts in local storage
         localStorage.setItem(
@@ -148,11 +128,7 @@ export function CreatePost({ trailsList, currUser }) {
    * URL for making post request to create new post
    * @type {string}
    */
-<<<<<<< HEAD
-  const CREATE_POST_URL = "https://stark-hamlet-74597.herokuapp.com/posts/create";
-=======
   const CREATE_POST_URL = "http://localhost:3001/posts/create";
->>>>>>> 09b5ef1 (Initial commit)
   /**
    * State var that holds url of picture input
    * @type {string}
