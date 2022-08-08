@@ -77,6 +77,7 @@ export default function FindHikes({ transparent, setTransparent, currUser }) {
         selectedHike={selectedHike}
         setSelectedHike={setSelectedHike}
         currUser={currUser}
+        setZoom={setZoom}
       />
       <div className="map-div">
         <GoogleMapReact

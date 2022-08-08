@@ -25,6 +25,7 @@ let socket = io(ENDPOINT);
  * @param {function} setSelectedHike
  * @param {{username: string, sessionToken: string, firstName: string,
  * lastName: string}} currUser Holds info on current user from local storage
+ * @param {function} setZoom Sets display of map
  * @returns Side Bar component
  */
 export default function SideBar({
@@ -34,6 +35,7 @@ export default function SideBar({
   selectedHike,
   setSelectedHike,
   currUser,
+  setZoom,
 }) {
   /**
    * State var that sets whether or not to render loading state when
@@ -64,6 +66,7 @@ export default function SideBar({
                 setSelectedHike={setSelectedHike}
                 currUser={currUser}
                 setCenter={setCenter}
+                setZoom={setZoom}
               />
             )
           ) : (
@@ -92,6 +95,7 @@ export default function SideBar({
  * @param {{username: string, sessionToken: string, firstName: string,
  * lastName: string}} currUser Holds info on current user from local storage
  * @param {function} setCenter Sets center of Google Map
+ * @param {function} setZoom Sets display of map
  * @returns Search Results component
  */
 export function SearchResults({
@@ -99,6 +103,7 @@ export function SearchResults({
   setSelectedHike,
   currUser,
   setCenter,
+  setZoom,
 }) {
   // Return React component
   return (
@@ -111,6 +116,7 @@ export function SearchResults({
             setSelectedHike={setSelectedHike}
             currUser={currUser}
             setCenter={setCenter}
+            setZoom={setZoom}
           />
         );
       })}
@@ -159,10 +165,13 @@ export function HikePopout({ selectedHike, setSelectedHike, username }) {
     }
 
     await axios
-      .put(`https://gohike-api.herokuapp.com/trails/comment/${selectedHike.id}`, {
-        username,
-        comment,
-      })
+      .put(
+        `https://gohike-api.herokuapp.com/trails/comment/${selectedHike.id}`,
+        {
+          username,
+          comment,
+        }
+      )
       .then((data) => {
         setComment("");
         setNum((old) => old + 1);
@@ -208,7 +217,7 @@ export function HikePopout({ selectedHike, setSelectedHike, username }) {
   socket.on("updatecomments", async () => {
     // Increment numComments
     // This triggers comments to be refetched and rerendered
-    setNum((old) => old + 1)
+    setNum((old) => old + 1);
   });
 
   // Return React component
@@ -329,7 +338,12 @@ export function SearchBar({
     event.preventDefault();
     setSpinner(true);
     await axios
-      .get(`https://gohike-api.herokuapp.com/trails/${searchInput.replaceAll(" ", "+")}`)
+      .get(
+        `https://gohike-api.herokuapp.com/trails/${searchInput.replaceAll(
+          " ",
+          "+"
+        )}`
+      )
       .then((data) => {
         setSearchInputResult(data.data.trail);
         setSelectedHike(null);
@@ -377,7 +391,9 @@ export function SearchBar({
     setSpinner(true);
     // Fetches completed hikes
     await axios
-      .get(`https://gohike-api.herokuapp.com/user/completed/${currUser.username}`)
+      .get(
+        `https://gohike-api.herokuapp.com/user/completed/${currUser.username}`
+      )
       .then((data) => {
         setSearchInputResult(data.data.completed);
         setSelectedHike(null);
@@ -530,9 +546,16 @@ export function SearchBar({
  * @param {{username: string, sessionToken: string, firstName: string,
  * lastName: string}} currUser Holds info on current user from local storage
  * @param {function} setCenter
+ * @param {function} setZoom
  * @returns Hike Card component
  */
-export function HikeCard({ hikeObject, setSelectedHike, currUser, setCenter }) {
+export function HikeCard({
+  hikeObject,
+  setSelectedHike,
+  currUser,
+  setCenter,
+  setZoom,
+}) {
   /**
    * State var that holds hikes saved by current user
    * @type {Array<number>} Contains hike id's
@@ -552,7 +575,8 @@ export function HikeCard({ hikeObject, setSelectedHike, currUser, setCenter }) {
    * URL for put request to remove a hike to user's completed hikes
    * @type {string}
    */
-  const UNCOMPLETE_HIKE_URL = "https://gohike-api.herokuapp.com/user/uncomplete";
+  const UNCOMPLETE_HIKE_URL =
+    "https://gohike-api.herokuapp.com/user/uncomplete";
   /**
    * URL for put request to add a hike to user's saved hikes
    * @type {string}
@@ -657,6 +681,7 @@ export function HikeCard({ hikeObject, setSelectedHike, currUser, setCenter }) {
           className="hike-name"
           onClick={() => {
             setSelectedHike(hikeObject);
+            setZoom(14);
             setCenter({
               lng: hikeObject.longitude,
               lat: hikeObject.latitude,
