@@ -246,11 +246,7 @@ export function FriendRequests({ friendsOpen, currUser }) {
    */
   React.useEffect(async () => {
     let data = await axios.get(
-<<<<<<< HEAD
-      `https://stark-hamlet-74597.herokuapp.com/user/${currUser?.sessionToken}`
-=======
       `http://localhost:3001/user/${currUser?.sessionToken}`
->>>>>>> 09b5ef1 (Initial commit)
     );
 
     if (
@@ -269,11 +265,7 @@ export function FriendRequests({ friendsOpen, currUser }) {
     // Update friend requests if receiver is current user
     if (receiver == currUser.username) {
       let data = await axios.get(
-<<<<<<< HEAD
-        `https://stark-hamlet-74597.herokuapp.com/user/${currUser?.sessionToken}`
-=======
         `http://localhost:3001/user/${currUser?.sessionToken}`
->>>>>>> 09b5ef1 (Initial commit)
       );
 
       if (
@@ -344,20 +336,12 @@ export function Request({
    * URL for put request to decline friend request
    * @type {string}
    */
-<<<<<<< HEAD
-  const DECLINE_FRIEND_URL = "https://stark-hamlet-74597.herokuapp.com/user/declineFriend";
-=======
   const DECLINE_FRIEND_URL = "http://localhost:3001/user/declineFriend";
->>>>>>> 09b5ef1 (Initial commit)
   /**
    * URL for put request to accept friend request
    * @type {string}
    */
-<<<<<<< HEAD
-  const ACCEPT_FRIEND_URL = "https://stark-hamlet-74597.herokuapp.com/user/acceptFriend";
-=======
   const ACCEPT_FRIEND_URL = "http://localhost:3001/user/acceptFriend";
->>>>>>> 09b5ef1 (Initial commit)
 
   /**
    * OnClick handler of accept friend request button
@@ -376,11 +360,7 @@ export function Request({
 
       // Reset friend requests
       let data = await axios.get(
-<<<<<<< HEAD
-        `https://stark-hamlet-74597.herokuapp.com/user/${currUser.sessionToken}`
-=======
         `http://localhost:3001/user/${currUser.sessionToken}`
->>>>>>> 09b5ef1 (Initial commit)
       );
       if (
         data.data.user.incomingFriendRequests == null ||
@@ -413,11 +393,7 @@ export function Request({
 
       // Reset friend requests
       let data = await axios.get(
-<<<<<<< HEAD
-        `https://stark-hamlet-74597.herokuapp.com/user/${currUser.sessionToken}`
-=======
         `http://localhost:3001/user/${currUser.sessionToken}`
->>>>>>> 09b5ef1 (Initial commit)
       );
       if (
         data.data.user.incomingFriendRequests == null ||
