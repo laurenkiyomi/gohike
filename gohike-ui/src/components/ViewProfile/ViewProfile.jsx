@@ -12,7 +12,7 @@ import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import io from "socket.io-client";
 
 // Set up socket
-let ENDPOINT = "http://localhost:3001";
+let ENDPOINT = "https://stark-hamlet-74597.herokuapp.com";
 let socket = io(ENDPOINT);
 
 /**
@@ -29,17 +29,17 @@ export default function ViewProfile({ transparent, setTransparent, currUser }) {
    * URL for making put request to send friend request
    * @type {string}
    */
-  const ADD_FRIEND_URL = "http://localhost:3001/user/addFriend";
+  const ADD_FRIEND_URL = "https://stark-hamlet-74597.herokuapp.com/user/addFriend";
   /**
    * URL for making put request to decline friend requeest
    * @type {string}
    */
-  const DECLINE_FRIEND_URL = "http://localhost:3001/user/declineFriend";
+  const DECLINE_FRIEND_URL = "https://stark-hamlet-74597.herokuapp.com/user/declineFriend";
   /**
    * URL for making put request to acceot friend requeest
    * @type {string}
    */
-  const ACCEPT_FRIEND_URL = "http://localhost:3001/user/acceptFriend";
+  const ACCEPT_FRIEND_URL = "https://stark-hamlet-74597.herokuapp.com/user/acceptFriend";
 
   /**
    * State var holding profile info on viewed user
@@ -140,12 +140,12 @@ export default function ViewProfile({ transparent, setTransparent, currUser }) {
    */
   const fetchData = async () => {
     // Get profile data
-    let data = await axios.get(`http://localhost:3001/user/view/${username}`);
+    let data = await axios.get(`https://stark-hamlet-74597.herokuapp.com/user/view/${username}`);
     setProfileData(data.data.user);
 
     // Get user's posts
     let data2 = await axios.get(
-      `http://localhost:3001/user/view/posts/${username}`
+      `https://stark-hamlet-74597.herokuapp.com/user/view/posts/${username}`
     );
     setPosts(data2.data.posts);
 

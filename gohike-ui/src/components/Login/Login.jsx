@@ -22,7 +22,7 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
    * URL to make post request to login to app
    * @type {string}
    */
-  const LOGIN_URL = "http://localhost:3001/authorization/login";
+  const LOGIN_URL = "https://stark-hamlet-74597.herokuapp.com/login";
   /**
    * Holds username input
    * @type {string}
@@ -106,7 +106,7 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
               ) {
                 // Update feed and location
                 await axios
-                  .put("http://localhost:3001/user/update-location", {
+                  .put("https://stark-hamlet-74597.herokuapp.com/user/update-location", {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude,
                     username: loginUser.data.username,
