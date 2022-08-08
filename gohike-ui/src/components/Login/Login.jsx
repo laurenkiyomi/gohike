@@ -22,7 +22,7 @@ export default function Login({ setCurrUser, transparent, setTransparent }) {
    * URL to make post request to login to app
    * @type {string}
    */
-  const LOGIN_URL = "https://gohike-api.herokuapp.com/login";
+  const LOGIN_URL = "https://gohike-api.herokuapp.com/authorization/login";
   /**
    * Holds username input
    * @type {string}
