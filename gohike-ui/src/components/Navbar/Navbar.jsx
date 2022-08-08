@@ -160,11 +160,7 @@ export function Dropdown({
    * URL to make post request for logging out
    * @type {string}
    */
-<<<<<<< HEAD
-  const LOGOUT_URL = "https://stark-hamlet-74597.herokuapp.com/authorization/logout";
-=======
   const LOGOUT_URL = "http://localhost:3001/authorization/logout";
->>>>>>> 09b5ef1 (Initial commit)
   /**
    * Navigatation tool
    * @type {hook}
