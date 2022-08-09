@@ -6,7 +6,7 @@
 describe("Login", function () {
   it("Navigate to login", function () {
     // Navigate to login page
-    cy.visit("hhttps://gohike.netlify.app/");
+    cy.visit("https://gohike.netlify.app/");
     cy.get(".login-button").contains("Log In").click();
     cy.location().should((loc) => {
       expect(loc.pathname).to.eq("/login");
