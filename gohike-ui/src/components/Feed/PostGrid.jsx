@@ -77,7 +77,7 @@ export default function PostGrid({ posts, currUser, setPosts }) {
             async function unlikePost() {
               await axios.put(UNLIKE_URL, {
                 username: currUser.username,
-                postId,
+                postId: postObj.id,
               });
 
               let data = await axios.get(GET_POST_URL, {
