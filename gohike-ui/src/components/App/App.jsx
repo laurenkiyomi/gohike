@@ -13,6 +13,7 @@ import Register from "../Register/Register";
 import Feed from "../Feed/Feed";
 import MyProfile from "../MyProfile/MyProfile";
 import ViewProfile from "../ViewProfile/ViewProfile";
+import FindFriends from "../FindFriends/FindFriends";
 
 /**
  * Holds the BrowserRoutes for all pages of the GoHike app and always
@@ -94,6 +95,16 @@ export default function App() {
               path="/find-hikes"
               element={
                 <FindHikes
+                  transparent={transparent}
+                  setTransparent={setTransparent}
+                  currUser={currUser}
+                />
+              }
+            />
+            <Route
+              path="/find-friends"
+              element={
+                <FindFriends
                   transparent={transparent}
                   setTransparent={setTransparent}
                   currUser={currUser}

@@ -14,7 +14,7 @@ import Plx from "react-plx";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { pq } from "../../../../gohike-api/models/pq";
-import hikers from "../Images/hikers.png"
+import hikers from "../Images/hikers.png";
 
 /**
  * Renders Home page with animations and on scroll effects

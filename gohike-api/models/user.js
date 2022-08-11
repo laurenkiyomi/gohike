@@ -406,6 +406,25 @@ class User {
   }
 
   /**
+   * Gets all users
+   * 
+   * @returns {Array<string>} Contains the usernames of all users in parse
+   */
+   static async getAllUsers() {
+    // Get all users
+    let query = new Parse.Query("_User");
+    let users = await query.find({ useMasterKey: true })
+
+    // Get all usernames
+    let usersArray = []
+    for (let i = 0; i < users.length; i++) {
+      usersArray.push(users[i].get("username"))
+    }
+
+    return usersArray;
+  }
+
+  /**
    * Declines a friend request sent to the current user from another user
    *
    * @param {String} sessionToken Corresponds to the current user declining

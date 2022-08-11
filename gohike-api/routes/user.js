@@ -310,4 +310,16 @@ router.put("/update-location", async (req, res) => {
   }
 })
 
+/**
+ * Get request for all usernames in Parse
+ */
+router.get("/", async (req, res) => {
+  try {
+    let users = await User.getAllUsers()
+    res.status(201).json({ users })
+  } catch {
+    res.status(400).json({ msg: "Failed to get all users" });
+  }
+})
+
 module.exports = router;
