@@ -20,6 +20,7 @@ export default function PostGrid({ posts, currUser, setPosts }) {
   // Return React component
   return (
     <div className="post-grid">
+      {posts ? "" : <div className="no-posts">No posts to display</div>}
       {posts?.length == 0
         ? <div className="no-posts">No posts to display</div>
         : posts?.map((postObj, index) => {
