@@ -22,7 +22,7 @@ export default function PostGrid({ posts, currUser, setPosts }) {
     <div className="post-grid">
       {posts?.length == 0
         ? <div className="no-posts">No posts to display</div>
-        : posts.map((postObj, index) => {
+        : posts?.map((postObj, index) => {
             /**
              * URL for put request to like a post
              * @type {string}
