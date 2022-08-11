@@ -84,6 +84,19 @@ export default function Navbar({ color, currUser, setCurrUser, transparent }) {
       >
         Feed
       </button>
+      <button
+        className="nav-button"
+        onClick={() => {
+          if (currUser == null) {
+            history("/login");
+          } else {
+            history("/find-friends");
+          }
+          setDropdownOpen(false);
+        }}
+      >
+        Find Friends
+      </button>
       {currUser ? (
         <>
           <button
