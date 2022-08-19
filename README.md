@@ -51,9 +51,6 @@ Pages/Screens with Wireframes on Figma:
 - View Profile Page
 - Login Page
 
-Requirements:
-
-<img width="518" alt="Screen Shot 2022-08-01 at 10 48 28 AM" src="https://user-images.githubusercontent.com/86620096/182210689-a6876b08-93d7-43fb-9bfb-3efd13e4c79f.png">
 
 Diagram of Data Model:
 - <img width="645" alt="Screen Shot 2022-06-29 at 3 35 40 PM" src="https://user-images.githubusercontent.com/86620096/176557214-1c7bea84-c16b-4855-9f80-b68406021824.png">
