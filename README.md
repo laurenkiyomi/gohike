@@ -1,5 +1,6 @@
 # Deployement Repository for GoHike Capstone Project
 App Idea: An app where you can keep track/build a map of the hikes you’ve done and share with friends
+Test my site out!: https://gohike.netlify.app/
 
 Core Features
 - [x] The Home page shows about section, contact information, etc.
